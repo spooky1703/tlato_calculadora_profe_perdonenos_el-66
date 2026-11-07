@@ -1,61 +1,82 @@
 :root { 
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  color: #35534A; /* Verde oscuro texto */
-  background: #FFFFFF; /* Fondo blanco */
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; 
   font-synthesis: none; 
+  
+  /* MODO DÍA (Opción 2) */
+  --fondo-body: #F5F7F6;
+  --fondo-panel: #FFFFFF;
+  --texto-principal: #0D1B2A;
+  --texto-secundario: #2F4F4F;
+  --borde: #D1D9E0;
+  --boton-bg: #EAEFF2;
+  --boton-hover: #D8E1E8;
+  --primario: #2F4F4F;
+  --primario-hover: #1F3636;
+  --acento: #6EA2B3;
+  --texto-boton: #0D1B2A;
+  --texto-boton-primario: #FFFFFF;
 }
+
+[data-theme="dark"] {
+  /* MODO NOCHE (Opción 2) */
+  --fondo-body: #0B131E;
+  --fondo-panel: #111D2D;
+  --texto-principal: #E6D8C9;
+  --texto-secundario: #A8B2BD;
+  --borde: #233446;
+  --boton-bg: #1B2B3E;
+  --boton-hover: #263C55;
+  --primario: #4A7C74;
+  --primario-hover: #5DA196;
+  --acento: #6EA2B3;
+  --texto-boton: #E6D8C9;
+  --texto-boton-primario: #0B131E;
+}
+
 * { box-sizing: border-box; }
-body { margin: 0; min-width: 320px; }
+body { margin: 0; min-width: 320px; background: var(--fondo-body); color: var(--texto-principal); transition: background 0.3s ease, color 0.3s ease; }
 button, input { font: inherit; }
 .contenedor { width: min(100% - 32px, 1050px); margin: 32px auto; }
 .encabezado { margin-bottom: 22px; }
-h1 { margin: 0; font-size: clamp(1.65rem, 4vw, 2.15rem); letter-spacing: -.04em; color: #35534A; }
-.encabezado p, .ayuda, footer { color: #4F7568; }
+.acciones-header { display: flex; gap: 10px; float: right; margin-bottom: 12px; }
+h1 { margin: 0; font-size: clamp(1.65rem, 4vw, 2.15rem); letter-spacing: -.04em; color: var(--texto-principal); }
+.encabezado p, .ayuda, footer { color: var(--texto-secundario); }
 .encabezado p { margin: 6px 0 0; }
 
 .panel { 
-  background: #FFFFFF; 
-  border: 2px solid #E6D8C9; /* Borde crema para delimitar la tarjeta blanca */
+  background: var(--fondo-panel); 
+  border: 1px solid var(--borde); 
   border-radius: 12px; 
   padding: 22px; 
   margin-bottom: 20px; 
-  box-shadow: 0 4px 12px rgba(53, 83, 74, 0.08); 
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); 
+  transition: background 0.3s ease, border 0.3s ease;
 }
 .panel-cabecera { display: flex; justify-content: space-between; align-items: flex-start; gap: 18px; flex-wrap: wrap; }
-h2 { font-size: 1.2rem; margin: 0 0 6px; color: #35534A; }
-h3 { font-size: 1rem; margin: 22px 0 12px; color: #35534A; }
+h2 { font-size: 1.2rem; margin: 0 0 6px; color: var(--texto-principal); }
+h3 { font-size: 1rem; margin: 22px 0 12px; color: var(--texto-principal); }
 .ayuda { margin: 0; font-size: .9rem; }
 .acciones-dimensiones, .acciones-principales, .acciones-resultado { display: flex; gap: 8px; flex-wrap: wrap; }
 
-/* Botones secundarios (+/- filas, restablecer) en crema/beige */
 .boton { 
-  border: 1px solid #CBBEAD; 
+  border: 1px solid var(--borde); 
   border-radius: 8px; 
   padding: 9px 13px; 
-  background: #E6D8C9; 
-  color: #35534A; 
+  background: var(--boton-bg); 
+  color: var(--texto-boton); 
   cursor: pointer; 
   font-weight: 600; 
   transition: all 0.2s ease;
-  /* Estas son las líneas nuevas: */
   display: inline-flex;
   align-items: center;
   gap: 6px;
 }
-.boton:hover { background: #CBBEAD; }
-
-/* ACENTO AZUL: Al hacer clic en un botón o celda */
-.boton:focus-visible, input:focus-visible { outline: 3px solid #6EA2B3; outline-offset: 2px; border-color: #6EA2B3; }
+.boton:hover { background: var(--boton-hover); }
+.boton:focus-visible, input:focus-visible { outline: 3px solid var(--acento); outline-offset: 2px; border-color: var(--acento); }
 .boton:disabled { opacity: .4; cursor: not-allowed; }
 
-/* Botones principales (Resolver, ¿Cómo usar?) en verde oscuro */
-.boton.principal, .encabezado > button { 
-  background: #35534A; 
-  border-color: #35534A; 
-  color: #FFFFFF; 
-  min-width: 130px; 
-}
-.boton.principal:hover, .encabezado > button:hover { background: #4F7568; }
+.boton.principal { background: var(--primario); border-color: var(--primario); color: var(--texto-boton-primario); min-width: 130px; }
+.boton.principal:hover { background: var(--primario-hover); }
 
 .desplazamiento-matriz { max-width: 100%; overflow-x: auto; overscroll-behavior-x: contain; padding: 12px 2px; }
 .matriz { display: grid; gap: 8px; width: max-content; margin: 0 auto; }
@@ -63,50 +84,43 @@ h3 { font-size: 1rem; margin: 22px 0 12px; color: #35534A; }
 
 .celda { 
   width: 100%; min-width: 0; height: 43px; 
-  border: 1px solid #98BCAE; 
+  border: 1px solid var(--borde); 
   border-radius: 6px; text-align: center; padding: 5px; 
-  background: #FFFFFF; 
-  color: #35534A;
+  background: var(--fondo-panel); 
+  color: var(--texto-principal);
 }
-.celda.invalida { border: 2px solid #c62828; background: #fff5f5; }
-
-/* ACENTO AZUL: Línea separadora de la matriz aumentada ("b") */
-.celda-aumentada { border-left: 2px solid #6EA2B3; margin-left: 5px; padding-left: 12px; }
+.celda.invalida { border: 2px solid #E57373; background: #3D1A1A; }
+.celda-aumentada { border-left: 2px solid var(--acento); margin-left: 5px; padding-left: 12px; }
 .fila-matriz .celda-aumentada { position: relative; }
-.pie-matriz { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; color: #4F7568; font-size: .82rem; border-top: 1px solid #E6D8C9; padding-top: 10px; }
+.pie-matriz { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; color: var(--texto-secundario); font-size: .82rem; border-top: 1px solid var(--borde); padding-top: 10px; }
 .acciones-principales { margin-top: 18px; }
 
-/* ACENTO AZUL: Mensajes del sistema */
-.mensaje { padding: 10px 12px; border-radius: 7px; margin: 12px 0 0; font-size: .9rem; background: #E8F0F4; color: #2C4A5E; border: 1px solid #6EA2B3; }
-.error { color: #9d1c1c; background: #fff0f0; border: 1px solid #f1caca; }
+.mensaje { padding: 10px 12px; border-radius: 7px; margin: 12px 0 0; font-size: .9rem; background: var(--boton-bg); color: var(--texto-principal); border: 1px solid var(--borde); }
+.error { color: #E57373; background: #3D1A1A; border: 1px solid #5C2727; }
 
-/* Etiqueta de solución única */
-.clasificacion { padding: 12px 14px; border-radius: 8px; background: #E6D8C9; color: #35534A; margin: 14px 0 18px; font-weight: 650; display: inline-block; }
-
+.clasificacion { padding: 12px 14px; border-radius: 8px; background: var(--boton-bg); color: var(--texto-principal); margin: 14px 0 18px; font-weight: 650; display: inline-block; }
 .tabla-resultado { display: grid; gap: 7px; width: max-content; margin: 0 auto; }
 .fila-resultado { display: flex; align-items: center; gap: 9px; min-height: 42px; }
-.valor-matriz { min-width: 56px; text-align: center; display: inline-flex; justify-content: center; align-items: center; padding: 4px 7px; color: #35534A; }
+.valor-matriz { min-width: 56px; text-align: center; display: inline-flex; justify-content: center; align-items: center; padding: 4px 7px; color: var(--texto-principal); }
+.valor-matriz.aumentada { border-left: 2px solid var(--acento); margin-left: 5px; padding-left: 13px; }
 
-/* ACENTO AZUL: Separador en el resultado */
-.valor-matriz.aumentada { border-left: 2px solid #6EA2B3; margin-left: 5px; padding-left: 13px; }
-
-/* Fracciones estrictas con línea horizontal */
+/* Fracciones estrictas - Línea horizontal */
 .fraccion { display: inline-grid; grid-template-rows: auto 1px auto; justify-items: stretch; align-items: center; vertical-align: middle; line-height: 1.05; font-size: .92em; min-width: 1.2em; }
 .fraccion .numerador, .fraccion .denominador { padding: 2px 3px; text-align: center; }
 .fraccion .barra { height: 1px; background: currentColor; }
 
 .solucion-lista { display: grid; gap: 9px; margin: 12px 0; }
 .solucion-linea { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.parametros { color: #4F7568; font-size: .9rem; }
+.parametros { color: var(--texto-secundario); font-size: .9rem; }
 .acciones-resultado { margin-top: 20px; }
 footer { text-align: center; font-size: .82rem; padding: 4px 0 20px; }
 
-.modal { position: fixed; inset: 0; background: rgba(53, 83, 74, 0.7); display: grid; place-items: center; padding: 18px; z-index: 5; }
+.modal { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); display: grid; place-items: center; padding: 18px; z-index: 5; }
 .modal[hidden], [hidden] { display: none !important; }
-.modal-contenido { width: min(100%, 760px); background: #FFFFFF; border-radius: 12px; padding: 16px; border: 2px solid #E6D8C9; }
+.modal-contenido { width: min(100%, 760px); background: var(--fondo-panel); border-radius: 12px; padding: 16px; border: 1px solid var(--borde); }
 .modal-cabecera { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-.cerrar { font-size: 1.4rem; padding: 2px 11px; color: #35534A; border: none; background: transparent; }
-.cerrar:hover { background: #E6D8C9; }
+.cerrar { font-size: 1.4rem; padding: 2px 11px; color: var(--texto-principal); border: none; background: transparent; }
+.cerrar:hover { background: var(--boton-hover); }
 video { width: 100%; max-height: 70vh; background: #000; border-radius: 8px; }
 
 @media (max-width: 620px) {
@@ -118,131 +132,36 @@ video { width: 100%; max-height: 70vh; background: #000; border-radius: 8px; }
   .pie-matriz { flex-direction: column; }
 }
 
-.encabezado > button { float: right; margin-bottom: 12px; padding: 9px 15px; border: none; }
 .celda { overflow: hidden; text-overflow: ellipsis; cursor: pointer; }
 input.celda { cursor: text; }
-#modal-ayuda { width: min(94vw, 650px); max-height: 90vh; overflow: auto; border: 2px solid #E6D8C9; border-radius: 14px; padding: 22px; color: #35534A; background: #FFFFFF; }
-#modal-ayuda::backdrop { background: rgba(53, 83, 74, 0.7); }
+#modal-ayuda { width: min(94vw, 650px); max-height: 90vh; overflow: auto; border: 1px solid var(--borde); border-radius: 14px; padding: 22px; color: var(--texto-principal); background: var(--fondo-panel); }
+#modal-ayuda::backdrop { background: rgba(0, 0, 0, 0.7); }
 #modal-ayuda img { width: 100%; height: auto; }
 #modal-ayuda p { line-height: 1.6; }
 #contador-paso { align-self: center; }
-#aviso-precision { background: #E6D8C9; color: #35534A; border: 1px solid #CBBEAD; }
+#aviso-precision { background: var(--boton-bg); color: var(--texto-principal); border: 1px solid var(--borde); }
 .solucion-linea, .valor-matriz { overflow-wrap: anywhere; }
 
-.demo-guia { border: 2px solid #E6D8C9; border-radius: 14px; overflow: hidden; background: #FFFFFF; }
+/* Selector de unidades */
+.selector-unidades { margin-bottom: 20px; }
+.tarjetas-unidades { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-top: 12px; }
+.tarjeta-unidad { display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px 15px; border-radius: 12px; border: 2px solid var(--borde); background: var(--fondo-panel); cursor: pointer; transition: all 0.25s ease; min-height: 110px; }
+.tarjeta-unidad.activa { border-color: var(--primario); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08); }
+.tarjeta-unidad.activa:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12); }
+.tarjeta-unidad.inactiva { background: var(--boton-bg); opacity: 0.85; cursor: not-allowed; }
+.tarjeta-unidad.inactiva:hover { border-color: var(--borde); }
+.numero-unidad { font-size: 1.35rem; font-weight: 700; color: var(--texto-principal); margin-bottom: 6px; }
+.tarjeta-unidad.inactiva .numero-unidad { color: var(--texto-secundario); }
+.tema-unidad { font-size: 0.95rem; font-weight: 600; color: var(--texto-secundario); display: inline-flex; align-items: center; gap: 6px; }
+.indicador-activo { width: 8px; height: 8px; background-color: var(--texto-secundario); border-radius: 50%; display: inline-block; }
+.proximamente { font-size: 0.8rem; font-weight: 700; padding: 5px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.02em; background-color: var(--fondo-body); color: var(--texto-secundario); border: 1px solid var(--borde); }
+
+/* SVG Ayuda */
+.demo-guia { border: 2px solid var(--borde); border-radius: 14px; overflow: hidden; background: var(--fondo-panel); }
 #animacion-guia { display: block; width: 100%; height: auto; font: 16px system-ui, sans-serif; }
 #animacion-guia .demo-titulo { font-weight: 650; }
 #demo-soluciones { font-size: 22px; }
-
-/* ACENTO AZUL: Barra de progreso de la guía de ayuda */
-.progreso-guia { height: 3px; background: #E6D8C9; }
-#progreso-guia { height: 100%; display: block; background: #6EA2B3; }
+.progreso-guia { height: 3px; background: var(--borde); }
+#progreso-guia { height: 100%; display: block; background: var(--acento); }
 #titulo-paso { margin-top: 18px; }
 #texto-paso { min-height: 5em; }
-/* =========================================
-   SELECTOR DE UNIDADES (NUEVO)
-   ========================================= */
-.selector-unidades {
-  margin-bottom: 20px;
-}
-
-.tarjetas-unidades {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 15px;
-  margin-top: 12px;
-}
-
-.tarjeta-unidad {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 20px 15px;
-  border-radius: 12px;
-  border: 2px solid #E6D8C9;
-  background: #FFFFFF;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  min-height: 110px;
-}
-
-/* Unidad 1 (Activa) */
-.tarjeta-unidad.activa {
-  border-color: #35534A;
-  box-shadow: 0 4px 10px rgba(53, 83, 74, 0.08);
-}
-
-.tarjeta-unidad.activa:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 15px rgba(53, 83, 74, 0.12);
-}
-
-/* Unidades inactivas */
-.tarjeta-unidad.inactiva {
-  background: #F4F7F6;
-  opacity: 0.85;
-  cursor: not-allowed;
-}
-
-.tarjeta-unidad.inactiva:hover {
-  border-color: #CBBEAD;
-  background: #EAEFEF;
-}
-
-/* Textos e indicadores */
-.numero-unidad {
-  font-size: 1.35rem;
-  font-weight: 700;
-  color: #35534A;
-  margin-bottom: 6px;
-}
-
-.tarjeta-unidad.inactiva .numero-unidad {
-  color: #4F7568;
-}
-
-.tema-unidad {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #4F7568;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.indicador-activo {
-  width: 8px;
-  height: 8px;
-  background-color: #4F7568;
-  border-radius: 50%;
-  display: inline-block;
-}
-
-/* Badges de Próximamente */
-.proximamente {
-  font-size: 0.8rem;
-  font-weight: 700;
-  padding: 5px 12px;
-  border-radius: 20px;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-}
-
-.proximamente.azul {
-  background-color: #E8F0F4;
-  color: #2C4A5E;
-  border: 1px solid #6EA2B3;
-}
-
-.proximamente.beige {
-  background-color: #E6D8C9;
-  color: #35534A;
-  border: 1px solid #CBBEAD;
-}
-
-@media (max-width: 620px) {
-  .tarjetas-unidades {
-    grid-template-columns: 1fr; /* Una columna por fila en pantallas muy chicas */
-  }
-}
