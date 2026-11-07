@@ -19,6 +19,7 @@
 
   function renderizarMatriz() {
     resultadoElemento.hidden = true;
+    window.VisualizacionSoluciones.limpiar();
     matrizElemento.replaceChildren();
     matrizElemento.style.gridTemplateRows = `repeat(${filas}, auto)`;
     valores.forEach((fila, i) => {
@@ -181,6 +182,7 @@
       };
       clasificacion.textContent = `${aproximado ? 'Modelo racional aproximado: ' : ''}${textos[resultado.tipo]} Rango(A) = ${resultado.rangoCoeficientes}; rango(A|b) = ${resultado.rangoAumentada}.`;
       renderizarSolucion(resultado);
+      window.VisualizacionSoluciones.preparar(resultado, matriz, incognitas, aproximado);
       resultadoElemento.hidden = false;
     } catch (error) {
       mostrarError(error.message, error.fila, error.columna);

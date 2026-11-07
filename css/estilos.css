@@ -246,3 +246,22 @@ input.celda { cursor: text; }
     grid-template-columns: 1fr; /* Una columna por fila en pantallas muy chicas */
   }
 }
+#modal-infinitas { width: min(95vw, 920px); max-height: 90vh; overflow: auto; border: 1px solid #98BCAE; border-radius: 12px; padding: 24px; color: #35534A; background: white; }
+#modal-infinitas::backdrop { background: #101318b8; }
+#modal-infinitas p { line-height: 1.65; }
+#modal-infinitas .modal-cabecera { gap: 16px; }
+.nota-geometria { background: #F4F7F6; padding: 10px 13px; border-radius: 7px; font-size: .88rem; }
+.controles-geometria { display: flex; flex-wrap: wrap; gap: 9px; margin: 14px 0; }
+.controles-geometria select { padding: 7px; border: 1px solid #98BCAE; border-radius: 5px; background: white; color: #35534A; }
+.grafica-contenedor { border: 1px solid #CBBEAD; border-radius: 8px; overflow: hidden; }
+#grafica-infinitas { width: 100%; height: auto; display: block; touch-action: none; cursor: grab; }
+#grafica-infinitas:active { cursor: grabbing; }
+.parametro-geometria { display: grid; grid-template-columns: 100px minmax(60px, 1fr) 110px; gap: 12px; align-items: center; padding: 8px 0; }
+.parametro-geometria input[type=text] { width: 100%; padding: 8px; border: 1px solid #98BCAE; border-radius: 5px; }
+.parametro-geometria input[aria-invalid=true] { border-color: #b42318; }
+.parametro-geometria input[type=range] { width: 100%; accent-color: #4F7568; }
+#punto-infinitas, #comprobacion-infinitas { display: grid; gap: 8px; overflow-wrap: anywhere; }
+#punto-infinitas { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+#estado-grafica { font-size: .9rem; font-weight: 600; }
+@media(max-width:620px) { #modal-infinitas { padding: 16px; } .parametro-geometria { grid-template-columns: 65px minmax(40px,1fr) 80px; gap: 7px; } }
+#grafica-infinitas { max-height: 340px; object-fit: contain; background: #F8FAF8; }

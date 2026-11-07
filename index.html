@@ -12,6 +12,8 @@
   <link rel="stylesheet" href="css/estilos.css">
   <script src="js/fracciones.js" defer></script>
   <script src="js/gauss-jordan.js" defer></script>
+  <script src="js/espacio-soluciones.js" defer></script>
+  <script src="js/visualizacion-soluciones.js" defer></script>
   <script src="js/app.js" defer></script>
   <script src="js/ayuda.js" defer></script>
 </head>
@@ -81,6 +83,7 @@
       <div id="matriz-resultado" class="desplazamiento-matriz"></div>
       <div id="detalle-solucion"></div>
       <div class="acciones-resultado">
+        <button type="button" id="explicar-infinitas" class="boton secundario" hidden>¿Qué significan infinitas soluciones?</button>
         <button type="button" id="ver-pasos" class="boton secundario">Ver pasos</button>
       </div>
     </section>
@@ -157,6 +160,21 @@
     <h3 id="titulo-paso"></h3><p id="texto-paso"></p>
     <p>Escribe e o euler para Euler; pi o π para pi. Usa * para multiplicar y ^ para potencias enteras. No se admiten variables ni funciones. π y e son aproximaciones; las demás operaciones admitidas conservan fracciones exactas.</p>
     <div class="acciones-principales"><button id="anterior-ayuda" class="boton">Anterior</button><span id="contador-paso" aria-live="polite"></span><button id="siguiente-ayuda" class="boton">Siguiente</button><button id="animar-ayuda" class="boton">Reproducir recorrido</button></div>
+  </dialog>
+<dialog id="modal-infinitas" aria-labelledby="titulo-infinitas">
+    <div class="modal-cabecera"><h2 id="titulo-infinitas">¿Qué significan infinitas soluciones?</h2><button type="button" id="cerrar-infinitas" class="boton" aria-label="Cerrar explicación">×</button></div>
+    <p id="explicacion-infinitas"></p>
+    <p id="proyeccion-infinitas" class="nota-geometria"></p>
+    <div id="ejes-infinitas" class="controles-geometria"></div>
+    <div class="grafica-contenedor"><canvas id="grafica-infinitas" width="900" height="480" aria-label="Gráfica de la familia de soluciones y del punto seleccionado">La explicación, las coordenadas y la comprobación se muestran debajo.</canvas></div>
+    <p id="estado-grafica" role="status"></p>
+    <div class="controles-geometria"><button type="button" class="boton" id="girar-grafica">Girar vista</button><button type="button" class="boton" id="acercar-grafica">Acercar</button><button type="button" class="boton" id="alejar-grafica">Alejar</button><button type="button" class="boton" id="restablecer-grafica">Restablecer vista</button></div>
+    <p class="nota-geometria">Arrastra para girar la vista 3D. La zona dibujada es una ventana finita de una familia ilimitada. Verde: familia de soluciones · Azul: punto seleccionado. La gráfica es aproximada; las coordenadas y la comprobación se calculan con fracciones.</p>
+    <h3>Cambia los parámetros</h3><p>Los controles recorren de −5 a 5; puedes escribir cualquier otro valor admitido en los campos. Cada parámetro puede tomar cualquier valor real.</p>
+    <div id="parametros-infinitas"></div>
+    <p id="error-parametro" class="mensaje error" role="alert" hidden></p>
+    <h3>Punto seleccionado</h3><div id="punto-infinitas" aria-live="polite"></div>
+    <h3>Comprobación en tus ecuaciones</h3><div id="comprobacion-infinitas"></div>
   </dialog>
 </body>
 </html>
