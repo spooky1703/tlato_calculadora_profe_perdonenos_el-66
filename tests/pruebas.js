@@ -83,4 +83,7 @@ for(let caso=0;caso<200;caso++) {
  const n=1+azar()%6,m=1+azar()%7;
  verificar(Array.from({length:m},()=>Array.from({length:n+1},()=>String(azar()%11-5))));
 }
+afirmar(f('euler').aTexto() === f('e').aTexto(), 'Euler es alias de e');
+afirmar(f('2Euler/e').aTexto() === '2', 'Euler dentro de expresiones');
+afirmar(F.contieneConstantes('euler') && F.contieneConstantes('2Euler'), 'aviso de aproximación de Euler');
 console.log(`Validación ampliada: ${total} comprobaciones correctas.`);

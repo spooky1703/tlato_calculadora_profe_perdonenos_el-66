@@ -203,27 +203,5 @@
   video.addEventListener('error', () => { document.getElementById('error-video').hidden = false; });
   document.addEventListener('keydown', evento => { if (evento.key === 'Escape' && !modal.hidden) cerrarModal(); });
 
-  const ayuda = document.getElementById('modal-ayuda');
-  let paso = 0, temporizador;
-  const pasos = [
-    ['1. Escribe los coeficientes', 'Cada fila es una ecuación. La columna b contiene el término a la derecha del signo igual. Pulsa una celda; Tab o Enter avanza.'],
-    ['2. Ajusta y resuelve', 'Añade filas o incógnitas según tu sistema y pulsa Resolver. Puedes usar 1/2, 0,25, 2*(3+1), 2pi o e.'],
-    ['3. Lee el resultado', 'La clasificación distingue solución única, infinitas soluciones o ninguna. En la parametrización, cada variable libre tiene su propio parámetro.']
-  ];
-  function mostrarPaso() {
-    document.getElementById('titulo-paso').textContent = pasos[paso][0];
-    document.getElementById('texto-paso').textContent = pasos[paso][1];
-    document.getElementById('captura-guia').src = `ayuda/paso-${paso + 1}.jpg`;
-    document.getElementById('contador-paso').textContent = `${paso + 1} / 3`;
-  }
-  document.getElementById('como-usar').onclick = () => { ayuda.showModal(); mostrarPaso(); };
-  document.getElementById('cerrar-ayuda').onclick = () => ayuda.close();
-  document.getElementById('siguiente-ayuda').onclick = () => { paso = (paso + 1) % 3; mostrarPaso(); };
-  document.getElementById('anterior-ayuda').onclick = () => { paso = (paso + 2) % 3; mostrarPaso(); };
-  document.getElementById('animar-ayuda').onclick = evento => {
-    if (temporizador) { clearInterval(temporizador); temporizador = null; evento.target.textContent = 'Reproducir recorrido'; }
-    else { temporizador = setInterval(() => { paso = (paso + 1) % 3; mostrarPaso(); }, 4500); evento.target.textContent = 'Pausar recorrido'; }
-  };
-  ayuda.addEventListener('close', () => { clearInterval(temporizador); temporizador = null; document.getElementById('animar-ayuda').textContent = 'Reproducir recorrido'; });
   renderizarMatriz();
 })();

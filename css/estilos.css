@@ -67,3 +67,11 @@ input.celda { cursor: text; }
 #contador-paso { align-self: center; }
 #aviso-precision { background: #fff3d6; color: #684800; }
 .solucion-linea, .valor-matriz { overflow-wrap: anywhere; }
+.demo-guia { border: 1px solid #e0e3e8; border-radius: 14px; overflow: hidden; background: #f1f4f8; }
+#animacion-guia { display: block; width: 100%; height: auto; font: 16px system-ui, sans-serif; }
+#animacion-guia .demo-titulo { font-weight: 650; }
+#demo-soluciones { font-size: 22px; }
+.progreso-guia { height: 3px; background: #e0e5ee; }
+#progreso-guia { height: 100%; display: block; background: #4773e8; }
+#titulo-paso { margin-top: 18px; }
+#texto-paso { min-height: 5em; }

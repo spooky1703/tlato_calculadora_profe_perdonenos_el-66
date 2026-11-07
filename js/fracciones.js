@@ -33,7 +33,7 @@
   }
   // Analizador cerrado: nunca ejecuta código ingresado por el usuario.
   function interpretar(texto) {
-    const valor = String(texto).trim().toLowerCase().replace(/−/g, '-').replace(/×/g, '*').replace(/÷/g, '/').replace(/π/g, 'pi').replace(/,/g, '.');
+    const valor = String(texto).trim().toLowerCase().replace(/−/g, '-').replace(/×/g, '*').replace(/÷/g, '/').replace(/euler/g, 'e').replace(/π/g, 'pi').replace(/,/g, '.');
     if (!valor) throw new Error('La celda está vacía. Escribe 0 si no hay coeficiente.');
     if (valor.length > 256) throw new Error('Usa expresiones de hasta 256 caracteres.');
     const tokens = valor.match(/(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?|pi|e|[()+*/^−-]/g) || [];
