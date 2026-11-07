@@ -57,3 +57,13 @@ video { width: 100%; max-height: 70vh; background: #000; }
   .fila-matriz { grid-auto-columns: 60px; }
   .pie-matriz { flex-direction: column; }
 }
+.encabezado > button { float: right; margin-bottom: 12px; }
+.celda { overflow: hidden; text-overflow: ellipsis; cursor: pointer; }
+input.celda { cursor: text; }
+#modal-ayuda { width: min(94vw, 650px); max-height: 90vh; overflow: auto; border: 1px solid #cbd0d8; border-radius: 14px; padding: 22px; color: #202124; }
+#modal-ayuda::backdrop { background: #101318b8; }
+#modal-ayuda img { width: 100%; height: auto; }
+#modal-ayuda p { line-height: 1.6; }
+#contador-paso { align-self: center; }
+#aviso-precision { background: #fff3d6; color: #684800; }
+.solucion-linea, .valor-matriz { overflow-wrap: anywhere; }

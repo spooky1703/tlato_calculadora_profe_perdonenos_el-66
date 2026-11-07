@@ -2,6 +2,7 @@
   const F = global.Fraccion;
 
   function reducir(matrizEntrada, numeroIncognitas) {
+    if (!Number.isInteger(numeroIncognitas) || numeroIncognitas < 1 || numeroIncognitas > 14 || !Array.isArray(matrizEntrada) || matrizEntrada.length < 1 || matrizEntrada.length > 15 || matrizEntrada.some(f => !Array.isArray(f) || f.length !== numeroIncognitas + 1 || f.some(v => !(v instanceof F)))) throw new Error('Dimensiones o valores de matriz inválidos.');
     const matriz = matrizEntrada.map(fila => fila.map(v => new F(v.n, v.d)));
     const filas = matriz.length;
     let filaPivote = 0;
@@ -33,6 +34,16 @@
     const filaIncompatible = matriz.findIndex(fila =>
       fila.slice(0, numeroIncognitas).every(v => v.esCero()) && !fila[numeroIncognitas].esCero()
     );
+    // La columna aumentada también tiene pivote si el sistema es incompatible.
+    if (filaIncompatible >= 0) {
+      const pivote = matriz[filaIncompatible][numeroIncognitas];
+      matriz[filaIncompatible] = matriz[filaIncompatible].map(v => v.dividir(pivote));
+      for (let i = 0; i < filas; i++) {
+        if (i === filaIncompatible) continue;
+        const factor = matriz[i][numeroIncognitas];
+        matriz[i] = matriz[i].map((v, j) => v.restar(factor.multiplicar(matriz[filaIncompatible][j])));
+      }
+    }
     const rangoAumentada = rangoCoeficientes + (filaIncompatible >= 0 ? 1 : 0);
     let tipo;
     if (filaIncompatible >= 0) tipo = 'incompatible';
@@ -43,6 +54,7 @@
   }
 
   function parametrizar(resultado, numeroIncognitas) {
+    if (resultado.tipo === 'incompatible') throw new Error('Un sistema incompatible no tiene parametrización.');
     const { matriz, columnasPivote } = resultado;
     const libres = Array.from({ length: numeroIncognitas }, (_, i) => i).filter(i => !columnasPivote.includes(i));
     const expresiones = Array(numeroIncognitas);

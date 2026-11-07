@@ -18,12 +18,14 @@
   }
 
   function renderizarMatriz() {
+    resultadoElemento.hidden = true;
     matrizElemento.replaceChildren();
     matrizElemento.style.gridTemplateRows = `repeat(${filas}, auto)`;
     valores.forEach((fila, i) => {
       const filaElemento = document.createElement('div'); filaElemento.className = 'fila-matriz';
       fila.forEach((valor, j) => {
         const celda = document.createElement('button');
+        celda.dataset.fila = i; celda.dataset.columna = j;
         celda.type = 'button'; celda.className = 'celda';
         if (j === incognitas) celda.classList.add('celda-aumentada');
         celda.setAttribute('aria-label', `Editar fila ${i + 1}, ${j === incognitas ? 'término independiente' : `coeficiente de x${j + 1}`}`);
@@ -43,19 +45,34 @@
 
   function editarCelda(i, j, boton) {
     const entrada = document.createElement('input');
-    entrada.className = 'celda'; entrada.value = valores[i][j]; entrada.defaultValue = valores[i][j]; entrada.autocomplete = 'off';
+    entrada.className = boton.className; entrada.maxLength = 256; entrada.value = valores[i][j]; entrada.defaultValue = valores[i][j]; entrada.autocomplete = 'off';
     entrada.setAttribute('aria-label', `Valor de fila ${i + 1}, columna ${j + 1}`);
     boton.replaceWith(entrada); entrada.focus(); entrada.select();
     let guardado = false;
     const guardar = () => {
       if (guardado) return; guardado = true;
       valores[i][j] = entrada.value.trim();
+      errorElemento.hidden = true;
+      try { F.desdeTexto(valores[i][j]); } catch (error) { mostrarError(`Fila ${i + 1}, columna ${j + 1}: ${error.message}`); }
       renderizarMatriz();
     };
-    entrada.addEventListener('blur', guardar);
+    entrada.addEventListener('blur', evento => {
+      const destino = evento.relatedTarget;
+      guardar();
+      if (destino?.dataset.fila !== undefined) {
+        const fila = Number(destino.dataset.fila), columna = Number(destino.dataset.columna);
+        const nueva = matrizElemento.querySelectorAll('.fila-matriz')[fila]?.children[columna];
+        if (nueva) editarCelda(fila, columna, nueva);
+      }
+    });
     entrada.addEventListener('keydown', evento => {
-      if (evento.key === 'Enter') { evento.preventDefault(); entrada.blur(); }
-      if (evento.key === 'Escape') { valores[i][j] = entrada.defaultValue; entrada.blur(); }
+      if (evento.key === 'Escape') { entrada.value = entrada.defaultValue; entrada.blur(); }
+      if (evento.key === 'Tab' || evento.key === 'Enter') {
+        evento.preventDefault();
+        const siguiente = (i * (incognitas + 1) + j + (evento.shiftKey ? -1 : 1) + filas * (incognitas + 1)) % (filas * (incognitas + 1));
+        guardar();
+        matrizElemento.querySelectorAll('.celda')[siguiente].click();
+      }
     });
   }
 
@@ -127,7 +144,7 @@
         lista.append(linea);
       });
       const nota = document.createElement('p'); nota.className = 'parametros';
-      nota.textContent = `Variables libres: ${libres.map(i => `x${i + 1}`).join(', ')}. Los parámetros t1, t2, … pueden tomar cualquier valor real.`;
+      nota.textContent = `Variables pivote: ${resultado.columnasPivote.map(i => `x${i + 1}`).join(', ') || 'ninguna'}. Variables libres: ${libres.map(i => `x${i + 1}`).join(', ')}. ${libres.map((col, i) => `t${i + 1} = x${col + 1}`).join('; ')}. Cada parámetro puede tomar cualquier valor real.`;
       destino.append(lista, nota); return;
     }
     destino.append(lista);
@@ -137,13 +154,13 @@
     if (filas >= 15) return; valores.push(Array(incognitas + 1).fill('0')); filas++; renderizarMatriz();
   });
   document.getElementById('quitar-fila').addEventListener('click', () => {
-    if (filas <= 1) return; valores.pop(); filas--; renderizarMatriz();
+    if (filas <= 1) return; if (valores[filas - 1].some(v => v !== '0') && !confirm('¿Eliminar la última fila y sus valores?')) return; valores.pop(); filas--; renderizarMatriz();
   });
   document.getElementById('agregar-columna').addEventListener('click', () => {
     if (incognitas >= 14) return; valores.forEach(fila => fila.splice(incognitas, 0, '0')); incognitas++; renderizarMatriz();
   });
   document.getElementById('quitar-columna').addEventListener('click', () => {
-    if (incognitas <= 1) return; valores.forEach(fila => fila.splice(incognitas - 1, 1)); incognitas--; renderizarMatriz();
+    if (incognitas <= 1) return; if (valores.some(f => f[incognitas - 1] !== '0') && !confirm('¿Eliminar la última incógnita y sus coeficientes?')) return; valores.forEach(fila => fila.splice(incognitas - 1, 1)); incognitas--; renderizarMatriz();
   });
   document.getElementById('limpiar').addEventListener('click', () => {
     filas = 3; incognitas = 3; valores = Array.from({ length: filas }, () => Array(incognitas + 1).fill('0'));
@@ -152,6 +169,8 @@
   document.getElementById('resolver').addEventListener('click', () => {
     try {
       const matriz = leerMatriz();
+      const aproximado = valores.some(f => f.some(F.contieneConstantes));
+      document.getElementById('aviso-precision').hidden = !aproximado;
       const resultado = GaussJordan.reducir(matriz, incognitas);
       renderizarMatrizResultado(resultado.matriz);
       const clasificacion = document.getElementById('clasificacion');
@@ -160,7 +179,7 @@
         infinitas: 'Sistema compatible indeterminado: existen infinitas soluciones.',
         incompatible: 'Sistema incompatible: no existe solución.'
       };
-      clasificacion.textContent = `${textos[resultado.tipo]} Rango(A) = ${resultado.rangoCoeficientes}; rango(A|b) = ${resultado.rangoAumentada}.`;
+      clasificacion.textContent = `${aproximado ? 'Modelo racional aproximado: ' : ''}${textos[resultado.tipo]} Rango(A) = ${resultado.rangoCoeficientes}; rango(A|b) = ${resultado.rangoAumentada}.`;
       renderizarSolucion(resultado);
       resultadoElemento.hidden = false;
     } catch (error) {
@@ -184,5 +203,27 @@
   video.addEventListener('error', () => { document.getElementById('error-video').hidden = false; });
   document.addEventListener('keydown', evento => { if (evento.key === 'Escape' && !modal.hidden) cerrarModal(); });
 
+  const ayuda = document.getElementById('modal-ayuda');
+  let paso = 0, temporizador;
+  const pasos = [
+    ['1. Escribe los coeficientes', 'Cada fila es una ecuación. La columna b contiene el término a la derecha del signo igual. Pulsa una celda; Tab o Enter avanza.'],
+    ['2. Ajusta y resuelve', 'Añade filas o incógnitas según tu sistema y pulsa Resolver. Puedes usar 1/2, 0,25, 2*(3+1), 2pi o e.'],
+    ['3. Lee el resultado', 'La clasificación distingue solución única, infinitas soluciones o ninguna. En la parametrización, cada variable libre tiene su propio parámetro.']
+  ];
+  function mostrarPaso() {
+    document.getElementById('titulo-paso').textContent = pasos[paso][0];
+    document.getElementById('texto-paso').textContent = pasos[paso][1];
+    document.getElementById('captura-guia').src = `ayuda/paso-${paso + 1}.jpg`;
+    document.getElementById('contador-paso').textContent = `${paso + 1} / 3`;
+  }
+  document.getElementById('como-usar').onclick = () => { ayuda.showModal(); mostrarPaso(); };
+  document.getElementById('cerrar-ayuda').onclick = () => ayuda.close();
+  document.getElementById('siguiente-ayuda').onclick = () => { paso = (paso + 1) % 3; mostrarPaso(); };
+  document.getElementById('anterior-ayuda').onclick = () => { paso = (paso + 2) % 3; mostrarPaso(); };
+  document.getElementById('animar-ayuda').onclick = evento => {
+    if (temporizador) { clearInterval(temporizador); temporizador = null; evento.target.textContent = 'Reproducir recorrido'; }
+    else { temporizador = setInterval(() => { paso = (paso + 1) % 3; mostrarPaso(); }, 4500); evento.target.textContent = 'Pausar recorrido'; }
+  };
+  ayuda.addEventListener('close', () => { clearInterval(temporizador); temporizador = null; document.getElementById('animar-ayuda').textContent = 'Reproducir recorrido'; });
   renderizarMatriz();
 })();

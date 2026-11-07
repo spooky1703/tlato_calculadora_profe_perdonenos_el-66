@@ -46,3 +46,41 @@ afirmar(r.matriz[0][1].aTexto() === '1/2', 'resultado fraccionario');
 const grande = Array.from({length:15}, (_,i) => Array.from({length:15}, (_,j) => i < 14 && i === j ? '1' : '0'));
 r = comprobar(grande, 14, 'unica', [14,14]);
 console.log(`Correcto: ${total} comprobaciones.`);
+
+for (const [entrada, esperado] of [['(2+3)/4','5/4'],['2^-3','1/8'],['-2^2','-4'],['2^3^2','512'],['1e-3','1/1000'],['1,25','5/4'],['2(3+1)','8'],['1/-2','-1/2'],['2pi/pi','2'],['e/e','1']]) afirmar(f(entrada).aTexto() === esperado, entrada);
+for (const entrada of ['', '1/0', '2x', 'alert(1)', '2**3', '()', '1 2', '2^101', '0^0', '(2+1', 'Infinity']) {
+ let fallo=false; try { f(entrada); } catch { fallo=true; } afirmar(fallo, `rechazar ${entrada}`);
+}
+function verificar(filas) {
+ const original=matriz(filas), n=original[0].length-1, r=G.reducir(original,n);
+ let ultima=-1;
+ r.matriz.forEach((fila,i)=> {
+  const p=fila.findIndex(v=>!v.esCero());
+  if(p<0) return;
+  afirmar(p>ultima,'orden de pivotes RREF'); ultima=p;
+  afirmar(fila[p].esUno(),'pivote unitario');
+  afirmar(r.matriz.every((f,j)=>j===i || f[p].esCero()),'columna pivote reducida');
+ });
+ if(r.tipo==='incompatible') { afirmar(r.matriz.some(f=>f.slice(0,n).every(v=>v.esCero()) && !f[n].esCero()),'contradicción'); return; }
+ const {expresiones,libres}=G.parametrizar(r,n);
+ // Verificar la constante y cada vector de la base prueba todos los parámetros.
+ for(let k=-1;k<libres.length;k++) {
+  const x=expresiones.map(ts=>ts.reduce((v,t)=>v.sumar((k===-1?t.constante:t.parametro===`t${k+1}`)?t.coeficiente:F.CERO),F.CERO));
+  original.forEach(fila=>afirmar(fila.slice(0,n).reduce((v,a,j)=>v.sumar(a.multiplicar(x[j])),F.CERO).restar(k===-1?fila[n]:F.CERO).esCero(),'sustitución exacta de la familia'));
+ }
+}
+[
+ [['1','2','3'],['2','4','7'],['0','0','5']],
+ [['0','1','2','3'],['0','2','4','6']],
+ [['1/2','-3/4','1.25'],['-2','3','-5']],
+ [['0','0','0'],['0','0','0']],
+ [['1','0','2'],['0','1','3'],['1','1','5']],
+ grande
+].forEach(verificar);
+let semilla=41;
+function azar(){semilla=(semilla*16807)%2147483647;return semilla;}
+for(let caso=0;caso<200;caso++) {
+ const n=1+azar()%6,m=1+azar()%7;
+ verificar(Array.from({length:m},()=>Array.from({length:n+1},()=>String(azar()%11-5))));
+}
+console.log(`Validación ampliada: ${total} comprobaciones correctas.`);

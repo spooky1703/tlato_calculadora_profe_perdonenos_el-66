@@ -13,6 +13,7 @@
 <body>
   <main class="contenedor">
     <header class="encabezado">
+      <button id="como-usar" type="button" class="boton">¿Cómo usar?</button>
       <div>
         <h1>Tlato Calculadora</h1>
         <p>Resolución de sistemas lineales mediante Gauss-Jordan</p>
@@ -23,7 +24,7 @@
       <div class="panel-cabecera">
         <div>
           <h2 id="titulo-matriz">Matriz aumentada</h2>
-          <p class="ayuda">Ingresa enteros, decimales o fracciones (por ejemplo, −3/4).</p>
+          <p class="ayuda">Pulsa una celda. Usa −3/4, 0,25, (2+3)/4, 2pi o e. Tab y Enter avanzan. La última columna es b.</p>
         </div>
         <div class="acciones-dimensiones">
           <button type="button" id="agregar-fila" class="boton secundario">+ Fila</button>
@@ -49,6 +50,7 @@
     <section id="seccion-resultado" class="panel resultado" aria-labelledby="titulo-resultado" hidden>
       <h2 id="titulo-resultado">Resultado</h2>
       <div id="clasificacion" class="clasificacion"></div>
+      <p id="aviso-precision" class="mensaje" hidden>π y e se aproximan a 40 decimales. Las soluciones, los rangos y la clasificación corresponden a ese modelo racional; no certifican el sistema con constantes irracionales exactas.</p>
       <h3>Matriz escalonada reducida</h3>
       <div id="matriz-resultado" class="desplazamiento-matriz"></div>
       <div id="detalle-solucion"></div>
@@ -56,7 +58,7 @@
         <button type="button" id="ver-pasos" class="boton secundario">Ver pasos</button>
       </div>
     </section>
-    <footer>Los cálculos se realizan con fracciones exactas; no se utilizan aproximaciones de punto flotante.</footer>
+    <footer>Enteros, decimales y fracciones: cálculo racional exacto. π y e: modelo aproximado de 40 decimales.</footer>
   </main>
 
   <div id="modal-video" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="titulo-video">
@@ -72,5 +74,12 @@
       <p id="error-video" class="mensaje error" hidden>No se encontró <code>video.mp4</code>. Coloca el archivo en la carpeta raíz del proyecto.</p>
     </div>
   </div>
+<dialog id="modal-ayuda" aria-labelledby="titulo-ayuda">
+    <div class="modal-cabecera"><h2 id="titulo-ayuda">Cómo usar Tlato</h2><button id="cerrar-ayuda" class="boton" aria-label="Cerrar ayuda">×</button></div>
+    <img id="captura-guia" alt="Captura real de Tlato Calculadora en este paso" width="1280" height="720">
+    <h3 id="titulo-paso"></h3><p id="texto-paso"></p>
+    <p>Usa * para multiplicar y ^ para potencias enteras. No se admiten variables ni funciones. π y e son aproximaciones; las demás operaciones admitidas conservan fracciones exactas.</p>
+    <div class="acciones-principales"><button id="anterior-ayuda" class="boton">Anterior</button><span id="contador-paso" aria-live="polite"></span><button id="siguiente-ayuda" class="boton">Siguiente</button><button id="animar-ayuda" class="boton">Reproducir recorrido</button></div>
+  </dialog>
 </body>
 </html>
