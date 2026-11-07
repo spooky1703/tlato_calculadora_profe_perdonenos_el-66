@@ -1,0 +1,188 @@
+(() => {
+  const F = window.Fraccion;
+  const matrizElemento = document.getElementById('matriz');
+  const resultadoElemento = document.getElementById('seccion-resultado');
+  const errorElemento = document.getElementById('error-entrada');
+  let filas = 3, incognitas = 3;
+  let valores = Array.from({ length: filas }, () => Array(incognitas + 1).fill('0'));
+
+  function fraccionVisual(fraccion) {
+    if (fraccion.d === 1n) return document.createTextNode(String(fraccion.n));
+    const contenedor = document.createElement('span');
+    contenedor.className = 'fraccion';
+    const numerador = document.createElement('span'); numerador.className = 'numerador'; numerador.textContent = String(fraccion.n);
+    const barra = document.createElement('span'); barra.className = 'barra';
+    const denominador = document.createElement('span'); denominador.className = 'denominador'; denominador.textContent = String(fraccion.d);
+    contenedor.append(numerador, barra, denominador);
+    return contenedor;
+  }
+
+  function renderizarMatriz() {
+    matrizElemento.replaceChildren();
+    matrizElemento.style.gridTemplateRows = `repeat(${filas}, auto)`;
+    valores.forEach((fila, i) => {
+      const filaElemento = document.createElement('div'); filaElemento.className = 'fila-matriz';
+      fila.forEach((valor, j) => {
+        const celda = document.createElement('button');
+        celda.type = 'button'; celda.className = 'celda';
+        if (j === incognitas) celda.classList.add('celda-aumentada');
+        celda.setAttribute('aria-label', `Editar fila ${i + 1}, ${j === incognitas ? 'término independiente' : `coeficiente de x${j + 1}`}`);
+        try { celda.append(fraccionVisual(F.desdeTexto(valor))); }
+        catch { celda.textContent = valor || 'Editar'; celda.classList.add('invalida'); }
+        celda.addEventListener('click', () => editarCelda(i, j, celda));
+        filaElemento.append(celda);
+      });
+      matrizElemento.append(filaElemento);
+    });
+    document.getElementById('dimensiones').textContent = `${filas} ecuaciones · ${incognitas} incógnitas`;
+    document.getElementById('agregar-fila').disabled = filas >= 15;
+    document.getElementById('quitar-fila').disabled = filas <= 1;
+    document.getElementById('agregar-columna').disabled = incognitas >= 14;
+    document.getElementById('quitar-columna').disabled = incognitas <= 1;
+  }
+
+  function editarCelda(i, j, boton) {
+    const entrada = document.createElement('input');
+    entrada.className = 'celda'; entrada.value = valores[i][j]; entrada.defaultValue = valores[i][j]; entrada.autocomplete = 'off';
+    entrada.setAttribute('aria-label', `Valor de fila ${i + 1}, columna ${j + 1}`);
+    boton.replaceWith(entrada); entrada.focus(); entrada.select();
+    let guardado = false;
+    const guardar = () => {
+      if (guardado) return; guardado = true;
+      valores[i][j] = entrada.value.trim();
+      renderizarMatriz();
+    };
+    entrada.addEventListener('blur', guardar);
+    entrada.addEventListener('keydown', evento => {
+      if (evento.key === 'Enter') { evento.preventDefault(); entrada.blur(); }
+      if (evento.key === 'Escape') { valores[i][j] = entrada.defaultValue; entrada.blur(); }
+    });
+  }
+
+  function mostrarError(mensaje, i = -1, j = -1) {
+    errorElemento.textContent = mensaje;
+    errorElemento.hidden = false;
+    if (i >= 0 && j >= 0) {
+      const celda = matrizElemento.querySelectorAll('.fila-matriz')[i]?.children[j];
+      if (celda) celda.classList.add('invalida');
+    }
+  }
+
+  function leerMatriz() {
+    errorElemento.hidden = true;
+    return valores.map((fila, i) => fila.map((valor, j) => {
+      try { return F.desdeTexto(valor); }
+      catch (error) { throw Object.assign(new Error(`Fila ${i + 1}, columna ${j + 1}: ${error.message}`), { fila: i, columna: j }); }
+    }));
+  }
+
+  function renderizarMatrizResultado(matriz) {
+    const tabla = document.createElement('div'); tabla.className = 'tabla-resultado';
+    matriz.forEach(fila => {
+      const filaElemento = document.createElement('div'); filaElemento.className = 'fila-resultado';
+      fila.forEach((valor, j) => {
+        const celda = document.createElement('span'); celda.className = 'valor-matriz';
+        if (j === incognitas) celda.classList.add('aumentada');
+        celda.append(fraccionVisual(valor)); filaElemento.append(celda);
+      });
+      tabla.append(filaElemento);
+    });
+    const destino = document.getElementById('matriz-resultado'); destino.replaceChildren(tabla);
+  }
+
+  function sumarTermino(contenedor, texto, clase = '') {
+    const span = document.createElement('span'); span.textContent = texto; if (clase) span.className = clase; contenedor.append(span);
+  }
+
+  function renderizarSolucion(resultado) {
+    const destino = document.getElementById('detalle-solucion'); destino.replaceChildren();
+    const encabezado = document.createElement('h3'); encabezado.textContent = 'Solución'; destino.append(encabezado);
+    if (resultado.tipo === 'incompatible') {
+      const p = document.createElement('p'); p.textContent = `El sistema no tiene solución. La fila ${resultado.filaIncompatible + 1} contiene únicamente ceros en los coeficientes y un término independiente distinto de cero.`;
+      destino.append(p); return;
+    }
+    const lista = document.createElement('div'); lista.className = 'solucion-lista';
+    if (resultado.tipo === 'unica') {
+      resultado.columnasPivote.forEach((columna, i) => {
+        const linea = document.createElement('div'); linea.className = 'solucion-linea';
+        sumarTermino(linea, `x${columna + 1} =`); linea.append(fraccionVisual(resultado.matriz[i][incognitas])); lista.append(linea);
+      });
+    } else {
+      const { libres, expresiones } = GaussJordan.parametrizar(resultado, incognitas);
+      expresiones.forEach((terminos, indice) => {
+        const linea = document.createElement('div'); linea.className = 'solucion-linea';
+        sumarTermino(linea, `x${indice + 1} =`);
+        if (!terminos.length) sumarTermino(linea, '0');
+        let primero = true;
+        terminos.forEach(termino => {
+          const coef = termino.coeficiente;
+          const negativo = coef.n < 0n;
+          if (!primero) sumarTermino(linea, negativo ? ' − ' : ' + ');
+          else if (negativo) sumarTermino(linea, '−');
+          const absoluto = new F(coef.n < 0n ? -coef.n : coef.n, coef.d);
+          if (termino.constante || !absoluto.esUno()) linea.append(fraccionVisual(absoluto));
+          if (termino.parametro) sumarTermino(linea, termino.parametro);
+          primero = false;
+        });
+        lista.append(linea);
+      });
+      const nota = document.createElement('p'); nota.className = 'parametros';
+      nota.textContent = `Variables libres: ${libres.map(i => `x${i + 1}`).join(', ')}. Los parámetros t1, t2, … pueden tomar cualquier valor real.`;
+      destino.append(lista, nota); return;
+    }
+    destino.append(lista);
+  }
+
+  document.getElementById('agregar-fila').addEventListener('click', () => {
+    if (filas >= 15) return; valores.push(Array(incognitas + 1).fill('0')); filas++; renderizarMatriz();
+  });
+  document.getElementById('quitar-fila').addEventListener('click', () => {
+    if (filas <= 1) return; valores.pop(); filas--; renderizarMatriz();
+  });
+  document.getElementById('agregar-columna').addEventListener('click', () => {
+    if (incognitas >= 14) return; valores.forEach(fila => fila.splice(incognitas, 0, '0')); incognitas++; renderizarMatriz();
+  });
+  document.getElementById('quitar-columna').addEventListener('click', () => {
+    if (incognitas <= 1) return; valores.forEach(fila => fila.splice(incognitas - 1, 1)); incognitas--; renderizarMatriz();
+  });
+  document.getElementById('limpiar').addEventListener('click', () => {
+    filas = 3; incognitas = 3; valores = Array.from({ length: filas }, () => Array(incognitas + 1).fill('0'));
+    resultadoElemento.hidden = true; errorElemento.hidden = true; renderizarMatriz();
+  });
+  document.getElementById('resolver').addEventListener('click', () => {
+    try {
+      const matriz = leerMatriz();
+      const resultado = GaussJordan.reducir(matriz, incognitas);
+      renderizarMatrizResultado(resultado.matriz);
+      const clasificacion = document.getElementById('clasificacion');
+      const textos = {
+        unica: 'Sistema compatible determinado: existe una solución única.',
+        infinitas: 'Sistema compatible indeterminado: existen infinitas soluciones.',
+        incompatible: 'Sistema incompatible: no existe solución.'
+      };
+      clasificacion.textContent = `${textos[resultado.tipo]} Rango(A) = ${resultado.rangoCoeficientes}; rango(A|b) = ${resultado.rangoAumentada}.`;
+      renderizarSolucion(resultado);
+      resultadoElemento.hidden = false;
+    } catch (error) {
+      mostrarError(error.message, error.fila, error.columna);
+      resultadoElemento.hidden = true;
+    }
+  });
+
+  const modal = document.getElementById('modal-video');
+  const video = document.getElementById('video');
+  document.getElementById('ver-pasos').addEventListener('click', () => {
+    modal.hidden = false;
+    document.getElementById('error-video').hidden = true;
+    video.currentTime = 0;
+    const promesa = video.play();
+    if (promesa && promesa.catch) promesa.catch(() => {});
+  });
+  function cerrarModal() { video.pause(); modal.hidden = true; }
+  document.getElementById('cerrar-video').addEventListener('click', cerrarModal);
+  modal.addEventListener('click', evento => { if (evento.target === modal) cerrarModal(); });
+  video.addEventListener('error', () => { document.getElementById('error-video').hidden = false; });
+  document.addEventListener('keydown', evento => { if (evento.key === 'Escape' && !modal.hidden) cerrarModal(); });
+
+  renderizarMatriz();
+})();

@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Resuelve sistemas de ecuaciones lineales mediante Gauss-Jordan con aritmética racional exacta.">
+  <title>Tlato Calculadora</title>
+  <link rel="stylesheet" href="css/estilos.css">
+  <script src="js/fracciones.js" defer></script>
+  <script src="js/gauss-jordan.js" defer></script>
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+  <main class="contenedor">
+    <header class="encabezado">
+      <div>
+        <h1>Tlato Calculadora</h1>
+        <p>Resolución de sistemas lineales mediante Gauss-Jordan</p>
+      </div>
+    </header>
+
+    <section class="panel" aria-labelledby="titulo-matriz">
+      <div class="panel-cabecera">
+        <div>
+          <h2 id="titulo-matriz">Matriz aumentada</h2>
+          <p class="ayuda">Ingresa enteros, decimales o fracciones (por ejemplo, −3/4).</p>
+        </div>
+        <div class="acciones-dimensiones">
+          <button type="button" id="agregar-fila" class="boton secundario">+ Fila</button>
+          <button type="button" id="quitar-fila" class="boton secundario">− Fila</button>
+          <button type="button" id="agregar-columna" class="boton secundario">+ Incógnita</button>
+          <button type="button" id="quitar-columna" class="boton secundario">− Incógnita</button>
+        </div>
+      </div>
+      <div id="contenedor-matriz" class="desplazamiento-matriz" aria-label="Editor de matriz">
+        <div id="matriz" class="matriz"></div>
+      </div>
+      <div class="pie-matriz">
+        <span id="dimensiones">3 ecuaciones · 3 incógnitas</span>
+        <span>Máximo: 15 ecuaciones y 14 incógnitas</span>
+      </div>
+      <div class="acciones-principales">
+        <button type="button" id="resolver" class="boton principal">Resolver</button>
+        <button type="button" id="limpiar" class="boton secundario">Restablecer matriz</button>
+      </div>
+      <p id="error-entrada" class="mensaje error" role="alert" hidden></p>
+    </section>
+
+    <section id="seccion-resultado" class="panel resultado" aria-labelledby="titulo-resultado" hidden>
+      <h2 id="titulo-resultado">Resultado</h2>
+      <div id="clasificacion" class="clasificacion"></div>
+      <h3>Matriz escalonada reducida</h3>
+      <div id="matriz-resultado" class="desplazamiento-matriz"></div>
+      <div id="detalle-solucion"></div>
+      <div class="acciones-resultado">
+        <button type="button" id="ver-pasos" class="boton secundario">Ver pasos</button>
+      </div>
+    </section>
+    <footer>Los cálculos se realizan con fracciones exactas; no se utilizan aproximaciones de punto flotante.</footer>
+  </main>
+
+  <div id="modal-video" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="titulo-video">
+    <div class="modal-contenido">
+      <div class="modal-cabecera">
+        <h2 id="titulo-video">Ver pasos</h2>
+        <button type="button" id="cerrar-video" class="boton cerrar" aria-label="Cerrar video">×</button>
+      </div>
+      <video id="video" controls preload="metadata">
+        <source src="video.mp4" type="video/mp4">
+        Tu navegador no puede reproducir este video.
+      </video>
+      <p id="error-video" class="mensaje error" hidden>No se encontró <code>video.mp4</code>. Coloca el archivo en la carpeta raíz del proyecto.</p>
+    </div>
+  </div>
+</body>
+</html>
