@@ -79,7 +79,38 @@ h3 { font-size: 1rem; margin: 22px 0 12px; color: var(--texto-principal); }
 .boton.principal:hover { background: var(--primario-hover); }
 
 .desplazamiento-matriz { max-width: 100%; overflow-x: auto; overscroll-behavior-x: contain; padding: 12px 2px; }
-.matriz { display: grid; gap: 8px; width: max-content; margin: 0 auto; }
+
+/* ======== CORCHETES MATEMÁTICOS PARA LAS MATRICES ======== */
+.matriz, .tabla-resultado { 
+  display: grid; 
+  width: max-content; 
+  margin: 0 auto; 
+  position: relative; 
+  padding: 5px 16px; /* Espacio para que el corchete no toque los números */
+}
+.matriz { gap: 8px; }
+.tabla-resultado { gap: 7px; }
+
+.matriz::before, .matriz::after, 
+.tabla-resultado::before, .tabla-resultado::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  width: 10px;
+  border: 2px solid var(--texto-principal);
+  pointer-events: none; /* Evita que el corchete bloquee clics en celdas */
+}
+.matriz::before, .tabla-resultado::before {
+  left: 0;
+  border-right: none;
+}
+.matriz::after, .tabla-resultado::after {
+  right: 0;
+  border-left: none;
+}
+/* ========================================================= */
+
 .fila-matriz { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(58px, 76px); gap: 8px; align-items: center; }
 
 .celda { 
@@ -99,12 +130,11 @@ h3 { font-size: 1rem; margin: 22px 0 12px; color: var(--texto-principal); }
 .error { color: #E57373; background: #3D1A1A; border: 1px solid #5C2727; }
 
 .clasificacion { padding: 12px 14px; border-radius: 8px; background: var(--boton-bg); color: var(--texto-principal); margin: 14px 0 18px; font-weight: 650; display: inline-block; }
-.tabla-resultado { display: grid; gap: 7px; width: max-content; margin: 0 auto; }
 .fila-resultado { display: flex; align-items: center; gap: 9px; min-height: 42px; }
 .valor-matriz { min-width: 56px; text-align: center; display: inline-flex; justify-content: center; align-items: center; padding: 4px 7px; color: var(--texto-principal); }
 .valor-matriz.aumentada { border-left: 2px solid var(--acento); margin-left: 5px; padding-left: 13px; }
 
-/* Fracciones estrictas - Línea horizontal */
+/* Fracciones estrictas - Línea horizontal (REGLA DEL PROFESOR INTACTA) */
 .fraccion { display: inline-grid; grid-template-rows: auto 1px auto; justify-items: stretch; align-items: center; vertical-align: middle; line-height: 1.05; font-size: .92em; min-width: 1.2em; }
 .fraccion .numerador, .fraccion .denominador { padding: 2px 3px; text-align: center; }
 .fraccion .barra { height: 1px; background: currentColor; }
