@@ -19,6 +19,7 @@
 
   function renderizarMatriz() {
     resultadoElemento.hidden = true;
+    window.VisualizacionSoluciones.limpiar();
     matrizElemento.replaceChildren();
     matrizElemento.style.gridTemplateRows = `repeat(${filas}, auto)`;
     valores.forEach((fila, i) => {
@@ -29,7 +30,18 @@
         celda.type = 'button'; celda.className = 'celda';
         if (j === incognitas) celda.classList.add('celda-aumentada');
         celda.setAttribute('aria-label', `Editar fila ${i + 1}, ${j === incognitas ? 'término independiente' : `coeficiente de x${j + 1}`}`);
-        try { celda.append(fraccionVisual(F.desdeTexto(valor))); }
+        try {
+          const numero = F.desdeTexto(valor);
+          if (F.contieneConstantes(valor)) {
+            const simbolos = document.createElement('span');
+            simbolos.className = 'expresion-constantes';
+            simbolos.textContent = valor.toLowerCase().replace(/euler/g, 'e').replace(/pi/g, 'π').replace(/\*/g, '·').replace(/-/g, '−');
+            celda.append(simbolos);
+            celda.title = `Expresión: ${valor}. π y e se calculan con aproximaciones de 40 decimales.`;
+          } else {
+            celda.append(fraccionVisual(numero));
+          }
+        }
         catch { celda.textContent = valor || 'Editar'; celda.classList.add('invalida'); }
         celda.addEventListener('click', () => editarCelda(i, j, celda));
         filaElemento.append(celda);
@@ -181,6 +193,7 @@
       };
       clasificacion.textContent = `${aproximado ? 'Modelo racional aproximado: ' : ''}${textos[resultado.tipo]} Rango(A) = ${resultado.rangoCoeficientes}; rango(A|b) = ${resultado.rangoAumentada}.`;
       renderizarSolucion(resultado);
+      window.VisualizacionSoluciones.preparar(resultado, matriz, incognitas, aproximado);
       resultadoElemento.hidden = false;
     } catch (error) {
       mostrarError(error.message, error.fila, error.columna);
