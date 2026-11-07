@@ -187,3 +187,5 @@ input.celda { cursor: text; }
 #grafica-infinitas { max-height: 340px; object-fit: contain; background: #F8FAF8; }
 
 .parametro-geometria input[type=text] { color: var(--texto-principal); background: var(--fondo-panel); }
+
+.expresion-constantes { font-family: "Cambria Math", "STIX Two Math", Georgia, serif; font-size: 1.2em; }
