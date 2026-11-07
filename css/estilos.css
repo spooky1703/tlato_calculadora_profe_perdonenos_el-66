@@ -135,3 +135,110 @@ input.celda { cursor: text; }
 #progreso-guia { height: 100%; display: block; background: #6EA2B3; }
 #titulo-paso { margin-top: 18px; }
 #texto-paso { min-height: 5em; }
+/* =========================================
+   SELECTOR DE UNIDADES (NUEVO)
+   ========================================= */
+.selector-unidades {
+  margin-bottom: 20px;
+}
+
+.tarjetas-unidades {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 15px;
+  margin-top: 12px;
+}
+
+.tarjeta-unidad {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 15px;
+  border-radius: 12px;
+  border: 2px solid #E6D8C9;
+  background: #FFFFFF;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  min-height: 110px;
+}
+
+/* Unidad 1 (Activa) */
+.tarjeta-unidad.activa {
+  border-color: #35534A;
+  box-shadow: 0 4px 10px rgba(53, 83, 74, 0.08);
+}
+
+.tarjeta-unidad.activa:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(53, 83, 74, 0.12);
+}
+
+/* Unidades inactivas */
+.tarjeta-unidad.inactiva {
+  background: #F4F7F6;
+  opacity: 0.85;
+  cursor: not-allowed;
+}
+
+.tarjeta-unidad.inactiva:hover {
+  border-color: #CBBEAD;
+  background: #EAEFEF;
+}
+
+/* Textos e indicadores */
+.numero-unidad {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #35534A;
+  margin-bottom: 6px;
+}
+
+.tarjeta-unidad.inactiva .numero-unidad {
+  color: #4F7568;
+}
+
+.tema-unidad {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #4F7568;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.indicador-activo {
+  width: 8px;
+  height: 8px;
+  background-color: #4F7568;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* Badges de Próximamente */
+.proximamente {
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.proximamente.azul {
+  background-color: #E8F0F4;
+  color: #2C4A5E;
+  border: 1px solid #6EA2B3;
+}
+
+.proximamente.beige {
+  background-color: #E6D8C9;
+  color: #35534A;
+  border: 1px solid #CBBEAD;
+}
+
+@media (max-width: 620px) {
+  .tarjetas-unidades {
+    grid-template-columns: 1fr; /* Una columna por fila en pantallas muy chicas */
+  }
+}

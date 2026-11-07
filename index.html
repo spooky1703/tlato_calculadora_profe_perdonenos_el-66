@@ -20,7 +20,31 @@
         <p>Resolución de sistemas lineales mediante Gauss-Jordan</p>
       </div>
     </header>
+<!-- SECCIÓN: SELECTOR DE UNIDADES (NUEVO) -->
+    <section class="panel selector-unidades" aria-labelledby="titulo-unidades">
+      <h2 id="titulo-unidades">Unidad de Trabajo</h2>
+      <div class="tarjetas-unidades">
+        <!-- Unidad 1 (Activa) -->
+        <button type="button" class="tarjeta-unidad activa" id-unidad="1">
+          <span class="numero-unidad">Unidad 1</span>
+          <span class="tema-unidad">
+            <span class="indicador-activo"></span> Gauss-Jordan
+          </span>
+        </button>
+        
+        <!-- Unidad 2 (Próximamente) -->
+        <button type="button" class="tarjeta-unidad inactiva" id-unidad="2">
+          <span class="numero-unidad">Unidad 2</span>
+          <span class="proximamente azul">Próximamente</span>
+        </button>
 
+        <!-- Unidad 3 (Próximamente) -->
+        <button type="button" class="tarjeta-unidad inactiva" id-unidad="3">
+          <span class="numero-unidad">Unidad 3</span>
+          <span class="proximamente beige">Próximamente</span>
+        </button>
+      </div>
+    </section>
     <section class="panel" aria-labelledby="titulo-matriz">
       <div class="panel-cabecera">
         <div>
