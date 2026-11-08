@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,600,0,0" />
-  <link rel="stylesheet" href="css/estilos.css?v=guia-matriz-6">
+  <link rel="stylesheet" href="css/estilos.css?v=pantalla-broma-7">
   <script src="js/tema.js" defer></script>
   <script src="js/navegacion.js" defer></script>
   <script src="js/fracciones.js?v=constantes-2" defer></script>
@@ -20,7 +20,7 @@
   <script src="js/visualizacion-soluciones.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
   <script src="js/guia-importacion.js?v=2" defer></script>
-  <script src="js/app.js?v=guia-archivos-3" defer></script>
+  <script src="js/app.js?v=pantalla-broma-4" defer></script>
   <script src="js/ayuda.js?v=2" defer></script>
 </head>
 <body>
@@ -121,10 +121,15 @@
         <h2 id="titulo-video">Ver pasos</h2>
         <button type="button" id="cerrar-video" class="boton cerrar" aria-label="Cerrar video">×</button>
       </div>
-      <video id="video" controls preload="metadata">
+      <div class="contenido-broma">
+        <img class="imagen-broma" src="assets/te-la-creiste.png" width="554" height="554" alt="Te la creíste, we.">
+        <video id="video" controls muted playsinline preload="metadata" aria-label="Rickroll sin sonido">
         <source src="video.mp4" type="video/mp4">
         Tu navegador no puede reproducir este video.
-      </video>
+        </video>
+      </div>
+      <audio id="audio-broma" controls preload="metadata" aria-label="Risas de bebé"><source src="assets/risas-bebe.mp3" type="audio/mpeg"></audio>
+      <p id="error-audio-broma" class="mensaje" hidden>No se pudo iniciar el audio. Puedes reproducirlo con sus controles.</p>
       <p id="error-video" class="mensaje error" hidden>No se encontró <code>video.mp4</code>. Coloca el archivo en la carpeta raíz del proyecto.</p>
     </div>
   </div>

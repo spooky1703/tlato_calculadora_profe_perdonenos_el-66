@@ -225,15 +225,31 @@
 
   const modal = document.getElementById('modal-video');
   const video = document.getElementById('video');
+  const audioBroma = document.getElementById('audio-broma');
+  const avisoAudioBroma = document.getElementById('error-audio-broma');
+  video.defaultMuted = true;
+  video.addEventListener('volumechange', () => { if (!video.muted) video.muted = true; });
   document.getElementById('ver-pasos').addEventListener('click', () => {
     modal.hidden = false;
     document.getElementById('error-video').hidden = true;
+    avisoAudioBroma.hidden = true;
+    video.muted = true;
     video.currentTime = 0;
+    audioBroma.currentTime = 0;
+    const sonido = audioBroma.play();
+    if (sonido?.catch) sonido.catch(() => { if (!modal.hidden) avisoAudioBroma.hidden = false; });
+    document.getElementById('cerrar-video').focus();
     const promesa = video.play();
     if (promesa && promesa.catch) promesa.catch(() => {});
   });
 
-  function cerrarModal() { video.pause(); modal.hidden = true; }
+  function cerrarModal() {
+    video.pause(); audioBroma.pause();
+    video.currentTime = 0; audioBroma.currentTime = 0;
+    modal.hidden = true;
+    document.getElementById('ver-pasos').focus();
+  }
+  audioBroma.addEventListener('error', () => { avisoAudioBroma.textContent = 'No se pudo cargar el audio de las risas.'; avisoAudioBroma.hidden = false; });
   document.getElementById('cerrar-video').addEventListener('click', cerrarModal);
   modal.addEventListener('click', evento => { if (evento.target === modal) cerrarModal(); });
   video.addEventListener('error', () => { document.getElementById('error-video').hidden = false; });
