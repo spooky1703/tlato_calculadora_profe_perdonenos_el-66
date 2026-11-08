@@ -5,7 +5,7 @@
   const errorElemento = document.getElementById('error-entrada');
   let filas = 3, incognitas = 3;
   let valores = Array.from({ length: filas }, () => Array(incognitas + 1).fill('0'));
-
+  
   function fraccionVisual(fraccion) {
     if (fraccion.d === 1n) return document.createTextNode(String(fraccion.n));
     const contenedor = document.createElement('span');
@@ -16,7 +16,7 @@
     contenedor.append(numerador, barra, denominador);
     return contenedor;
   }
-
+  
   function renderizarMatriz() {
     resultadoElemento.hidden = true;
     window.VisualizacionSoluciones.limpiar();
@@ -54,7 +54,7 @@
     document.getElementById('agregar-columna').disabled = incognitas >= 14;
     document.getElementById('quitar-columna').disabled = incognitas <= 1;
   }
-
+  
   function editarCelda(i, j, boton) {
     const entrada = document.createElement('input');
     entrada.className = boton.className; entrada.maxLength = 256; entrada.value = valores[i][j]; entrada.defaultValue = valores[i][j]; entrada.autocomplete = 'off';
@@ -87,7 +87,7 @@
       }
     });
   }
-
+  
   function mostrarError(mensaje, i = -1, j = -1) {
     errorElemento.textContent = mensaje;
     errorElemento.hidden = false;
@@ -96,7 +96,7 @@
       if (celda) celda.classList.add('invalida');
     }
   }
-
+  
   function leerMatriz() {
     errorElemento.hidden = true;
     return valores.map((fila, i) => fila.map((valor, j) => {
@@ -104,7 +104,7 @@
       catch (error) { throw Object.assign(new Error(`Fila ${i + 1}, columna ${j + 1}: ${error.message}`), { fila: i, columna: j }); }
     }));
   }
-
+  
   function renderizarMatrizResultado(matriz) {
     const tabla = document.createElement('div'); tabla.className = 'tabla-resultado';
     matriz.forEach(fila => {
@@ -118,11 +118,11 @@
     });
     const destino = document.getElementById('matriz-resultado'); destino.replaceChildren(tabla);
   }
-
+  
   function sumarTermino(contenedor, texto, clase = '') {
     const span = document.createElement('span'); span.textContent = texto; if (clase) span.className = clase; contenedor.append(span);
   }
-
+  
   function renderizarSolucion(resultado) {
     const destino = document.getElementById('detalle-solucion'); destino.replaceChildren();
     const encabezado = document.createElement('h3'); encabezado.textContent = 'Solución'; destino.append(encabezado);
@@ -161,7 +161,7 @@
     }
     destino.append(lista);
   }
-
+  
   document.getElementById('agregar-fila').addEventListener('click', () => {
     if (filas >= 15) return; valores.push(Array(incognitas + 1).fill('0')); filas++; renderizarMatriz();
   });
@@ -174,10 +174,12 @@
   document.getElementById('quitar-columna').addEventListener('click', () => {
     if (incognitas <= 1) return; if (valores.some(f => f[incognitas - 1] !== '0') && !confirm('¿Eliminar la última incógnita y sus coeficientes?')) return; valores.forEach(fila => fila.splice(incognitas - 1, 1)); incognitas--; renderizarMatriz();
   });
+  
   document.getElementById('limpiar').addEventListener('click', () => {
     filas = 3; incognitas = 3; valores = Array.from({ length: filas }, () => Array(incognitas + 1).fill('0'));
     resultadoElemento.hidden = true; errorElemento.hidden = true; renderizarMatriz();
   });
+  
   document.getElementById('resolver').addEventListener('click', () => {
     try {
       const matriz = leerMatriz();
@@ -200,7 +202,7 @@
       resultadoElemento.hidden = true;
     }
   });
-
+  
   const modal = document.getElementById('modal-video');
   const video = document.getElementById('video');
   document.getElementById('ver-pasos').addEventListener('click', () => {
@@ -210,11 +212,12 @@
     const promesa = video.play();
     if (promesa && promesa.catch) promesa.catch(() => {});
   });
+  
   function cerrarModal() { video.pause(); modal.hidden = true; }
   document.getElementById('cerrar-video').addEventListener('click', cerrarModal);
   modal.addEventListener('click', evento => { if (evento.target === modal) cerrarModal(); });
   video.addEventListener('error', () => { document.getElementById('error-video').hidden = false; });
   document.addEventListener('keydown', evento => { if (evento.key === 'Escape' && !modal.hidden) cerrarModal(); });
-
+  
   renderizarMatriz();
 })();
