@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,600,0,0" />
-  <link rel="stylesheet" href="css/estilos.css?v=logo-limpio-3">
+  <link rel="stylesheet" href="css/estilos.css?v=barra-unidades-4">
   <script src="js/tema.js" defer></script>
   <script src="js/navegacion.js" defer></script>
   <script src="js/fracciones.js?v=constantes-2" defer></script>
@@ -24,25 +24,26 @@
 <body>
   <main class="contenedor">
     <nav id="navegacion-unidades" class="navegacion-unidades" aria-label="Unidades de trabajo">
+      <span class="unidad-actual-movil"><span class="indicador-activo" aria-hidden="true"></span> Unidad 1 <span class="detalle-unidad-movil">· Gauss-Jordan</span></span>
       <button id="menu-unidades" type="button" class="boton menu-unidades" aria-label="Abrir menú de unidades" aria-controls="lista-unidades" aria-expanded="false">
         <span class="barras-menu" aria-hidden="true"><span></span><span></span><span></span></span>
       </button>
-    <section id="lista-unidades" class="panel selector-unidades" aria-labelledby="titulo-unidades">
-      <h2 id="titulo-unidades">Unidad de Trabajo</h2>
+    <section id="lista-unidades" class="selector-unidades" aria-labelledby="titulo-unidades">
+      <h2 id="titulo-unidades">Unidades</h2>
       <div class="tarjetas-unidades">
-        <button type="button" class="tarjeta-unidad activa" id-unidad="1">
+        <button type="button" class="tarjeta-unidad activa" data-unidad="1" aria-current="page">
           <span class="numero-unidad">Unidad 1</span>
           <span class="tema-unidad">
-            <span class="indicador-activo"></span> Gauss-Jordan
+            Gauss-Jordan
           </span>
         </button>
-        <button type="button" class="tarjeta-unidad inactiva" disabled id-unidad="2">
+        <button type="button" class="tarjeta-unidad inactiva" disabled data-unidad="2">
           <span class="numero-unidad">Unidad 2</span>
-          <span class="proximamente azul">Próximamente</span>
+          <span class="proximamente">Próximamente</span>
         </button>
-        <button type="button" class="tarjeta-unidad inactiva" disabled id-unidad="3">
+        <button type="button" class="tarjeta-unidad inactiva" disabled data-unidad="3">
           <span class="numero-unidad">Unidad 3</span>
-          <span class="proximamente beige">Próximamente</span>
+          <span class="proximamente">Próximamente</span>
         </button>
       </div>
     </section>
@@ -104,7 +105,7 @@
         <button type="button" id="ver-pasos" class="boton secundario">Ver pasos</button>
       </div>
     </section>
-    <footer>Enteros, decimales y fracciones: cálculo racional exacto. π y e: modelo aproximado de 40 decimales.</footer>
+    <footer>Profe le juro que no se vuelve a repetir ese -66 no me mande a extra pls.</footer>
   </main>
 
   <div id="modal-video" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="titulo-video">

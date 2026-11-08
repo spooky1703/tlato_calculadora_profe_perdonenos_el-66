@@ -141,20 +141,6 @@ input.celda { cursor: text; }
 #aviso-precision { background: var(--boton-bg); color: var(--texto-principal); border: 1px solid var(--borde); }
 .solucion-linea, .valor-matriz { overflow-wrap: anywhere; }
 
-/* Selector de unidades */
-.selector-unidades { margin-bottom: 20px; }
-.tarjetas-unidades { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-top: 12px; }
-.tarjeta-unidad { display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px 15px; border-radius: 12px; border: 2px solid var(--borde); background: var(--fondo-panel); cursor: pointer; transition: all 0.25s ease; min-height: 110px; }
-.tarjeta-unidad.activa { border-color: var(--primario); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08); }
-.tarjeta-unidad.activa:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12); }
-.tarjeta-unidad.inactiva { background: var(--boton-bg); opacity: 0.85; cursor: not-allowed; }
-.tarjeta-unidad.inactiva:hover { border-color: var(--borde); }
-.numero-unidad { font-size: 1.35rem; font-weight: 700; color: var(--texto-principal); margin-bottom: 6px; }
-.tarjeta-unidad.inactiva .numero-unidad { color: var(--texto-secundario); }
-.tema-unidad { font-size: 0.95rem; font-weight: 600; color: var(--texto-secundario); display: inline-flex; align-items: center; gap: 6px; }
-.indicador-activo { width: 8px; height: 8px; background-color: var(--texto-secundario); border-radius: 50%; display: inline-block; }
-.proximamente { font-size: 0.8rem; font-weight: 700; padding: 5px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.02em; background-color: var(--fondo-body); color: var(--texto-secundario); border: 1px solid var(--borde); }
-
 /* SVG Ayuda */
 .demo-guia { border: 2px solid var(--borde); border-radius: 14px; overflow: hidden; background: var(--fondo-panel); }
 #animacion-guia { display: block; width: 100%; height: auto; font: 16px system-ui, sans-serif; }
@@ -220,21 +206,33 @@ input.celda { cursor: text; }
 .expresion-constantes { font-family: "Cambria Math", Georgia, serif; font-size: 1.2em; }
 @media(max-width:620px) { .fila-matriz .celda { width: 60px; } .acciones-header { float: none; flex-wrap: wrap; } }
 
-/* Unidades primero en escritorio; menú desplegable en móvil. */
-.navegacion-unidades { position: relative; margin-bottom: 22px; }
-.menu-unidades { display: none; }
-.navegacion-unidades .selector-unidades { margin-bottom: 0; }
-.barras-menu { display: grid; gap: 5px; width: 21px; }
+/* Navegación secundaria compacta; la matriz conserva el protagonismo. */
+.navegacion-unidades { position: relative; margin-bottom: 25px; padding: 0 0 12px; border-bottom: 1px solid var(--borde); }
+.selector-unidades { display: flex; align-items: center; gap: 20px; }
+#titulo-unidades { margin: 0; color: var(--texto-secundario); font-size: .75rem; font-weight: 600; }
+.tarjetas-unidades { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.tarjeta-unidad { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 8px 12px; border: 1px solid transparent; border-radius: 7px; background: transparent; color: var(--texto-secundario); font-size: .82rem; cursor: pointer; }
+.tarjeta-unidad.activa { background: var(--boton-bg); color: var(--texto-principal); border-color: var(--borde); }
+.tarjeta-unidad.activa:hover { background: var(--boton-hover); }
+.numero-unidad { font-weight: 600; white-space: nowrap; }
+.tema-unidad { padding-left: 9px; border-left: 1px solid var(--borde); font-size: .8rem; }
+.tarjeta-unidad.inactiva { cursor: not-allowed; color: var(--texto-secundario); opacity: .7; }
+.proximamente { font-size: .68rem; font-weight: 400; }
+.menu-unidades, .unidad-actual-movil { display: none; }
+.barras-menu { display: grid; gap: 5px; width: 19px; }
 .barras-menu > span { height: 2px; border-radius: 2px; background: currentColor; }
+.indicador-activo { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--primario); }
 @media(max-width:620px) {
-  .navegacion-unidades { display: flex; justify-content: flex-end; min-height: 44px; margin-bottom: 14px; z-index: 3; }
-  .menu-unidades { display: inline-flex; width: 44px; height: 44px; justify-content: center; padding: 10px; }
-  .navegacion-unidades .selector-unidades { display: none; position: absolute; top: 52px; right: 0; width: min(320px, calc(100vw - 24px)); max-height: 70vh; overflow-y: auto; box-shadow: 0 12px 30px #0003; }
+  .navegacion-unidades { display: flex; align-items: center; justify-content: space-between; min-height: 44px; padding-bottom: 10px; margin-bottom: 20px; z-index: 3; }
+  .unidad-actual-movil { display: inline-flex; align-items: center; gap: 7px; font-size: .76rem; font-weight: 600; color: var(--texto-principal); }
+  .detalle-unidad-movil { font-weight: 400; color: var(--texto-secundario); }
+  .menu-unidades { display: inline-flex; width: 40px; height: 40px; justify-content: center; padding: 9px; background: transparent; }
+  .navegacion-unidades .selector-unidades { display: none; position: absolute; top: 52px; right: 0; width: min(300px, calc(100vw - 24px)); max-height: 70vh; overflow-y: auto; padding: 14px; background: var(--fondo-panel); border: 1px solid var(--borde); border-radius: 10px; box-shadow: 0 12px 30px #0002; }
   .navegacion-unidades.abierta .selector-unidades { display: block; }
-  .navegacion-unidades .tarjetas-unidades { grid-template-columns: 1fr; gap: 9px; }
-  .navegacion-unidades .tarjeta-unidad { min-height: 72px; padding: 12px; }
-  .navegacion-unidades .numero-unidad { font-size: 1.05rem; }
-  .navegacion-unidades .tarjeta-unidad.activa:hover { transform: none; }
+  #titulo-unidades { padding: 2px 4px 10px; }
+  .tarjetas-unidades { flex-direction: column; align-items: stretch; gap: 5px; }
+  .tarjeta-unidad { justify-content: space-between; min-height: 44px; }
+  .tema-unidad { border: 0; padding-left: 0; }
 }
 
 /* Bienvenida visual: una sola frase acompaña cada escena. */
