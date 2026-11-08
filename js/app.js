@@ -19,7 +19,12 @@
   
   function renderizarMatriz() {
     resultadoElemento.hidden = true;
-    window.VisualizacionSoluciones.limpiar();
+    
+    // Escudo de seguridad para que no colapse si el módulo visualizador no existe
+    if (window.VisualizacionSoluciones && typeof window.VisualizacionSoluciones.limpiar === 'function') {
+      window.VisualizacionSoluciones.limpiar();
+    }
+    
     matrizElemento.replaceChildren();
     matrizElemento.style.gridTemplateRows = `repeat(${filas}, auto)`;
     valores.forEach((fila, i) => {
@@ -195,7 +200,12 @@
       };
       clasificacion.textContent = `${aproximado ? 'Modelo racional aproximado: ' : ''}${textos[resultado.tipo]} Rango(A) = ${resultado.rangoCoeficientes}; rango(A|b) = ${resultado.rangoAumentada}.`;
       renderizarSolucion(resultado);
-      window.VisualizacionSoluciones.preparar(resultado, matriz, incognitas, aproximado);
+      
+      // Escudo seguro de preparación
+      if (window.VisualizacionSoluciones && typeof window.VisualizacionSoluciones.preparar === 'function') {
+        window.VisualizacionSoluciones.preparar(resultado, matriz, incognitas, aproximado);
+      }
+      
       resultadoElemento.hidden = false;
     } catch (error) {
       mostrarError(error.message, error.fila, error.columna);
@@ -221,4 +231,3 @@
   
   renderizarMatriz();
 })();
-
