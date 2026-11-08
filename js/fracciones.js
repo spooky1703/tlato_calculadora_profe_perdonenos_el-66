@@ -102,7 +102,11 @@
     if (i !== tokens.length) throw new Error('Revisa los operadores y los paréntesis.');
     return resultado;
   }
-  Fraccion.contieneConstantes = texto => /pi|π|(^|[^0-9.])e(?![+-]?\d)/i.test(String(texto));
+  Fraccion.contieneConstantes = texto => {
+    const normalizado = String(texto).toLowerCase().replace(/euler/g, 'e').replace(/π/g, 'pi').replace(/,/g, '.');
+    const tokens = normalizado.match(/(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?|pi|e|[()+*/^−-]/g) || [];
+    return tokens.some(token => token === 'pi' || token === 'e');
+  };
   Fraccion.CERO = new Fraccion(0n);
   Fraccion.UNO = new Fraccion(1n);
   global.Fraccion = Fraccion;

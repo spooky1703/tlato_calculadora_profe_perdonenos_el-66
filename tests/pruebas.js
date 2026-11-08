@@ -86,4 +86,6 @@ for(let caso=0;caso<200;caso++) {
 afirmar(f('euler').aTexto() === f('e').aTexto(), 'Euler es alias de e');
 afirmar(f('2Euler/e').aTexto() === '2', 'Euler dentro de expresiones');
 afirmar(F.contieneConstantes('euler') && F.contieneConstantes('2Euler'), 'aviso de aproximación de Euler');
+for (const entrada of ['pi', 'π', 'e', 'Euler', '2e', '2euler', '(1+pi)/2']) afirmar(F.contieneConstantes(entrada), `reconocer constante: ${entrada}`);
+for (const entrada of ['1e3', '1e-3', '2.5', '1/2']) afirmar(!F.contieneConstantes(entrada), `distinguir número: ${entrada}`);
 console.log(`Validación ampliada: ${total} comprobaciones correctas.`);
