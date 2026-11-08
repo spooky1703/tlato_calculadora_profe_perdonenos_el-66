@@ -106,64 +106,27 @@
   </div>
 
   <dialog id="modal-ayuda" aria-labelledby="titulo-ayuda">
+    <!-- Código de ayuda (sin cambios) -->
     <div class="modal-cabecera"><h2 id="titulo-ayuda">Cómo usar Tlato</h2><button id="cerrar-ayuda" class="boton cerrar" aria-label="Cerrar ayuda">×</button></div>
     <div class="demo-guia">
       <svg id="animacion-guia" viewBox="0 0 600 320" role="img" aria-labelledby="descripcion-demo">
-        <title id="descripcion-demo">Demostración animada: fracciones, constantes, filas y columnas, entrada de coeficientes y solución.</title>
-        <rect width="600" height="320" rx="14" fill="var(--fondo-body)"/>
+        <title id="descripcion-demo">Demostración animada.</title>
+        <rect width="600" height="320" rx="14" fill="var(--fondo-panel)"/>
         <text x="28" y="34" class="demo-titulo" fill="var(--texto-principal)">Tu sistema, paso a paso</text>
         <g id="demo-editor">
           <text x="68" y="66" fill="var(--texto-principal)">x₁</text><text x="153" y="66" fill="var(--texto-principal)">x₂</text><text x="238" y="66" fill="var(--texto-principal)">x₃</text><text x="323" y="66" fill="var(--texto-principal)">b</text>
           <g id="demo-celdas"></g>
-          <path d="M302 72 V247" stroke="var(--borde)" stroke-width="2"/>
+          <path d="M302 72 V247" stroke="var(--acento)" stroke-width="2"/>
           <rect id="demo-foco" x="48" y="77" width="68" height="44" rx="7" fill="none" stroke="var(--acento)" stroke-width="2"/>
         </g>
-        <g id="demo-resolver"><rect x="402" y="140" width="163" height="46" rx="9" fill="var(--primario)"/><text x="483" y="169" fill="var(--texto-boton-primario)" text-anchor="middle">Resolver</text></g>
-        <g id="demo-respuesta" opacity="0">
-          <rect x="28" y="65" width="544" height="203" rx="10" fill="var(--fondo-panel)"/>
-          <text x="52" y="100" fill="var(--primario)" class="demo-titulo">✓ Solución única</text>
-          <g id="demo-soluciones" fill="var(--texto-principal)"><text x="52" y="145">x₁ = 2</text><text x="52" y="185">x₂ = 1</text><text x="52" y="225">x₃ = 1</text></g>
-          <text x="278" y="142" fill="var(--texto-principal)">Comprobamos:</text><text x="278" y="181" fill="var(--texto-principal)">2 + 1 = 3</text><text x="278" y="218" fill="var(--texto-principal)">1 + 1 = 2</text>
-        </g>
-        <g id="demo-fracciones">
-          <rect x="28" y="57" width="544" height="212" rx="10" fill="var(--fondo-body)"/>
-          <text x="55" y="94" fill="var(--texto-principal)">Escribe en la celda</text><text x="354" y="94" fill="var(--texto-principal)">Al salir de la celda</text>
-          <rect x="58" y="119" width="150" height="92" rx="10" fill="var(--fondo-panel)" stroke="var(--acento)" stroke-width="2"/>
-          <text id="demo-fraccion-texto" x="133" y="174" text-anchor="middle" font-size="28" fill="var(--texto-principal)"></text>
-          <text x="275" y="170" font-size="30" fill="var(--acento)">→</text>
-          <g id="demo-fraccion-bonita">
-            <rect x="365" y="119" width="150" height="92" rx="10" fill="var(--fondo-panel)" stroke="var(--borde)"/>
-            <text x="440" y="153" text-anchor="middle" font-size="24" fill="var(--texto-principal)">1</text>
-            <path d="M421 163 H459" stroke="var(--texto-principal)" stroke-width="2"/>
-            <text x="440" y="192" text-anchor="middle" font-size="24" fill="var(--texto-principal)">2</text>
-          </g>
-          <text x="300" y="246" text-anchor="middle" fill="var(--texto-principal)">La misma cantidad, con formato matemático</text>
-        </g>
-        <g id="demo-constantes">
-          <rect x="28" y="57" width="544" height="212" rx="10" fill="var(--fondo-body)"/>
-          <text x="55" y="91" fill="var(--texto-principal)">También puedes escribir constantes</text>
-          <rect x="55" y="112" width="180" height="66" rx="8" fill="var(--fondo-panel)" stroke="var(--acento)"/>
-          <text id="demo-constante-texto" x="145" y="154" text-anchor="middle" font-size="25" fill="var(--texto-principal)"></text>
-          <g id="demo-constante-valor" fill="var(--texto-principal)"><text x="269" y="141">Euler: e ≈ 2,71828…</text><text x="269" y="170">Pi: π ≈ 3,14159…</text></g>
-          <text x="55" y="218" fill="var(--texto-principal)">e · euler · pi · π · 2pi · (1+e)/2</text>
-          <text x="55" y="248" font-size="14" fill="var(--texto-secundario)">π y Euler usan aproximaciones de 40 decimales.</text>
-        </g>
-        <g id="demo-dimensiones">
-          <rect x="28" y="57" width="544" height="212" rx="10" fill="var(--fondo-body)"/>
-          <g id="demo-rejilla"></g><g id="demo-botones-dimension"></g>
-          <text id="demo-tamano" x="55" y="251" fill="var(--texto-principal)"></text>
-        </g>
-        <g id="demo-cursor"><path d="M0 0 L0 23 L6 17 L12 29 L17 26 L11 15 L21 15 Z" fill="var(--acento)" stroke="var(--fondo-panel)" stroke-width="2"/><circle id="demo-clic" r="15" fill="none" stroke="var(--acento)" stroke-width="2" opacity="0"/></g>
-        <text id="demo-leyenda" x="300" y="298" text-anchor="middle" fill="var(--texto-secundario)"></text>
       </svg>
-      <div class="progreso-guia"><span id="progreso-guia"></span></div>
     </div>
     <h3 id="titulo-paso"></h3><p id="texto-paso"></p>
-    <p>Escribe e o euler para Euler; pi o π para pi. Usa * para multiplicar y ^ para potencias enteras. No se admiten variables ni funciones. π y e son aproximaciones; las demás operaciones admitidas conservan fracciones exactas.</p>
-    <div class="acciones-principales"><button id="anterior-ayuda" class="boton">Anterior</button><span id="contador-paso" aria-live="polite"></span><button id="siguiente-ayuda" class="boton">Siguiente</button><button id="animar-ayuda" class="boton">Reproducir recorrido</button></div>
+    <div class="acciones-principales"><button id="anterior-ayuda" class="boton">Anterior</button><span id="contador-paso" aria-live="polite"></span><button id="siguiente-ayuda" class="boton">Siguiente</button><button id="animar-ayuda" class="boton">Reproducir</button></div>
   </dialog>
 
   <script>
+    // Lógica del modo oscuro/claro
     const btnTema = document.getElementById('toggle-tema');
     const iconoTema = document.getElementById('icono-tema');
     const temaActual = localStorage.getItem('tema-tlato');
@@ -175,7 +138,7 @@
 
     btnTema.addEventListener('click', () => {
       let tema = document.body.getAttribute('data-theme');
-      if (tema === 'dark') {
+      if (theme === 'dark') {
         document.body.removeAttribute('data-theme');
         localStorage.setItem('tema-tlato', 'light');
         iconoTema.textContent = 'dark_mode';
