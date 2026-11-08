@@ -239,16 +239,11 @@
   video.addEventListener('error', () => { document.getElementById('error-video').hidden = false; });
   document.addEventListener('keydown', evento => { if (evento.key === 'Escape' && !modal.hidden) cerrarModal(); });
 
-  // Agregamos drag and drop
-  matrizElemento.addEventListener('dragover', (e) => { e.preventDefault(); matrizElemento.classList.add('arrastrando'); });
-  matrizElemento.addEventListener('dragleave', (e) => { e.preventDefault(); matrizElemento.classList.remove('arrastrando'); });
-  matrizElemento.addEventListener('drop', (e) => {
-    e.preventDefault();
-    matrizElemento.classList.remove('arrastrando');
-    errorElemento.hidden = true;
-    const archivo = e.dataTransfer.files[0];
+  const inputArchivo = document.getElementById('input-archivo');
+  const btnSubir = document.getElementById('btn-subir');
+
+  const procesarArchivo = (archivo) => {
     if (!archivo) return;
-    
     const procesar = (datos) => {
       const limpia = datos.filter(f => f.some(c => c !== undefined && c !== null && c !== ''));
       if (!limpia.length) { mostrarError("Archivo vacío o inválido."); return; }
@@ -284,7 +279,23 @@
       };
       lector.readAsArrayBuffer(archivo);
     } else mostrarError("Formato no soportado (.txt, .csv, .xlsx).");
+  };
+
+  matrizElemento.addEventListener('dragover', (e) => { e.preventDefault(); matrizElemento.classList.add('arrastrando'); });
+  matrizElemento.addEventListener('dragleave', (e) => { e.preventDefault(); matrizElemento.classList.remove('arrastrando'); });
+  matrizElemento.addEventListener('drop', (e) => {
+    e.preventDefault(); matrizElemento.classList.remove('arrastrando'); errorElemento.hidden = true;
+    procesarArchivo(e.dataTransfer.files[0]);
   });
+
+  if (btnSubir && inputArchivo) {
+    btnSubir.addEventListener('click', () => inputArchivo.click());
+    inputArchivo.addEventListener('change', (e) => {
+      errorElemento.hidden = true;
+      procesarArchivo(e.target.files[0]);
+      inputArchivo.value = ''; // Permite cargar el mismo archivo dos veces seguidas si hay modificaciones
+    });
+  }
 
   renderizarMatriz();
 })();
