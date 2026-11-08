@@ -279,3 +279,11 @@ input.celda { cursor: text; }
 }
 
 #modal-ayuda .logo-tlato img { width: 100%; height: 100%; max-width: 40px; object-fit: contain; }
+
+/* Agregamos drag and drop */
+#matriz.arrastrando {
+    border: 2px dashed var(--acento);
+    background-color: var(--boton-hover);
+    opacity: 0.8;
+    transition: all 0.2s ease-in-out;
+}

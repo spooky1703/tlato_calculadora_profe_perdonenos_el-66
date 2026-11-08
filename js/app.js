@@ -239,5 +239,52 @@
   video.addEventListener('error', () => { document.getElementById('error-video').hidden = false; });
   document.addEventListener('keydown', evento => { if (evento.key === 'Escape' && !modal.hidden) cerrarModal(); });
 
+  // Agregamos drag and drop
+  matrizElemento.addEventListener('dragover', (e) => { e.preventDefault(); matrizElemento.classList.add('arrastrando'); });
+  matrizElemento.addEventListener('dragleave', (e) => { e.preventDefault(); matrizElemento.classList.remove('arrastrando'); });
+  matrizElemento.addEventListener('drop', (e) => {
+    e.preventDefault();
+    matrizElemento.classList.remove('arrastrando');
+    errorElemento.hidden = true;
+    const archivo = e.dataTransfer.files[0];
+    if (!archivo) return;
+    
+    const procesar = (datos) => {
+      const limpia = datos.filter(f => f.some(c => c !== undefined && c !== null && c !== ''));
+      if (!limpia.length) { mostrarError("Archivo vacío o inválido."); return; }
+      const f = limpia.length, c = limpia[0].length - 1;
+      if (f > 15 || c > 14 || c < 1) { mostrarError(`Dimensiones no soportadas: ${f}x${c}.`); return; }
+      let temp = [];
+      try {
+        for (let i = 0; i < f; i++) {
+          let filaTemp = [];
+          for (let j = 0; j <= c; j++) {
+            let val = limpia[i][j] !== undefined ? String(limpia[i][j]).trim() : '0';
+            if (val === '') val = '0';
+            F.desdeTexto(val);
+            filaTemp.push(val);
+          }
+          temp.push(filaTemp);
+        }
+      } catch (err) { mostrarError(`Datos inválidos: ${err.message}`); return; }
+      filas = f; incognitas = c; valores = temp; renderizarMatriz();
+    };
+    
+    const nombre = archivo.name.toLowerCase();
+    if (nombre.endsWith('.csv') || nombre.endsWith('.txt')) {
+      const lector = new FileReader();
+      lector.onload = (ev) => procesar(ev.target.result.trim().split('\n').map(f => f.trim().split(/[\t,; ]+/)));
+      lector.readAsText(archivo);
+    } else if (nombre.endsWith('.xlsx') || nombre.endsWith('.xls')) {
+      if (typeof XLSX === 'undefined') { mostrarError("Librería Excel no cargada. Actualiza el HTML."); return; }
+      const lector = new FileReader();
+      lector.onload = (ev) => {
+        const libro = XLSX.read(new Uint8Array(ev.target.result), {type: 'array'});
+        procesar(XLSX.utils.sheet_to_json(libro.Sheets[libro.SheetNames[0]], {header: 1}));
+      };
+      lector.readAsArrayBuffer(archivo);
+    } else mostrarError("Formato no soportado (.txt, .csv, .xlsx).");
+  });
+
   renderizarMatriz();
 })();
