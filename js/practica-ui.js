@@ -17,14 +17,25 @@
         const celda=document.createElement(editable?'input':'span');
         celda.className=editable?'celda entrada-practica':'valor-matriz';
         celda.style.gridRow=i+1;celda.style.gridColumn=j<n?j+1:j+2;
+        let contenido=celda;
         if(editable){
+          const campo=document.createElement('div');campo.className='campo-practica';
+          campo.style.gridRow=i+1;campo.style.gridColumn=j<n?j+1:j+2;
+          celda.style.removeProperty('grid-row');celda.style.removeProperty('grid-column');
+          const vista=document.createElement('span');vista.className='vista-valor-practica';vista.setAttribute('aria-hidden','true');
+          campo.append(celda,vista);contenido=campo;
+          celda.addEventListener('blur',()=>{
+            campo.classList.remove('con-vista');vista.replaceChildren();
+            try{if(F.contieneConstantes(celda.value))return;vista.append(valorVisual(F.desdeTexto(celda.value)));campo.classList.add('con-vista');}catch{}
+          });
+          celda.addEventListener('input',()=>{campo.classList.remove('con-vista');vista.replaceChildren();});
           celda.type='text';celda.maxLength=256;celda.autocomplete='off';celda.spellcheck=false;
           celda.setAttribute('aria-label',`Respuesta fila ${i+1}, ${j===n?'término independiente':`columna ${j+1}`}`);
           celda.addEventListener('input',()=>{celda.classList.remove('respuesta-incorrecta');celda.removeAttribute('aria-invalid');});
           celda.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();const todas=campos.flat();todas[(todas.indexOf(celda)+1)%todas.length].focus();}});
           campos[i][j]=celda;
         }else celda.append(valorVisual(v));
-        tabla.append(celda);
+        tabla.append(contenido);
       });
     });
     const separador=document.createElement('span');separador.className='separador-aumentada';separador.style.gridColumn=n+1;separador.style.gridRow=`1 / span ${matriz.length}`;separador.setAttribute('aria-hidden','true');tabla.append(separador);

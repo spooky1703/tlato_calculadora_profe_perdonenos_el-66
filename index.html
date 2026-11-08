@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,600,0,0" />
-  <link rel="stylesheet" href="css/estilos.css?v=guia-practica-10">
+  <link rel="stylesheet" href="css/estilos.css?v=fracciones-practica-11">
   <script src="js/tema.js" defer></script>
   <script src="js/navegacion.js" defer></script>
   <script src="js/fracciones.js?v=constantes-2" defer></script>
@@ -21,8 +21,8 @@
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
   <script src="js/guia-importacion.js?v=2" defer></script>
   <script src="js/practica-modelo.js?v=4" defer></script>
-  <script src="js/practica-ui.js?v=4" defer></script>
-  <script src="js/guia-practica.js?v=2" defer></script>
+  <script src="js/practica-ui.js?v=5" defer></script>
+  <script src="js/guia-practica.js?v=3" defer></script>
   <script src="js/app.js?v=guia-practica-6" defer></script>
   <script src="js/ayuda.js?v=2" defer></script>
 </head>
@@ -73,7 +73,7 @@
       <button id="modo-calculadora" type="button" aria-pressed="true">Calculadora</button><button id="modo-practica" type="button" aria-pressed="false">Practicar</button>
     </div>
     <button id="reabrir-guia-practica" type="button" class="boton enlace-formato" hidden>Ver guía de práctica</button>
-    <p id="introduccion-practica" class="intro-practica" hidden>Introduce tu matriz. Tú completarás cada paso de Gauss-Jordan; Tlato te guiará y verificará tus respuestas. Solo valores racionales, sin π ni Euler.</p>
+    <p id="introduccion-practica" class="intro-practica" hidden>Completa una matriz por cada operación elemental. Solo valores racionales, sin π ni Euler.</p>
     <section id="editor-sistema" class="panel" aria-labelledby="titulo-matriz">
       <div class="panel-cabecera">
         <div>
@@ -113,13 +113,14 @@
       <div class="resumen-progreso"><span id="paso-practica"></span><span id="errores-practica">0 intentos incorrectos</span></div>
       <progress id="progreso-practica" max="1" value="0" aria-label="Pasos completados"></progress>
       <div id="ejercicio-practica">
+        <div class="regla-unica-practica"><strong>Una sola operación elemental por matriz.</strong><span>Normalizar un pivote y hacer cero debajo son dos pasos distintos.</span></div>
         <button id="pedir-pista-practica" type="button" class="boton secundario pedir-pista">¿Pista?</button>
         <div id="pista-practica" class="objetivo-practica" hidden><span id="etapa-practica" class="etiqueta-guia"></span><p id="objetivo-practica"></p><p id="notas-practica"></p></div>
         <div class="matrices-practica">
           <div><h3>Matriz anterior</h3><div id="anterior-practica" class="desplazamiento-matriz"></div></div>
           <div><h3>Completa la siguiente matriz</h3><div id="respuesta-practica" class="desplazamiento-matriz"></div></div>
         </div>
-        <p class="ayuda ayuda-practica">Una operación elemental por paso. Escribe también las filas que no cambian. Tab o Enter avanza.</p>
+        <p class="ayuda ayuda-practica">Conserva las filas que no cambian. Tab o Enter avanza y muestra las fracciones.</p>
         <div id="mensaje-practica" class="mensaje" role="status" hidden></div>
         <div id="operacion-practica" class="operacion-revelada" hidden></div>
         <div class="acciones-principales"><button id="verificar-practica" type="button" class="boton principal">Verificar matriz</button><button id="siguiente-practica" type="button" class="boton principal" hidden>Siguiente paso</button></div>
@@ -300,7 +301,7 @@
     <div class="demo-guia">
       <svg id="demo-practica" viewBox="0 0 600 300" role="img" aria-label="Ejemplo animado: preparar una matriz, completar un paso, corregir un error, pedir pistas y ver la nota">
         <rect width="600" height="300" rx="12" fill="var(--fondo-body)"/>
-        <text x="24" y="30" fill="var(--texto-secundario)" font-size="13">EJEMPLO DE PRÁCTICA</text>
+        <text x="24" y="30" fill="var(--texto-secundario)" font-size="13">1 OPERACIÓN ELEMENTAL POR MATRIZ</text>
         <g id="demo-practica-matrices"><text x="100" y="65" text-anchor="middle">Anterior</text><text x="377" y="65" text-anchor="middle">Tu respuesta</text><g id="demo-practica-origen"></g><g id="demo-practica-respuesta"></g><text x="234" y="137" fill="var(--acento)" font-size="26">→</text>
           <g id="demo-practica-boton"><rect x="285" y="200" width="190" height="38" rx="7" fill="var(--primario)"/><text id="demo-practica-boton-texto" x="380" y="224" text-anchor="middle" fill="var(--texto-boton-primario)">Verificar matriz</text></g>
           <text id="demo-practica-feedback" x="300" y="271" text-anchor="middle" font-size="14"></text>

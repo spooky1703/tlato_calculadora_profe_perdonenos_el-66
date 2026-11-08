@@ -1,6 +1,6 @@
 (() => {
   const $=id=>document.getElementById(id), modal=$('guia-practica'), ns='http://www.w3.org/2000/svg';
-  const pasos=[['Prepara tu matriz','Introduce tu sistema y pulsa Comenzar práctica.'],['Completa el siguiente paso','Escribe toda la matriz, incluidas las filas que no cambian.'],['Verifica y corrige','Se marcan los errores. La operación aparece cuando todo está bien.'],['¿Necesitas una pista?','Puedes pedirla, pero confirmar una pista reduce tu nota.'],['Mira tu progreso','Al terminar verás tu nota y los pasos que completaste.']];
+  const pasos=[['Prepara tu matriz','Introduce tu sistema y pulsa Comenzar práctica.'],['Una operación a la vez','Normalizar el pivote y hacer cero debajo son dos pasos distintos.'],['Verifica y corrige','Se marcan los errores. La operación aparece cuando todo está bien.'],['¿Necesitas una pista?','Puedes pedirla, pero confirmar una pista reduce tu nota.'],['Mira tu progreso','Al terminar verás tu nota y los pasos que completaste.']];
   const valores=['2','0','4','0','3','9'], respuestas=['1','0','2','0','3','8'];
   const celdas=[];
   function crear(tipo,attrs,padre,contenido){const el=document.createElementNS(ns,tipo);Object.entries(attrs).forEach(([k,v])=>el.setAttribute(k,v));if(contenido!==undefined)el.textContent=contenido;padre.append(el);return el;}
