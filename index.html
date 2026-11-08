@@ -21,6 +21,7 @@
       <div class="acciones-header">
         <button id="toggle-tema" type="button" class="boton" title="Alternar modo claro/oscuro">
           <span class="material-symbols-outlined" id="icono-tema">dark_mode</span>
+          <span id="texto-tema">Modo noche</span>
         </button>
         <button id="como-usar" type="button" class="boton"><span class="material-symbols-outlined">help</span> ¿Cómo usar?</button>
       </div>
@@ -63,9 +64,11 @@
           <button type="button" id="quitar-columna" class="boton secundario"><span class="material-symbols-outlined">remove</span> Incógnita</button>
         </div>
       </div>
+      
       <div id="contenedor-matriz" class="desplazamiento-matriz" aria-label="Editor de matriz">
         <div id="matriz" class="matriz"></div>
       </div>
+
       <div class="pie-matriz">
         <span id="dimensiones">3 ecuaciones · 3 incógnitas</span>
         <span>Máximo: 15 ecuaciones y 14 incógnitas</span>
@@ -109,7 +112,7 @@
     <div class="modal-cabecera"><h2 id="titulo-ayuda">Cómo usar Tlato</h2><button id="cerrar-ayuda" class="boton cerrar" aria-label="Cerrar ayuda">×</button></div>
     <div class="demo-guia">
       <svg id="animacion-guia" viewBox="0 0 600 320" role="img" aria-labelledby="descripcion-demo">
-        <title id="descripcion-demo">Demostración animada: fracciones, constantes, filas y columnas, entrada de coeficientes y solución.</title>
+        <title id="descripcion-demo">Demostración animada.</title>
         <rect width="600" height="320" rx="14" fill="var(--fondo-body)"/>
         <text x="28" y="34" class="demo-titulo" fill="var(--texto-principal)">Tu sistema, paso a paso</text>
         <g id="demo-editor">
@@ -166,11 +169,13 @@
   <script>
     const btnTema = document.getElementById('toggle-tema');
     const iconoTema = document.getElementById('icono-tema');
+    const textoTema = document.getElementById('texto-tema');
     const temaActual = localStorage.getItem('tema-tlato');
 
     if (temaActual === 'dark') {
       document.body.setAttribute('data-theme', 'dark');
       iconoTema.textContent = 'light_mode';
+      textoTema.textContent = 'Modo día';
     }
 
     btnTema.addEventListener('click', () => {
@@ -179,10 +184,12 @@
         document.body.removeAttribute('data-theme');
         localStorage.setItem('tema-tlato', 'light');
         iconoTema.textContent = 'dark_mode';
+        textoTema.textContent = 'Modo noche';
       } else {
         document.body.setAttribute('data-theme', 'dark');
         localStorage.setItem('tema-tlato', 'dark');
         iconoTema.textContent = 'light_mode';
+        textoTema.textContent = 'Modo día';
       }
     });
   </script>
