@@ -10,8 +10,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,600,0,0" />
   <link rel="stylesheet" href="css/estilos.css">
+  <script src="js/tema.js" defer></script>
   <script src="js/fracciones.js" defer></script>
   <script src="js/gauss-jordan.js" defer></script>
+  <script src="js/espacio-soluciones.js" defer></script>
+  <script src="js/visualizacion-soluciones.js" defer></script>
   <script src="js/app.js" defer></script>
   <script src="js/ayuda.js" defer></script>
 </head>
@@ -40,11 +43,11 @@
             <span class="indicador-activo"></span> Gauss-Jordan
           </span>
         </button>
-        <button type="button" class="tarjeta-unidad inactiva" id-unidad="2">
+        <button type="button" class="tarjeta-unidad inactiva" disabled id-unidad="2">
           <span class="numero-unidad">Unidad 2</span>
           <span class="proximamente azul">Próximamente</span>
         </button>
-        <button type="button" class="tarjeta-unidad inactiva" id-unidad="3">
+        <button type="button" class="tarjeta-unidad inactiva" disabled id-unidad="3">
           <span class="numero-unidad">Unidad 3</span>
           <span class="proximamente beige">Próximamente</span>
         </button>
@@ -64,7 +67,7 @@
           <button type="button" id="quitar-columna" class="boton secundario"><span class="material-symbols-outlined">remove</span> Incógnita</button>
         </div>
       </div>
-      
+
       <div id="contenedor-matriz" class="desplazamiento-matriz" aria-label="Editor de matriz">
         <div id="matriz" class="matriz"></div>
       </div>
@@ -88,6 +91,7 @@
       <div id="matriz-resultado" class="desplazamiento-matriz"></div>
       <div id="detalle-solucion"></div>
       <div class="acciones-resultado">
+        <button type="button" id="explicar-infinitas" class="boton secundario" hidden>¿Qué significan infinitas soluciones?</button>
         <button type="button" id="ver-pasos" class="boton secundario">Ver pasos</button>
       </div>
     </section>
@@ -116,6 +120,7 @@
         <rect width="600" height="320" rx="14" fill="var(--fondo-body)"/>
         <text x="28" y="34" class="demo-titulo" fill="var(--texto-principal)">Tu sistema, paso a paso</text>
         <g id="demo-editor">
+          <path d="M41 71 H33 V245 H41 M378 71 H386 V245 H378" fill="none" stroke="var(--texto-principal)" stroke-width="2"/>
           <text x="68" y="66" fill="var(--texto-principal)">x₁</text><text x="153" y="66" fill="var(--texto-principal)">x₂</text><text x="238" y="66" fill="var(--texto-principal)">x₃</text><text x="323" y="66" fill="var(--texto-principal)">b</text>
           <g id="demo-celdas"></g>
           <path d="M302 72 V247" stroke="var(--borde)" stroke-width="2"/>
@@ -166,32 +171,22 @@
     <div class="acciones-principales"><button id="anterior-ayuda" class="boton">Anterior</button><span id="contador-paso" aria-live="polite"></span><button id="siguiente-ayuda" class="boton">Siguiente</button><button id="animar-ayuda" class="boton">Reproducir recorrido</button></div>
   </dialog>
 
-  <script>
-    const btnTema = document.getElementById('toggle-tema');
-    const iconoTema = document.getElementById('icono-tema');
-    const textoTema = document.getElementById('texto-tema');
-    const temaActual = localStorage.getItem('tema-tlato');
+<dialog id="modal-infinitas" aria-labelledby="titulo-infinitas">
+    <div class="modal-cabecera"><h2 id="titulo-infinitas">¿Qué significan infinitas soluciones?</h2><button type="button" id="cerrar-infinitas" class="boton" aria-label="Cerrar explicación">×</button></div>
+    <p id="explicacion-infinitas"></p>
+    <p id="proyeccion-infinitas" class="nota-geometria"></p>
+    <div id="ejes-infinitas" class="controles-geometria"></div>
+    <div class="grafica-contenedor"><canvas id="grafica-infinitas" width="900" height="480" aria-label="Gráfica de la familia de soluciones y del punto seleccionado">La explicación, las coordenadas y la comprobación se muestran debajo.</canvas></div>
+    <p id="estado-grafica" role="status"></p>
+    <div class="controles-geometria"><button type="button" class="boton" id="girar-grafica">Girar vista</button><button type="button" class="boton" id="acercar-grafica">Acercar</button><button type="button" class="boton" id="alejar-grafica">Alejar</button><button type="button" class="boton" id="restablecer-grafica">Restablecer vista</button></div>
+    <p class="nota-geometria">Arrastra para girar la vista 3D. La zona dibujada es una ventana finita de una familia ilimitada. Verde: familia de soluciones · Azul: punto seleccionado. La gráfica es aproximada; las coordenadas y la comprobación se calculan con fracciones.</p>
+    <h3>Cambia los parámetros</h3><p>Los controles recorren de −5 a 5; puedes escribir cualquier otro valor admitido en los campos. Cada parámetro puede tomar cualquier valor real.</p>
+    <div id="parametros-infinitas"></div>
+    <p id="error-parametro" class="mensaje error" role="alert" hidden></p>
+    <h3>Punto seleccionado</h3><div id="punto-infinitas" aria-live="polite"></div>
+    <h3>Comprobación en tus ecuaciones</h3><div id="comprobacion-infinitas"></div>
+  </dialog>
 
-    if (temaActual === 'dark') {
-      document.body.setAttribute('data-theme', 'dark');
-      iconoTema.textContent = 'light_mode';
-      textoTema.textContent = 'Modo día';
-    }
 
-    btnTema.addEventListener('click', () => {
-      let tema = document.body.getAttribute('data-theme');
-      if (tema === 'dark') {
-        document.body.removeAttribute('data-theme');
-        localStorage.setItem('tema-tlato', 'light');
-        iconoTema.textContent = 'dark_mode';
-        textoTema.textContent = 'Modo noche';
-      } else {
-        document.body.setAttribute('data-theme', 'dark');
-        localStorage.setItem('tema-tlato', 'dark');
-        iconoTema.textContent = 'light_mode';
-        textoTema.textContent = 'Modo día';
-      }
-    });
-  </script>
 </body>
 </html>
