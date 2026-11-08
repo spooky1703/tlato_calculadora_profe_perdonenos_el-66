@@ -88,4 +88,7 @@ afirmar(f('2Euler/e').aTexto() === '2', 'Euler dentro de expresiones');
 afirmar(F.contieneConstantes('euler') && F.contieneConstantes('2Euler'), 'aviso de aproximación de Euler');
 for (const entrada of ['pi', 'π', 'e', 'Euler', '2e', '2euler', '(1+pi)/2']) afirmar(F.contieneConstantes(entrada), `reconocer constante: ${entrada}`);
 for (const entrada of ['1e3', '1e-3', '2.5', '1/2']) afirmar(!F.contieneConstantes(entrada), `distinguir número: ${entrada}`);
+const contradiccionTrasNulas = G.reducir(matriz([['1','0'], ['0','0'], ['0','2']]), 1);
+afirmar(contradiccionTrasNulas.filaIncompatible === 1, 'contradicción antes de las filas nulas');
+afirmar(contradiccionTrasNulas.matriz[1][1].esUno() && contradiccionTrasNulas.matriz[2].every(v=>v.esCero()), 'RREF incompatible ordenada');
 console.log(`Validación ampliada: ${total} comprobaciones correctas.`);

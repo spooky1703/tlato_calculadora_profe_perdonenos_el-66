@@ -3,7 +3,7 @@
   const matrizElemento = document.getElementById('matriz');
   const resultadoElemento = document.getElementById('seccion-resultado');
   const errorElemento = document.getElementById('error-entrada');
-  let filas = 3, incognitas = 3;
+  let filas = 3, incognitas = 3, modoPractica = false;
   let valores = Array.from({ length: filas }, () => Array(incognitas + 1).fill('0'));
 
   function fraccionVisual(fraccion) {
@@ -202,6 +202,7 @@
     try {
       const matriz = leerMatriz();
       const aproximado = valores.some(f => f.some(F.contieneConstantes));
+      const presentar = () => {
       document.getElementById('aviso-precision').hidden = !aproximado;
       const resultado = GaussJordan.reducir(matriz, incognitas);
       renderizarMatrizResultado(resultado.matriz);
@@ -217,11 +218,29 @@
       window.VisualizacionSoluciones.preparar(resultado, matriz, incognitas, aproximado);
 
       resultadoElemento.hidden = false;
+      };
+      if (modoPractica) {
+        if (aproximado) throw new Error('En práctica usa enteros, decimales, fracciones o expresiones racionales, sin π ni Euler.');
+        window.PracticaUI.iniciar(matriz, incognitas, presentar);
+      } else presentar();
     } catch (error) {
       mostrarError(error.message, error.fila, error.columna);
       resultadoElemento.hidden = true;
     }
   });
+
+  function cambiarModo(practica) {
+    if (!window.PracticaUI.salir()) return;
+    modoPractica = practica;
+    document.getElementById('modo-calculadora').setAttribute('aria-pressed', String(!practica));
+    document.getElementById('modo-practica').setAttribute('aria-pressed', String(practica));
+    document.getElementById('introduccion-practica').hidden = !practica;
+    document.getElementById('resolver').textContent = practica ? 'Comenzar práctica' : 'Resolver';
+    errorElemento.hidden = true; resultadoElemento.hidden = true;
+    window.VisualizacionSoluciones.limpiar();
+  }
+  document.getElementById('modo-practica').onclick = () => cambiarModo(true);
+  document.getElementById('modo-calculadora').onclick = () => cambiarModo(false);
 
   const modal = document.getElementById('modal-video');
   const video = document.getElementById('video');

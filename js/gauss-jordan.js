@@ -31,11 +31,16 @@
     }
 
     const rangoCoeficientes = columnasPivote.length;
-    const filaIncompatible = matriz.findIndex(fila =>
+    let filaIncompatible = matriz.findIndex(fila =>
       fila.slice(0, numeroIncognitas).every(v => v.esCero()) && !fila[numeroIncognitas].esCero()
     );
     // La columna aumentada también tiene pivote si el sistema es incompatible.
     if (filaIncompatible >= 0) {
+      // El pivote de b debe quedar antes de las filas nulas para completar RREF.
+      if (filaIncompatible !== rangoCoeficientes) {
+        [matriz[rangoCoeficientes], matriz[filaIncompatible]] = [matriz[filaIncompatible], matriz[rangoCoeficientes]];
+        filaIncompatible = rangoCoeficientes;
+      }
       const pivote = matriz[filaIncompatible][numeroIncognitas];
       matriz[filaIncompatible] = matriz[filaIncompatible].map(v => v.dividir(pivote));
       for (let i = 0; i < filas; i++) {
