@@ -289,7 +289,7 @@
   });
 
   if (btnSubir && inputArchivo) {
-    btnSubir.addEventListener('click', () => inputArchivo.click());
+    btnSubir.addEventListener('click', () => window.GuiaImportacion.cargar(inputArchivo));
     inputArchivo.addEventListener('change', (e) => {
       errorElemento.hidden = true;
       procesarArchivo(e.target.files[0]);

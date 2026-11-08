@@ -17,3 +17,7 @@ Las matrices de entrada y resultado comparten columnas dentro de una sola rejill
 ## Bienvenida en la primera visita
 
 El recorrido se abre automáticamente y se reproduce una vez. Al cerrarlo o elegir «Usar calculadora», se guarda `tlato-recorrido-visto` en el almacenamiento del navegador para no interrumpir visitas posteriores. Se puede reabrir desde «Ver recorrido». Si el almacenamiento no está disponible, la ayuda funciona pero la preferencia no persiste. Respeta la preferencia de movimiento reducido: en ese caso se abre pausado y permite avanzar manualmente o iniciar la animación.
+
+## Guía al cargar archivos
+
+La primera pulsación en «Cargar archivo» muestra ejemplos animados para TXT y Excel. Se puede reabrir con «Ver formato». «Ver formato» permanece oculto hasta pulsar «Cargar archivo»; ese estado se recuerda mediante `tlato-cargar-pulsado`. El TXT de ejemplo anima su transferencia a una matriz con corchetes dentro de una miniatura de Tlato y usa punto y coma, filas completas y ceros explícitos; Excel muestra la primera hoja desde A1, sin encabezados ni fórmulas. La guía documenta las limitaciones actuales del importador y pide revisar la matriz antes de resolver; no cambia su interpretación de datos. «Elegir archivo» abre el selector desde la guía. El arrastre directo conserva su comportamiento anterior.

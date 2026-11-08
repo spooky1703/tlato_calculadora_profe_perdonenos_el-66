@@ -5,7 +5,7 @@ const html = fs.readFileSync(path.join(raiz, 'index.html'), 'utf8');
 const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);
 assert.equal(new Set(ids).size, ids.length, 'No debe haber identificadores repetidos.');
 const scripts = [...html.matchAll(/<script\s+src="([^"]+)"\s+defer><\/script>/g)].map(m=>m[1].split('?')[0]);
-for (const nombre of ['tema','navegacion','fracciones','gauss-jordan','espacio-soluciones','visualizacion-soluciones','app','ayuda']) {
+for (const nombre of ['tema','navegacion','guia-importacion','fracciones','gauss-jordan','espacio-soluciones','visualizacion-soluciones','app','ayuda']) {
  const archivo=`js/${nombre}.js`;
  assert(scripts.includes(archivo),`Falta cargar ${archivo}`);
  const codigo=fs.readFileSync(path.join(raiz,archivo),'utf8');

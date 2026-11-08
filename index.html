@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,600,0,0" />
-  <link rel="stylesheet" href="css/estilos.css?v=barra-unidades-4">
+  <link rel="stylesheet" href="css/estilos.css?v=guia-matriz-6">
   <script src="js/tema.js" defer></script>
   <script src="js/navegacion.js" defer></script>
   <script src="js/fracciones.js?v=constantes-2" defer></script>
@@ -19,7 +19,8 @@
   <script src="js/espacio-soluciones.js" defer></script>
   <script src="js/visualizacion-soluciones.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
-  <script src="js/app.js?v=simbolos-2" defer></script>
+  <script src="js/guia-importacion.js?v=2" defer></script>
+  <script src="js/app.js?v=guia-archivos-3" defer></script>
   <script src="js/ayuda.js?v=2" defer></script>
 </head>
 <body>
@@ -80,6 +81,7 @@
           <!-- Agregamos botón de cargar archivo -->
           <input type="file" id="input-archivo" accept=".txt, .csv, .xlsx, .xls" hidden>
           <button type="button" id="btn-subir" class="boton secundario"><span class="material-symbols-outlined">upload_file</span> Cargar archivo</button>
+          <button type="button" id="ver-formato-archivo" hidden class="boton enlace-formato">Ver formato</button>
         </div>
       </div>
 
@@ -207,5 +209,46 @@
   </dialog>
 
 
+  <dialog id="guia-archivo" aria-labelledby="titulo-guia-archivo">
+    <div class="modal-cabecera"><div><span class="etiqueta-guia">ANTES DE IMPORTAR</span><h2 id="titulo-guia-archivo">Tu archivo, listo para Tlato</h2></div><button type="button" id="cerrar-guia-archivo" class="boton cerrar" aria-label="Cerrar guía de archivos">×</button></div>
+    <p class="subtitulo-guia">Una fila por ecuación. La última columna es <strong>b</strong>.</p>
+    <div class="pestanas-archivo" role="tablist" aria-label="Formato del ejemplo">
+      <button type="button" id="ejemplo-txt" role="tab" aria-selected="true" aria-controls="panel-ejemplo-txt">Archivo TXT</button>
+      <button type="button" id="ejemplo-excel" role="tab" aria-selected="false" aria-controls="panel-ejemplo-excel" tabindex="-1">Excel</button>
+    </div>
+    <div class="escenario-archivo">
+      <div class="cabecera-archivo"><span class="punto-archivo" aria-hidden="true"></span><span id="nombre-ejemplo-archivo">mi-sistema.txt</span><span id="listo-ejemplo-archivo">Escribiendo…</span></div>
+      <div id="panel-ejemplo-txt" role="tabpanel" aria-labelledby="ejemplo-txt">
+        <div class="origen-txt"><div class="rotulos-txt" aria-hidden="true"><span>Tu TXT</span><span>b</span></div><pre id="texto-ejemplo-archivo" aria-label="Ejemplo de matriz en TXT"></pre></div>
+        <div class="transferencia-txt" aria-hidden="true"><span class="flecha-transferencia">→</span><span id="dato-transferido">TXT</span></div>
+        <div class="vista-txt-tlato"><div class="titulo-mini-app"><span class="punto-archivo" aria-hidden="true"></span> Tlato <span>Matriz aumentada</span></div>
+          <div id="matriz-desde-txt" class="mini-matriz-txt" aria-label="Así queda la matriz importada en Tlato">
+            <span class="mini-celda-txt">1</span>
+            <span class="mini-celda-txt">1</span>
+            <span class="mini-celda-txt">0</span>
+            <span class="mini-celda-txt mini-aumentada">3</span>
+            <span class="mini-celda-txt">0</span>
+            <span class="mini-celda-txt">1</span>
+            <span class="mini-celda-txt">1</span>
+            <span class="mini-celda-txt mini-aumentada">2</span>
+            <span class="mini-celda-txt">1</span>
+            <span class="mini-celda-txt">0</span>
+            <span class="mini-celda-txt">1</span>
+            <span class="mini-celda-txt mini-aumentada">3</span>
+          </div><span id="estado-matriz-txt" class="estado-mini-app">Esperando archivo</span>
+        </div>
+      </div>
+      <div id="panel-ejemplo-excel" role="tabpanel" aria-labelledby="ejemplo-excel" hidden><table class="tabla-ejemplo-excel" aria-label="Ejemplo de matriz en la primera hoja de Excel"><thead><tr><th aria-label="Fila"></th><th>A</th><th>B</th><th>C</th><th>D · b</th></tr></thead><tbody>
+      <tr><th scope="row">1</th><td><span>1</span></td><td><span>1</span></td><td><span>0</span></td><td><span>3</span></td></tr>
+      <tr><th scope="row">2</th><td><span>0</span></td><td><span>1</span></td><td><span>1</span></td><td><span>2</span></td></tr>
+      <tr><th scope="row">3</th><td><span>1</span></td><td><span>0</span></td><td><span>1</span></td><td><span>3</span></td></tr>
+      </tbody></table><div class="hoja-ejemplo">Hoja 1 <span>← La primera hoja es la que se importa</span></div></div>
+    </div>
+    <p id="consejo-ejemplo-archivo" class="consejo-archivo"></p>
+    <div class="reglas-archivo"><span>✓ Mismas columnas en cada fila</span><span>✓ Escribe 0; no dejes huecos</span><span>✓ Decimales con punto: 0.5</span><span>✓ Sin títulos ni ecuaciones escritas</span></div>
+    <p class="limite-archivo">Hasta 15 filas y 15 columnas, contando b. En Excel usa valores, sin fórmulas ni celdas combinadas; empieza en A1.</p>
+    <details class="detalle-archivo"><summary>Si el formato no coincide</summary><p>El importador actual puede omitir columnas sobrantes, rellenar faltantes con ceros o separar las comas decimales. Revisa siempre la matriz cargada antes de resolver.</p></details>
+    <div class="pie-guia-archivo"><button type="button" id="repetir-ejemplo-archivo" class="boton">Repetir ejemplo</button><button type="button" id="elegir-archivo-guia" class="boton principal">Elegir archivo</button></div>
+  </dialog>
 </body>
 </html>
