@@ -35,12 +35,12 @@
     return rect;
   });
   const pasos = [
-    ['1. Fracciones con formato matemático', 'Escribe 1/2 y sal de la celda con Tab, Enter o un clic. Se mostrará un medio con numerador, barra y denominador. Al editarla puedes volver a modificar el texto.'],
-    ['2. Constantes y expresiones', 'Puedes usar e o euler para Euler y pi o π para pi, también dentro de expresiones como 2pi o (1+e)/2. Estas constantes se calculan con aproximaciones de 40 decimales.'],
-    ['3. Agrega o quita filas y columnas', 'Cada fila añade una ecuación y cada columna de incógnita añade una variable. Los botones − eliminan la última fila o incógnita; la columna b se conserva. Máximo: 15 filas y 14 incógnitas.'],
-    ['4. Escribe los coeficientes', 'Pulsa una celda y escribe. Cada fila es una ecuación; b es el término independiente. Tab o Enter avanza a la siguiente celda.'],
-    ['5. Pulsa Resolver', 'Ajusta las filas e incógnitas a tu sistema y pulsa Resolver. En el ejemplo: x₁ + x₂ = 3, x₂ + x₃ = 2 y x₁ + x₃ = 3.'],
-    ['6. Lee la solución', 'Este sistema tiene una solución única: x₁ = 2, x₂ = 1 y x₃ = 1. Otros sistemas pueden tener infinitas soluciones con parámetros o no tener solución.']
+    ['Fracciones, así de fácil', 'Escribe 1/2. Al salir de la celda, se verá como una fracción.'],
+    ['También π y Euler', 'Usa pi, e o euler, solos o en expresiones como 2pi.'],
+    ['Una matriz a tu medida', 'Añade o quita filas e incógnitas con los botones + y −.'],
+    ['Escribe tu sistema', 'Una fila por ecuación. La última columna es b; Tab avanza.'],
+    ['Resuelve con un clic', 'Pulsa Resolver para calcular tu sistema.'],
+    ['Encuentra tu solución', 'Verás si hay una solución, infinitas o ninguna.']
   ];
   let tiempo = 0, anterior = null, reproduciendo = false, frame = null, pasoActual = -1;
   const duracion = 40000;
@@ -52,6 +52,7 @@
       pasoActual = paso;
       $('titulo-paso').textContent = pasos[paso][0]; $('texto-paso').textContent = pasos[paso][1];
       $('contador-paso').textContent = `${paso + 1} / 6`;
+      [...$('indicadores-recorrido').children].forEach((el,i)=>el.classList.toggle('activo',i===paso));
     }
     let x = 390, y = 265;
     const indice = Math.min(11, Math.max(0, Math.floor((t - 500) / 750)));
@@ -102,7 +103,7 @@
       $('demo-constante-texto').textContent = texto.slice(0, Math.max(0, Math.floor((local % 3200 - 300) / 300)));
       $('demo-constante-valor').style.opacity = suave((local - 1600) / 600);
       x = 180; y = 159; $('demo-cursor').style.opacity = '1'; $('demo-clic').style.opacity = '0';
-      $('demo-leyenda').textContent = 'Constantes numéricas, sin variables simbólicas';
+      $('demo-leyenda').textContent = 'π y Euler: aproximados a 40 decimales';
     }
     if (paso === 2) {
       const local = tiempo - 12000, fase = Math.min(3, Math.floor(local / 2500));
@@ -127,23 +128,34 @@
   }
   function animar(ahora) {
     if (!reproduciendo) return;
-    if (anterior !== null) tiempo = (tiempo + Math.min(ahora - anterior, 100)) % duracion;
-    anterior = ahora; dibujar(); frame = requestAnimationFrame(animar);
+    if (anterior !== null) tiempo = Math.min(duracion, tiempo + Math.min(ahora - anterior, 100));
+    anterior = ahora; dibujar();
+    if (tiempo >= duracion) { reproducir(false); return; }
+    frame = requestAnimationFrame(animar);
   }
   function reproducir(valor) {
     reproduciendo = valor; anterior = null; cancelAnimationFrame(frame);
-    $('animar-ayuda').textContent = valor ? 'Pausar animación' : 'Reproducir animación';
+    $('animar-ayuda').textContent = valor ? 'Pausar' : tiempo >= duracion ? 'Repetir' : 'Reproducir';
+    $('animar-ayuda').setAttribute('aria-label', valor ? 'Pausar recorrido' : 'Reproducir recorrido');
     if (valor) frame = requestAnimationFrame(animar);
   }
-  $('como-usar').onclick = () => {
+  function abrirRecorrido() {
     tiempo = 0; pasoActual = -1; ayuda.showModal(); dibujar();
     reproducir(!matchMedia('(prefers-reduced-motion: reduce)').matches);
   };
+  $('como-usar').onclick = abrirRecorrido;
   $('cerrar-ayuda').onclick = () => ayuda.close();
-  $('animar-ayuda').onclick = () => reproducir(!reproduciendo);
+  $('empezar-calculadora').onclick = () => { ayuda.close(); document.querySelector('#matriz .celda')?.focus(); };
+  $('animar-ayuda').onclick = () => { if (tiempo >= duracion) tiempo = 0; reproducir(!reproduciendo); };
   function ir(delta) { const paso = (pasoActual + delta + 6) % 6; tiempo = [3800, 8500, 13200, 22000, 32500, 37500][paso]; anterior = null; dibujar(); }
   $('siguiente-ayuda').onclick = () => ir(1);
   $('anterior-ayuda').onclick = () => ir(-1);
-  ayuda.addEventListener('close', () => reproducir(false));
+  ayuda.addEventListener('close', () => {
+    reproducir(false);
+    try { localStorage.setItem('tlato-recorrido-visto', '1'); } catch { /* El recorrido manual sigue disponible. */ }
+  });
   document.addEventListener('visibilitychange', () => { anterior = null; });
+  let visto = false;
+  try { visto = localStorage.getItem('tlato-recorrido-visto') === '1'; } catch { /* Primera visita sin almacenamiento disponible. */ }
+  if (!visto) abrirRecorrido();
 })();
