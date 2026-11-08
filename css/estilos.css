@@ -405,3 +405,15 @@ input.celda { cursor: text; }
 #confirmar-pista-practica::backdrop { background: #101318b8; }
 #confirmar-pista-practica h2 { font-size: 1.1rem; }
 #confirmar-pista-practica p { line-height: 1.65; color: var(--texto-secundario); }
+
+#guia-practica { width: min(94vw,680px); max-height: 92vh; overflow: auto; padding: 24px; border: 1px solid var(--borde); border-radius: 15px; background: var(--fondo-panel); color: var(--texto-principal); }
+#guia-practica::backdrop { background: #101318b8; }
+#guia-practica h2 { font-size: 1.15rem; }
+#guia-practica .modal-cabecera { gap: 12px; }
+#demo-practica { display: block; width: 100%; height: auto; max-height: 300px; font: 16px system-ui,sans-serif; fill: var(--texto-principal); }
+#progreso-guia-practica { display: block; height: 100%; background: var(--acento); }
+#paso-guia-practica { margin: 0 0 6px; font-size: 1rem; }
+#texto-guia-practica { font-size: .9rem; color: var(--texto-secundario); line-height: 1.6; min-height: 3em; margin: 0 0 16px; }
+#contador-guia-practica { font-size: .8rem; white-space: nowrap; }
+#reabrir-guia-practica { margin-left: 8px; margin-bottom: 18px; }
+@media(max-width:620px) { #guia-practica { padding: 18px; } #guia-practica h2 { font-size: 1.05rem; } #empezar-guia-practica { width: 100%; justify-content: center; } }

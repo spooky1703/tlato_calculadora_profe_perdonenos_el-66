@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,600,0,0" />
-  <link rel="stylesheet" href="css/estilos.css?v=pistas-9">
+  <link rel="stylesheet" href="css/estilos.css?v=guia-practica-10">
   <script src="js/tema.js" defer></script>
   <script src="js/navegacion.js" defer></script>
   <script src="js/fracciones.js?v=constantes-2" defer></script>
@@ -22,7 +22,8 @@
   <script src="js/guia-importacion.js?v=2" defer></script>
   <script src="js/practica-modelo.js?v=4" defer></script>
   <script src="js/practica-ui.js?v=4" defer></script>
-  <script src="js/app.js?v=practica-5" defer></script>
+  <script src="js/guia-practica.js?v=2" defer></script>
+  <script src="js/app.js?v=guia-practica-6" defer></script>
   <script src="js/ayuda.js?v=2" defer></script>
 </head>
 <body>
@@ -71,6 +72,7 @@
     <div class="modos-unidad" role="group" aria-label="Modo de la Unidad 1">
       <button id="modo-calculadora" type="button" aria-pressed="true">Calculadora</button><button id="modo-practica" type="button" aria-pressed="false">Practicar</button>
     </div>
+    <button id="reabrir-guia-practica" type="button" class="boton enlace-formato" hidden>Ver guía de práctica</button>
     <p id="introduccion-practica" class="intro-practica" hidden>Introduce tu matriz. Tú completarás cada paso de Gauss-Jordan; Tlato te guiará y verificará tus respuestas. Solo valores racionales, sin π ni Euler.</p>
     <section id="editor-sistema" class="panel" aria-labelledby="titulo-matriz">
       <div class="panel-cabecera">
@@ -127,7 +129,7 @@
         <p id="clasificacion-practica"></p>
         <button id="solucion-practica" type="button" class="boton principal">Ver solución final</button>
       </div>
-      <details class="reglas-practica"><summary>Ruta y calificación</summary><p>Hacer 1 cada pivote, ceros debajo y repetir. Después, ceros encima por columnas de izquierda a derecha. Se usan intercambios cuando hacen falta, se saltan columnas sin pivote y no se cuentan operaciones que no cambian nada. Si hay contradicción, también se reduce la columna b.</p><p>Nota = 10 × pasos / (pasos + intentos incorrectos + pistas). Cada pista confirmada equivale a un intento incorrecto y se cobra una sola vez por paso. Una verificación con errores cuenta como un intento, aunque haya varias casillas mal. Las entradas vacías o inválidas no descuentan.</p></details>
+      <p class="reglas-practica">Tu nota baja con cada intento incorrecto o pista confirmada. Las casillas vacías o inválidas no descuentan.</p>
       <details id="historial-practica" class="historial-practica" hidden><summary>Ver mis pasos completados</summary><div id="lista-historial-practica"></div></details>
     </section>
 
@@ -291,6 +293,27 @@
     <p>tlatoani te diria que practiques mas y no andes viendo pistas</p>
     <p id="aviso-descuento-pista">Ver una pista reduce tu calificación. Cancelar no descuenta.</p>
     <div class="acciones-principales"><button id="cancelar-pista-practica" type="button" class="boton secundario" autofocus>Seguir intentando</button><button id="aceptar-pista-practica" type="button" class="boton principal">Aceptar descuento y ver pista</button></div>
+  </dialog>
+  <dialog id="guia-practica" aria-labelledby="titulo-guia-practica">
+    <div class="modal-cabecera"><div class="identidad-bienvenida"><span class="logo-tlato logo-pequeno"><img src="assets/tlato-limpio.png?v=4" width="36" height="36" alt=""></span><h2 id="titulo-guia-practica">Ahora te toca a ti</h2></div><button id="cerrar-guia-practica" type="button" class="boton cerrar" aria-label="Cerrar guía de práctica">×</button></div>
+    <p class="subtitulo-guia">Mira el ejemplo y prueba a tu ritmo.</p>
+    <div class="demo-guia">
+      <svg id="demo-practica" viewBox="0 0 600 300" role="img" aria-label="Ejemplo animado: preparar una matriz, completar un paso, corregir un error, pedir pistas y ver la nota">
+        <rect width="600" height="300" rx="12" fill="var(--fondo-body)"/>
+        <text x="24" y="30" fill="var(--texto-secundario)" font-size="13">EJEMPLO DE PRÁCTICA</text>
+        <g id="demo-practica-matrices"><text x="100" y="65" text-anchor="middle">Anterior</text><text x="377" y="65" text-anchor="middle">Tu respuesta</text><g id="demo-practica-origen"></g><g id="demo-practica-respuesta"></g><text x="234" y="137" fill="var(--acento)" font-size="26">→</text>
+          <g id="demo-practica-boton"><rect x="285" y="200" width="190" height="38" rx="7" fill="var(--primario)"/><text id="demo-practica-boton-texto" x="380" y="224" text-anchor="middle" fill="var(--texto-boton-primario)">Verificar matriz</text></g>
+          <text id="demo-practica-feedback" x="300" y="271" text-anchor="middle" font-size="14"></text>
+        </g>
+        <g id="demo-practica-pista" opacity="0"><rect x="100" y="70" width="400" height="168" rx="12" fill="var(--fondo-panel)" stroke="var(--borde)"/><text x="130" y="105" font-weight="600">¿Pista?</text><text x="130" y="138" font-size="15">Primero intenta resolverlo tú.</text><text x="130" y="165" font-size="15">Ver una pista reduce tu nota.</text><rect x="130" y="185" width="170" height="33" rx="6" fill="var(--boton-bg)"/><text x="215" y="207" text-anchor="middle" font-size="14">Seguir intentando</text></g>
+        <g id="demo-practica-nota" opacity="0"><rect x="100" y="65" width="400" height="180" rx="12" fill="var(--fondo-panel)" stroke="var(--borde)"/><text x="300" y="103" text-anchor="middle" font-size="16">¡Práctica completada!</text><text x="300" y="157" text-anchor="middle" font-size="36" fill="var(--primario)" font-weight="700">6.67 / 10</text><text x="300" y="192" text-anchor="middle" font-size="14">Ejemplo: 2 pasos · 1 intento incorrecto</text><text x="300" y="222" text-anchor="middle" font-size="13">Cada corrección es parte de aprender.</text></g>
+        <g id="cursor-guia-practica"><path d="M0 0V22L6 16L12 27L16 24L10 14H20Z" fill="var(--acento)" stroke="var(--fondo-panel)" stroke-width="2"/><circle id="clic-guia-practica" r="14" fill="none" stroke="var(--acento)" opacity="0"/></g>
+      </svg>
+      <div class="progreso-guia"><span id="progreso-guia-practica"></span></div>
+    </div>
+    <div id="puntos-guia-practica" class="indicadores-recorrido" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+    <h3 id="paso-guia-practica"></h3><p id="texto-guia-practica"></p>
+    <div class="controles-recorrido"><div class="navegar-recorrido"><button id="anterior-guia-practica" type="button" class="boton" aria-label="Paso anterior de la guía de práctica">←</button><span id="contador-guia-practica" aria-live="polite"></span><button id="siguiente-guia-practica" type="button" class="boton" aria-label="Paso siguiente de la guía de práctica">→</button><button id="pausar-guia-practica" type="button" class="boton">Pausar</button></div><button id="empezar-guia-practica" type="button" class="boton principal">¡A practicar!</button></div>
   </dialog>
 </body>
 </html>

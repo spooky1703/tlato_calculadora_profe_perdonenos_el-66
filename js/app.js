@@ -235,9 +235,11 @@
     document.getElementById('modo-calculadora').setAttribute('aria-pressed', String(!practica));
     document.getElementById('modo-practica').setAttribute('aria-pressed', String(practica));
     document.getElementById('introduccion-practica').hidden = !practica;
+    document.getElementById('reabrir-guia-practica').hidden = !practica;
     document.getElementById('resolver').textContent = practica ? 'Comenzar práctica' : 'Resolver';
     errorElemento.hidden = true; resultadoElemento.hidden = true;
     window.VisualizacionSoluciones.limpiar();
+    if(practica) window.GuiaPractica.primeraVez();
   }
   document.getElementById('modo-practica').onclick = () => cambiarModo(true);
   document.getElementById('modo-calculadora').onclick = () => cambiarModo(false);
