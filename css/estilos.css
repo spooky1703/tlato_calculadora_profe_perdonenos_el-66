@@ -2,35 +2,35 @@
   font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-synthesis: none;
 
-  /* MODO DÍA (Opción 2) */
-  --fondo-body: #F5F7F6;
+  /* MODO DÍA */
+  --fondo-body: #F4F8FB; 
   --fondo-panel: #FFFFFF;
-  --texto-principal: #0D1B2A;
-  --texto-secundario: #2F4F4F;
-  --borde: #D1D9E0;
-  --boton-bg: #EAEFF2;
-  --boton-hover: #D8E1E8;
-  --primario: #2F4F4F;
-  --primario-hover: #1F3636;
-  --acento: #6EA2B3;
-  --texto-boton: #0D1B2A;
+  --texto-principal: #001D39; 
+  --texto-secundario: #49769F;
+  --borde: #BDD8E9; 
+  --boton-bg: #BDD8E9;
+  --boton-hover: #7BBDE8;
+  --primario: #0A4174;
+  --primario-hover: #001D39;
+  --acento: #4E8EA2;
+  --texto-boton: #001D39;
   --texto-boton-primario: #FFFFFF;
 }
 
 [data-theme="dark"] {
-  /* MODO NOCHE (Opción 2) */
-  --fondo-body: #0B131E;
-  --fondo-panel: #111D2D;
-  --texto-principal: #E6D8C9;
-  --texto-secundario: #A8B2BD;
-  --borde: #233446;
-  --boton-bg: #1B2B3E;
-  --boton-hover: #263C55;
-  --primario: #4A7C74;
-  --primario-hover: #5DA196;
-  --acento: #6EA2B3;
-  --texto-boton: #E6D8C9;
-  --texto-boton-primario: #0B131E;
+  /* MODO NOCHE  */
+  --fondo-body: #001D39; 
+  --fondo-panel: #0A4174; 
+  --texto-principal: #FFFFFF;
+  --texto-secundario: #BDD8E9;
+  --borde: #49769F; 
+  --boton-bg: #49769F;
+  --boton-hover: #4E8EA2;
+  --primario: #6EA2B3;
+  --primario-hover: #7BBDE8;
+  --acento: #7BBDE8;
+  --texto-boton: #FFFFFF;
+  --texto-boton-primario: #001D39;
 }
 
 * { box-sizing: border-box; }
