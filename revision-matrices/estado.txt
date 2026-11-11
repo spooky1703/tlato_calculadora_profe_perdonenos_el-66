@@ -1,7 +1,0 @@
-45 imágenes preparadas y subidas a las carpetas JAMR01-JAMR15.
-Los sistemas se reconstruyeron a partir de las imágenes visibles porque macOS denegó la lectura de las capturas temporales.
-JAMR01 sigue la matriz manuscrita (tercera fila con -2x2).
-JAMR14 sigue la matriz manuscrita (tercera fila 2x1 + 3x2 = 5).
-JAMR10 se adaptó a la matriz de resultado fotografiada: columna x3 = [4,9,5,13]. La foto original del procedimiento conserva una matriz inicial diferente.
-Los 15 sistemas preparados tienen la misma forma reducida que los 15 resultados fotografiados, comprobada con fracciones exactas.
-Fecha solicitada para el registro: 06/11/2026, horas asignadas de 18:00 a 19:10.
