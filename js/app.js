@@ -141,7 +141,7 @@
     const span = document.createElement('span'); span.textContent = texto; if (clase) span.className = clase; contenedor.append(span);
   }
 
-  function renderizarSolucion(resultado) {
+  function renderizarSolucion(resultado, original) {
     const destino = document.getElementById('detalle-solucion'); destino.replaceChildren();
     const encabezado = document.createElement('h3'); encabezado.textContent = 'Solución'; destino.append(encabezado);
     if (resultado.tipo === 'incompatible') {
@@ -155,27 +155,55 @@
         sumarTermino(linea, `x${columna + 1} =`); linea.append(fraccionVisual(resultado.matriz[i][incognitas])); lista.append(linea);
       });
     } else {
-      const { libres, expresiones } = GaussJordan.parametrizar(resultado, incognitas);
-      expresiones.forEach((terminos, indice) => {
-        const linea = document.createElement('div'); linea.className = 'solucion-linea';
-        sumarTermino(linea, `x${indice + 1} =`);
-        if (!terminos.length) sumarTermino(linea, '0');
-        let primero = true;
-        terminos.forEach(termino => {
-          const coef = termino.coeficiente;
-          const negativo = coef.n < 0n;
-          if (!primero) sumarTermino(linea, negativo ? ' − ' : ' + ');
-          else if (negativo) sumarTermino(linea, '−');
-          const absoluto = new F(coef.n < 0n ? -coef.n : coef.n, coef.d);
-          if (termino.constante || !absoluto.esUno()) linea.append(fraccionVisual(absoluto));
-          if (termino.parametro) sumarTermino(linea, termino.parametro);
-          primero = false;
-        });
-        lista.append(linea);
-      });
+      const modelo = window.ParametrizacionCuaderno.crear(original, incognitas);
+      const { libres } = modelo;
       const nota = document.createElement('p'); nota.className = 'parametros';
-      nota.textContent = `Variables pivote: ${resultado.columnasPivote.map(i => `x${i + 1}`).join(', ') || 'ninguna'}. Variables libres: ${libres.map(i => `x${i + 1}`).join(', ')}. ${libres.map((col, i) => `t${i + 1} = x${col + 1}`).join('; ')}. Cada parámetro puede tomar cualquier valor real.`;
-      destino.append(lista, nota); return;
+      nota.textContent = `${libres.map(i => `x${i + 1}`).join(', ')} ∈ ℝ. Cada variable libre puede tomar cualquier valor real.`;
+      const dibujarVector = (contenedor, componentes) => {
+        const grupo = document.createElement('span');
+        grupo.className = 'solucion-linea';
+        sumarTermino(grupo, '(');
+        componentes.forEach((valor, i) => {
+          if (i) sumarTermino(grupo, ',');
+          grupo.append(fraccionVisual(valor));
+        });
+        sumarTermino(grupo, ')');
+        contenedor.append(grupo);
+      };
+      const dibujarComponente = (contenedor, i) => {
+        const terminos = [{ coeficiente: modelo.origen[i] }, ...modelo.base.map((v, k) => ({ coeficiente: v[i], parametro: modelo.parametros[k] }))].filter(t => !t.coeficiente.esCero());
+        if (!terminos.length) sumarTermino(contenedor, '0');
+        terminos.forEach((t, k) => {
+          const negativo = t.coeficiente.n < 0n;
+          const absoluto = negativo ? t.coeficiente.negar() : t.coeficiente;
+          sumarTermino(contenedor, k ? (negativo ? ' − ' : ' + ') : (negativo ? '−' : ''));
+          if (!t.parametro || !absoluto.esUno()) contenedor.append(fraccionVisual(absoluto));
+          if (t.parametro) sumarTermino(contenedor, t.parametro);
+        });
+      };
+      modelo.origen.forEach((_, i) => {
+        const linea = document.createElement('div'); linea.className = 'solucion-linea';
+        sumarTermino(linea, `x${i + 1} =`);
+        dibujarComponente(linea, i); lista.append(linea);
+      });
+      const tituloTupla = document.createElement('h4'); tituloTupla.textContent = 'Solución paramétrica';
+      const tupla = document.createElement('div'); tupla.className = 'solucion-linea';
+      sumarTermino(tupla, 'x = (');
+      modelo.origen.forEach((_, i) => {
+        if (i) sumarTermino(tupla, ',');
+        const componente = document.createElement('span'); componente.className = 'solucion-linea';
+        dibujarComponente(componente, i); tupla.append(componente);
+      });
+      sumarTermino(tupla, ')');
+      const tituloVector = document.createElement('h4'); tituloVector.textContent = 'Forma vectorial';
+      const vector = document.createElement('div'); vector.className = 'solucion-linea';
+      sumarTermino(vector, 'x =');
+      dibujarVector(vector, modelo.origen);
+      modelo.base.forEach((direccion, k) => {
+        sumarTermino(vector, ` + ${modelo.parametros[k]} · `);
+        dibujarVector(vector, direccion);
+      });
+      destino.append(lista, tituloTupla, tupla, tituloVector, vector, nota); return;
     }
     destino.append(lista);
   }
@@ -212,8 +240,8 @@
         infinitas: 'Sistema compatible indeterminado: existen infinitas soluciones.',
         incompatible: 'Sistema incompatible: no existe solución.'
       };
-      clasificacion.textContent = `${aproximado ? 'Modelo racional aproximado: ' : ''}${textos[resultado.tipo]} Rango(A) = ${resultado.rangoCoeficientes}; rango(A|b) = ${resultado.rangoAumentada}.`;
-      renderizarSolucion(resultado);
+      clasificacion.textContent = `${aproximado ? 'Modelo racional aproximado: ' : ''}${textos[resultado.tipo]}`;
+      renderizarSolucion(resultado, matriz);
 
       window.VisualizacionSoluciones.preparar(resultado, matriz, incognitas, aproximado);
 

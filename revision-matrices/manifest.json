@@ -1,0 +1,152 @@
+[
+  {
+    "id": "JAMR01",
+    "ejercicio": 31,
+    "dimension": "3x4",
+    "files": {
+      "sistema": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR01/sistema.png",
+      "procedimiento": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR01/procedimiento.jpg",
+      "resultado": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR01/resultado.jpg"
+    }
+  },
+  {
+    "id": "JAMR02",
+    "ejercicio": 32,
+    "dimension": "3x4",
+    "files": {
+      "sistema": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR02/sistema.png",
+      "procedimiento": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR02/procedimiento.jpg",
+      "resultado": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR02/resultado.jpg"
+    }
+  },
+  {
+    "id": "JAMR03",
+    "ejercicio": 33,
+    "dimension": "3x4",
+    "files": {
+      "sistema": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR03/sistema.png",
+      "procedimiento": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR03/procedimiento.jpg",
+      "resultado": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR03/resultado.jpg"
+    }
+  },
+  {
+    "id": "JAMR04",
+    "ejercicio": 34,
+    "dimension": "3x5",
+    "files": {
+      "sistema": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR04/sistema.png",
+      "procedimiento": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR04/procedimiento.jpg",
+      "resultado": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR04/resultado.jpg"
+    }
+  },
+  {
+    "id": "JAMR05",
+    "ejercicio": 35,
+    "dimension": "3x5",
+    "files": {
+      "sistema": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR05/sistema.png",
+      "procedimiento": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR05/procedimiento.jpg",
+      "resultado": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR05/resultado.jpg"
+    }
+  },
+  {
+    "id": "JAMR06",
+    "ejercicio": 36,
+    "dimension": "3x5",
+    "files": {
+      "sistema": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR06/sistema.png",
+      "procedimiento": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR06/procedimiento.jpg",
+      "resultado": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR06/resultado.jpg"
+    }
+  },
+  {
+    "id": "JAMR07",
+    "ejercicio": 37,
+    "dimension": "4x4",
+    "files": {
+      "sistema": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR07/sistema.png",
+      "procedimiento": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR07/procedimiento.jpg",
+      "resultado": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR07/resultado.jpg"
+    }
+  },
+  {
+    "id": "JAMR08",
+    "ejercicio": 38,
+    "dimension": "4x4",
+    "files": {
+      "sistema": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR08/sistema.png",
+      "procedimiento": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR08/procedimiento.jpg",
+      "resultado": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR08/resultado.jpg"
+    }
+  },
+  {
+    "id": "JAMR09",
+    "ejercicio": 39,
+    "dimension": "4x4",
+    "files": {
+      "sistema": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR09/sistema.png",
+      "procedimiento": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR09/procedimiento.jpg",
+      "resultado": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR09/resultado.jpg"
+    }
+  },
+  {
+    "id": "JAMR10",
+    "ejercicio": 40,
+    "dimension": "4x3",
+    "files": {
+      "sistema": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR10/sistema.png",
+      "procedimiento": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR10/procedimiento.jpg",
+      "resultado": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR10/resultado.jpg"
+    }
+  },
+  {
+    "id": "JAMR11",
+    "ejercicio": 41,
+    "dimension": "4x3",
+    "files": {
+      "sistema": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR11/sistema.png",
+      "procedimiento": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR11/procedimiento.jpg",
+      "resultado": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR11/resultado.jpg"
+    }
+  },
+  {
+    "id": "JAMR12",
+    "ejercicio": 42,
+    "dimension": "4x3",
+    "files": {
+      "sistema": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR12/sistema.png",
+      "procedimiento": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR12/procedimiento.jpg",
+      "resultado": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR12/resultado.jpg"
+    }
+  },
+  {
+    "id": "JAMR13",
+    "ejercicio": 43,
+    "dimension": "5x3",
+    "files": {
+      "sistema": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR13/sistema.png",
+      "procedimiento": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR13/procedimiento.jpg",
+      "resultado": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR13/resultado.jpg"
+    }
+  },
+  {
+    "id": "JAMR14",
+    "ejercicio": 44,
+    "dimension": "5x3",
+    "files": {
+      "sistema": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR14/sistema.png",
+      "procedimiento": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR14/procedimiento.jpg",
+      "resultado": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR14/resultado.jpg"
+    }
+  },
+  {
+    "id": "JAMR15",
+    "ejercicio": 45,
+    "dimension": "5x3",
+    "files": {
+      "sistema": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR15/sistema.png",
+      "procedimiento": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR15/procedimiento.jpg",
+      "resultado": "/Users/alo/Downloads/tlato-calculadora 2/revision-matrices/archivos/JAMR15/resultado.jpg"
+    }
+  }
+]
