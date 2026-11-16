@@ -71,7 +71,7 @@
     modal.showModal(); azimut=-.6;elevacion=.45;zoom=1;
     const dimension=modelo.libres.length;
     const forma=dimension===1?'una recta':dimension===2?'un plano':`un espacio afín de dimensión ${dimension}`;
-    $('explicacion-infinitas').textContent=`Tus ${modelo.n} incógnitas tienen ${dimension} ${dimension===1?'variable libre':'variables libres'}: la familia de soluciones forma ${forma}. Cada parámetro puede tomar cualquier valor real. Al cambiarlo obtienes otra solución de todas las ecuaciones. Dimensión = ${modelo.n} incógnitas − rango ${modelo.n-dimension} = ${dimension}.`;
+    $('explicacion-infinitas').textContent=`Hay muchos puntos que cumplen el sistema: forman ${forma}. Mueve los controles para ver distintas soluciones.`;
     $('proyeccion-infinitas').textContent=modelo.n>3?'Proyección parcial: elige tres incógnitas distintas. Se muestra la imagen de toda la familia sobre esos ejes, no una sección que fija las demás variables. Distintas soluciones pueden coincidir en el mismo punto de esta vista.':'La gráfica representa la familia completa en tus coordenadas; solo se dibuja una zona finita.';
     $('ejes-infinitas').replaceChildren();ejes=Array.from({length:Math.min(3,modelo.n)},(_,i)=>i);
     if(modelo.n>3) ejes.forEach((eje,k)=>{

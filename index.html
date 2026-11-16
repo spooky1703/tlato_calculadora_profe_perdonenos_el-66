@@ -14,17 +14,17 @@
   <link rel="stylesheet" href="css/estilos.css?v=fracciones-practica-11">
   <script src="js/tema.js" defer></script>
   <script src="js/navegacion.js" defer></script>
+  <script src="js/configuracion.js" defer></script>
   <script src="js/fracciones.js?v=constantes-2" defer></script>
-  <script src="js/gauss-jordan.js?v=practica-2" defer></script>
-  <script src="js/parametrizacion-cuaderno.js?v=3" defer></script>
-  <script src="js/espacio-soluciones.js" defer></script>
-  <script src="js/visualizacion-soluciones.js" defer></script>
+  <script src="js/gauss-jordan.js?v=limites-3" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+  <script src="js/espacio-soluciones.js?v=2" defer></script>
+  <script src="js/visualizacion-soluciones.js?v=2" defer></script>
   <script src="js/guia-importacion.js?v=2" defer></script>
   <script src="js/practica-modelo.js?v=4" defer></script>
-  <script src="js/practica-ui.js?v=5" defer></script>
+  <script src="js/practica-ui.js?v=6" defer></script>
   <script src="js/guia-practica.js?v=3" defer></script>
-  <script src="js/app.js?v=parametrizacion-9" defer></script>
+  <script src="js/app.js?v=limites-12" defer></script>
   <script src="js/ayuda.js?v=2" defer></script>
 </head>
 <body>
@@ -100,7 +100,6 @@
 
       <div class="pie-matriz">
         <span id="dimensiones">3 ecuaciones · 3 incógnitas</span>
-        <span>Máximo: 15 ecuaciones y 14 incógnitas</span>
       </div>
       <div class="acciones-principales">
         <button type="button" id="resolver" class="boton principal"><span class="material-symbols-outlined">calculate</span> Resolver</button>
@@ -138,12 +137,10 @@
     <section id="seccion-resultado" class="panel resultado" aria-labelledby="titulo-resultado" hidden>
       <h2 id="titulo-resultado">Resultado</h2>
       <div id="clasificacion" class="clasificacion"></div>
-      <p id="aviso-precision" class="mensaje" hidden>π y e se aproximan a 40 decimales. Las soluciones, los rangos y la clasificación corresponden a ese modelo racional; no certifican el sistema con constantes irracionales exactas.</p>
       <h3>Matriz escalonada reducida</h3>
       <div id="matriz-resultado" class="desplazamiento-matriz"></div>
-      <div id="detalle-solucion"></div>
       <div class="acciones-resultado">
-        <button type="button" id="explicar-infinitas" class="boton secundario" hidden>¿Qué significan infinitas soluciones?</button>
+        <button type="button" id="explicar-infinitas" class="boton secundario" hidden>Ver gráfica de soluciones</button>
         <button type="button" id="ver-pasos" class="boton secundario">Ver pasos</button>
       </div>
     </section>
@@ -232,7 +229,10 @@
     </div>
   </dialog>
 
-<dialog id="modal-infinitas" aria-labelledby="titulo-infinitas">
+
+
+
+  <dialog id="modal-infinitas" aria-labelledby="titulo-infinitas">
     <div class="modal-cabecera"><h2 id="titulo-infinitas">¿Qué significan infinitas soluciones?</h2><button type="button" id="cerrar-infinitas" class="boton" aria-label="Cerrar explicación">×</button></div>
     <p id="explicacion-infinitas"></p>
     <p id="proyeccion-infinitas" class="nota-geometria"></p>
@@ -240,14 +240,13 @@
     <div class="grafica-contenedor"><canvas id="grafica-infinitas" width="900" height="480" aria-label="Gráfica de la familia de soluciones y del punto seleccionado">La explicación, las coordenadas y la comprobación se muestran debajo.</canvas></div>
     <p id="estado-grafica" role="status"></p>
     <div class="controles-geometria"><button type="button" class="boton" id="girar-grafica">Girar vista</button><button type="button" class="boton" id="acercar-grafica">Acercar</button><button type="button" class="boton" id="alejar-grafica">Alejar</button><button type="button" class="boton" id="restablecer-grafica">Restablecer vista</button></div>
-    <p class="nota-geometria">Arrastra para girar la vista 3D. La zona dibujada es una ventana finita de una familia ilimitada. Verde: familia de soluciones · Azul: punto seleccionado. La gráfica es aproximada; las coordenadas y la comprobación se calculan con fracciones.</p>
-    <h3>Cambia los parámetros</h3><p>Los controles recorren de −5 a 5; puedes escribir cualquier otro valor admitido en los campos. Cada parámetro puede tomar cualquier valor real.</p>
+    <p class="nota-geometria">Arrastra para girar. Verde: soluciones · Azul: punto elegido. Se muestra solo una parte del espacio.</p>
+    <h3>Cambia los parámetros</h3><p>Mueve un control o escribe un valor para cambiar el punto.</p>
     <div id="parametros-infinitas"></div>
     <p id="error-parametro" class="mensaje error" role="alert" hidden></p>
-    <h3>Punto seleccionado</h3><div id="punto-infinitas" aria-live="polite"></div>
-    <h3>Comprobación en tus ecuaciones</h3><div id="comprobacion-infinitas"></div>
+    <details><summary>Ver punto y comprobación</summary><h3>Punto seleccionado</h3><div id="punto-infinitas" aria-live="polite"></div>
+    <h3>Comprobación en tus ecuaciones</h3><div id="comprobacion-infinitas"></div></details>
   </dialog>
-
 
   <dialog id="guia-archivo" aria-labelledby="titulo-guia-archivo">
     <div class="modal-cabecera"><div><span class="etiqueta-guia">ANTES DE IMPORTAR</span><h2 id="titulo-guia-archivo">Tu archivo, listo para Tlato</h2></div><button type="button" id="cerrar-guia-archivo" class="boton cerrar" aria-label="Cerrar guía de archivos">×</button></div>
@@ -286,7 +285,7 @@
     </div>
     <p id="consejo-ejemplo-archivo" class="consejo-archivo"></p>
     <div class="reglas-archivo"><span>✓ Mismas columnas en cada fila</span><span>✓ Escribe 0; no dejes huecos</span><span>✓ Decimales con punto: 0.5</span><span>✓ Sin títulos ni ecuaciones escritas</span></div>
-    <p class="limite-archivo">Hasta 15 filas y 15 columnas, contando b. En Excel usa valores, sin fórmulas ni celdas combinadas; empieza en A1.</p>
+    <p class="limite-archivo">En Excel usa valores, sin fórmulas ni celdas combinadas; empieza en A1.</p>
     <details class="detalle-archivo"><summary>Si el formato no coincide</summary><p>El importador actual puede omitir columnas sobrantes, rellenar faltantes con ceros o separar las comas decimales. Revisa siempre la matriz cargada antes de resolver.</p></details>
     <div class="pie-guia-archivo"><button type="button" id="repetir-ejemplo-archivo" class="boton">Repetir ejemplo</button><button type="button" id="elegir-archivo-guia" class="boton principal">Elegir archivo</button></div>
   </dialog>

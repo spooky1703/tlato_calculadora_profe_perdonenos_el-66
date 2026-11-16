@@ -2,8 +2,25 @@
   const F = global.Fraccion;
 
   function reducir(matrizEntrada, numeroIncognitas) {
-    if (!Number.isInteger(numeroIncognitas) || numeroIncognitas < 1 || numeroIncognitas > 14 || !Array.isArray(matrizEntrada) || matrizEntrada.length < 1 || matrizEntrada.length > 15 || matrizEntrada.some(f => !Array.isArray(f) || f.length !== numeroIncognitas + 1 || f.some(v => !(v instanceof F)))) throw new Error('Dimensiones o valores de matriz inválidos.');
-    const matriz = matrizEntrada.map(fila => fila.map(v => new F(v.n, v.d)));
+    if (!Number.isInteger(numeroIncognitas) || numeroIncognitas < 1 || numeroIncognitas >= global.col_max) {
+      throw new Error(`El número de incógnitas debe estar entre 1 y ${global.col_max - 1}.`);
+    }
+    if (!Array.isArray(matrizEntrada) || matrizEntrada.length < 1 || matrizEntrada.length > global.fila_max) {
+      throw new Error(`La matriz debe tener entre 1 y ${global.fila_max} filas.`);
+    }
+
+    const matriz = [];
+    for (let i = 0; i < matrizEntrada.length; i++) {
+      const fila = matrizEntrada[i];
+      if (!Array.isArray(fila) || fila.length !== numeroIncognitas + 1) {
+        throw new Error('Cada fila debe incluir los coeficientes y la columna aumentada.');
+      }
+      matriz[i] = [];
+      for (let j = 0; j < fila.length; j++) {
+        if (!(fila[j] instanceof F)) throw new Error('La matriz contiene un valor inválido.');
+        matriz[i][j] = new F(fila[j].n, fila[j].d);
+      }
+    }
     const filas = matriz.length;
     let filaPivote = 0;
     const columnasPivote = [];
@@ -13,7 +30,11 @@
       while (candidata < filas && matriz[candidata][columna].esCero()) candidata++;
       if (candidata === filas) continue;
 
-      if (candidata !== filaPivote) [matriz[candidata], matriz[filaPivote]] = [matriz[filaPivote], matriz[candidata]];
+      if (candidata !== filaPivote) {
+        const temporal = matriz[filaPivote];
+        matriz[filaPivote] = matriz[candidata];
+        matriz[candidata] = temporal;
+      }
 
       const pivote = matriz[filaPivote][columna];
       for (let j = 0; j <= numeroIncognitas; j++) matriz[filaPivote][j] = matriz[filaPivote][j].dividir(pivote);
@@ -31,22 +52,36 @@
     }
 
     const rangoCoeficientes = columnasPivote.length;
-    let filaIncompatible = matriz.findIndex(fila =>
-      fila.slice(0, numeroIncognitas).every(v => v.esCero()) && !fila[numeroIncognitas].esCero()
-    );
-    // La columna aumentada también tiene pivote si el sistema es incompatible.
+    let filaIncompatible = -1;
+    for (let i = 0; i < filas; i++) {
+      let todosCero = true;
+      for (let j = 0; j < numeroIncognitas; j++) {
+        if (!matriz[i][j].esCero()) todosCero = false;
+      }
+      if (todosCero && !matriz[i][numeroIncognitas].esCero()) {
+        filaIncompatible = i;
+        break;
+      }
+    }
+    // la columna aumentada también tiene pivote si el sistema es incompatible.
     if (filaIncompatible >= 0) {
-      // El pivote de b debe quedar antes de las filas nulas para completar RREF.
+      // el pivote de b debe quedar antes de las filas nulas para completar RREF.
       if (filaIncompatible !== rangoCoeficientes) {
-        [matriz[rangoCoeficientes], matriz[filaIncompatible]] = [matriz[filaIncompatible], matriz[rangoCoeficientes]];
+        const temporal = matriz[rangoCoeficientes];
+        matriz[rangoCoeficientes] = matriz[filaIncompatible];
+        matriz[filaIncompatible] = temporal;
         filaIncompatible = rangoCoeficientes;
       }
       const pivote = matriz[filaIncompatible][numeroIncognitas];
-      matriz[filaIncompatible] = matriz[filaIncompatible].map(v => v.dividir(pivote));
+      for (let j = 0; j <= numeroIncognitas; j++) {
+        matriz[filaIncompatible][j] = matriz[filaIncompatible][j].dividir(pivote);
+      }
       for (let i = 0; i < filas; i++) {
         if (i === filaIncompatible) continue;
         const factor = matriz[i][numeroIncognitas];
-        matriz[i] = matriz[i].map((v, j) => v.restar(factor.multiplicar(matriz[filaIncompatible][j])));
+        for (let j = 0; j <= numeroIncognitas; j++) {
+          matriz[i][j] = matriz[i][j].restar(factor.multiplicar(matriz[filaIncompatible][j]));
+        }
       }
     }
     const rangoAumentada = rangoCoeficientes + (filaIncompatible >= 0 ? 1 : 0);
@@ -58,25 +93,5 @@
     return { matriz, columnasPivote, rangoCoeficientes, rangoAumentada, filaIncompatible, tipo };
   }
 
-  function parametrizar(resultado, numeroIncognitas) {
-    if (resultado.tipo === 'incompatible') throw new Error('Un sistema incompatible no tiene parametrización.');
-    const { matriz, columnasPivote } = resultado;
-    const libres = Array.from({ length: numeroIncognitas }, (_, i) => i).filter(i => !columnasPivote.includes(i));
-    const expresiones = Array(numeroIncognitas);
-    libres.forEach((columna, indice) => { expresiones[columna] = [{ coeficiente: F.UNO, parametro: `t${indice + 1}` }]; });
-
-    columnasPivote.forEach((columna, indiceFila) => {
-      const fila = matriz[indiceFila];
-      const terminos = [];
-      if (!fila[numeroIncognitas].esCero()) terminos.push({ coeficiente: fila[numeroIncognitas], constante: true });
-      libres.forEach((columnaLibre, indiceParametro) => {
-        const coeficiente = fila[columnaLibre].negar();
-        if (!coeficiente.esCero()) terminos.push({ coeficiente, parametro: `t${indiceParametro + 1}` });
-      });
-      expresiones[columna] = terminos;
-    });
-    return { libres, expresiones };
-  }
-
-  global.GaussJordan = { reducir, parametrizar };
+  global.GaussJordan = { reducir };
 })(window);

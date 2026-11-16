@@ -1,6 +1,6 @@
 const fs=require('fs'),vm=require('vm'),assert=require('assert');
 const c={window:{}};vm.createContext(c);
-for(const p of ['fracciones','gauss-jordan','espacio-soluciones'])vm.runInContext(fs.readFileSync(`${__dirname}/../js/${p}.js`,'utf8'),c);
+for(const p of ['configuracion','fracciones','gauss-jordan','espacio-soluciones'])vm.runInContext(fs.readFileSync(`${__dirname}/../js/${p}.js`,'utf8'),c);
 const {Fraccion:F,GaussJordan:G,EspacioSoluciones:E}=c.window;
 const modelo=filas=>{const a=filas.map(f=>f.map(F.desdeTexto)),n=a[0].length-1;return E.crear(G.reducir(a,n),a,n);};
 for(const [a,dimension] of [

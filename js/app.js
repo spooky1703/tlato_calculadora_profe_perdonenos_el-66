@@ -18,9 +18,8 @@
   }
 
   function renderizarMatriz() {
-    resultadoElemento.hidden = true;
+    resultadoElemento.hidden = true; window.VisualizacionSoluciones.limpiar();
 
-    window.VisualizacionSoluciones.limpiar();
 
     matrizElemento.replaceChildren();
     matrizElemento.style.gridTemplateColumns = `repeat(${incognitas}, max-content) 2px max-content`;
@@ -54,9 +53,9 @@
     });
     agregarSeparador(matrizElemento, filas);
     document.getElementById('dimensiones').textContent = `${filas} ecuaciones · ${incognitas} incógnitas`;
-    document.getElementById('agregar-fila').disabled = filas >= 15;
+    document.getElementById('agregar-fila').disabled = filas >= fila_max;
     document.getElementById('quitar-fila').disabled = filas <= 1;
-    document.getElementById('agregar-columna').disabled = incognitas >= 14;
+    document.getElementById('agregar-columna').disabled = incognitas >= col_max - 1;
     document.getElementById('quitar-columna').disabled = incognitas <= 1;
   }
 
@@ -137,85 +136,14 @@
     const destino = document.getElementById('matriz-resultado'); destino.replaceChildren(tabla);
   }
 
-  function sumarTermino(contenedor, texto, clase = '') {
-    const span = document.createElement('span'); span.textContent = texto; if (clase) span.className = clase; contenedor.append(span);
-  }
-
-  function renderizarSolucion(resultado, original) {
-    const destino = document.getElementById('detalle-solucion'); destino.replaceChildren();
-    const encabezado = document.createElement('h3'); encabezado.textContent = 'Solución'; destino.append(encabezado);
-    if (resultado.tipo === 'incompatible') {
-      const p = document.createElement('p'); p.textContent = `El sistema no tiene solución. La fila ${resultado.filaIncompatible + 1} contiene únicamente ceros en los coeficientes y un término independiente distinto de cero.`;
-      destino.append(p); return;
-    }
-    const lista = document.createElement('div'); lista.className = 'solucion-lista';
-    if (resultado.tipo === 'unica') {
-      resultado.columnasPivote.forEach((columna, i) => {
-        const linea = document.createElement('div'); linea.className = 'solucion-linea';
-        sumarTermino(linea, `x${columna + 1} =`); linea.append(fraccionVisual(resultado.matriz[i][incognitas])); lista.append(linea);
-      });
-    } else {
-      const modelo = window.ParametrizacionCuaderno.crear(original, incognitas);
-      const { libres } = modelo;
-      const nota = document.createElement('p'); nota.className = 'parametros';
-      nota.textContent = `${libres.map(i => `x${i + 1}`).join(', ')} ∈ ℝ. Cada variable libre puede tomar cualquier valor real.`;
-      const dibujarVector = (contenedor, componentes) => {
-        const grupo = document.createElement('span');
-        grupo.className = 'solucion-linea';
-        sumarTermino(grupo, '(');
-        componentes.forEach((valor, i) => {
-          if (i) sumarTermino(grupo, ',');
-          grupo.append(fraccionVisual(valor));
-        });
-        sumarTermino(grupo, ')');
-        contenedor.append(grupo);
-      };
-      const dibujarComponente = (contenedor, i) => {
-        const terminos = [{ coeficiente: modelo.origen[i] }, ...modelo.base.map((v, k) => ({ coeficiente: v[i], parametro: modelo.parametros[k] }))].filter(t => !t.coeficiente.esCero());
-        if (!terminos.length) sumarTermino(contenedor, '0');
-        terminos.forEach((t, k) => {
-          const negativo = t.coeficiente.n < 0n;
-          const absoluto = negativo ? t.coeficiente.negar() : t.coeficiente;
-          sumarTermino(contenedor, k ? (negativo ? ' − ' : ' + ') : (negativo ? '−' : ''));
-          if (!t.parametro || !absoluto.esUno()) contenedor.append(fraccionVisual(absoluto));
-          if (t.parametro) sumarTermino(contenedor, t.parametro);
-        });
-      };
-      modelo.origen.forEach((_, i) => {
-        const linea = document.createElement('div'); linea.className = 'solucion-linea';
-        sumarTermino(linea, `x${i + 1} =`);
-        dibujarComponente(linea, i); lista.append(linea);
-      });
-      const tituloTupla = document.createElement('h4'); tituloTupla.textContent = 'Solución paramétrica';
-      const tupla = document.createElement('div'); tupla.className = 'solucion-linea';
-      sumarTermino(tupla, 'x = (');
-      modelo.origen.forEach((_, i) => {
-        if (i) sumarTermino(tupla, ',');
-        const componente = document.createElement('span'); componente.className = 'solucion-linea';
-        dibujarComponente(componente, i); tupla.append(componente);
-      });
-      sumarTermino(tupla, ')');
-      const tituloVector = document.createElement('h4'); tituloVector.textContent = 'Forma vectorial';
-      const vector = document.createElement('div'); vector.className = 'solucion-linea';
-      sumarTermino(vector, 'x =');
-      dibujarVector(vector, modelo.origen);
-      modelo.base.forEach((direccion, k) => {
-        sumarTermino(vector, ` + ${modelo.parametros[k]} · `);
-        dibujarVector(vector, direccion);
-      });
-      destino.append(lista, tituloTupla, tupla, tituloVector, vector, nota); return;
-    }
-    destino.append(lista);
-  }
-
   document.getElementById('agregar-fila').addEventListener('click', () => {
-    if (filas >= 15) return; valores.push(Array(incognitas + 1).fill('0')); filas++; renderizarMatriz();
+    if (filas >= fila_max) return; valores.push(Array(incognitas + 1).fill('0')); filas++; renderizarMatriz();
   });
   document.getElementById('quitar-fila').addEventListener('click', () => {
     if (filas <= 1) return; if (valores[filas - 1].some(v => v !== '0') && !confirm('¿Eliminar la última fila y sus valores?')) return; valores.pop(); filas--; renderizarMatriz();
   });
   document.getElementById('agregar-columna').addEventListener('click', () => {
-    if (incognitas >= 14) return; valores.forEach(fila => fila.splice(incognitas, 0, '0')); incognitas++; renderizarMatriz();
+    if (incognitas >= col_max - 1) return; valores.forEach(fila => fila.splice(incognitas, 0, '0')); incognitas++; renderizarMatriz();
   });
   document.getElementById('quitar-columna').addEventListener('click', () => {
     if (incognitas <= 1) return; if (valores.some(f => f[incognitas - 1] !== '0') && !confirm('¿Eliminar la última incógnita y sus coeficientes?')) return; valores.forEach(fila => fila.splice(incognitas - 1, 1)); incognitas--; renderizarMatriz();
@@ -223,7 +151,7 @@
 
   document.getElementById('limpiar').addEventListener('click', () => {
     filas = 3; incognitas = 3; valores = Array.from({ length: filas }, () => Array(incognitas + 1).fill('0'));
-    resultadoElemento.hidden = true; errorElemento.hidden = true; renderizarMatriz();
+    resultadoElemento.hidden = true; window.VisualizacionSoluciones.limpiar(); errorElemento.hidden = true; renderizarMatriz();
   });
 
   document.getElementById('resolver').addEventListener('click', () => {
@@ -231,19 +159,17 @@
       const matriz = leerMatriz();
       const aproximado = valores.some(f => f.some(F.contieneConstantes));
       const presentar = () => {
-      document.getElementById('aviso-precision').hidden = !aproximado;
       const resultado = GaussJordan.reducir(matriz, incognitas);
       renderizarMatrizResultado(resultado.matriz);
+      window.VisualizacionSoluciones.preparar(resultado, matriz, incognitas, aproximado);
       const clasificacion = document.getElementById('clasificacion');
       const textos = {
         unica: 'Sistema compatible determinado: existe una solución única.',
-        infinitas: 'Sistema compatible indeterminado: existen infinitas soluciones.',
-        incompatible: 'Sistema incompatible: no existe solución.'
+        infinitas: 'sistema con infinitas soluciones',
+        incompatible: 'sistema sin soluciones'
       };
-      clasificacion.textContent = `${aproximado ? 'Modelo racional aproximado: ' : ''}${textos[resultado.tipo]}`;
-      renderizarSolucion(resultado, matriz);
+      clasificacion.textContent = textos[resultado.tipo];
 
-      window.VisualizacionSoluciones.preparar(resultado, matriz, incognitas, aproximado);
 
       resultadoElemento.hidden = false;
       };
@@ -253,7 +179,7 @@
       } else presentar();
     } catch (error) {
       mostrarError(error.message, error.fila, error.columna);
-      resultadoElemento.hidden = true;
+      resultadoElemento.hidden = true; window.VisualizacionSoluciones.limpiar();
     }
   });
 
@@ -265,8 +191,7 @@
     document.getElementById('introduccion-practica').hidden = !practica;
     document.getElementById('reabrir-guia-practica').hidden = !practica;
     document.getElementById('resolver').textContent = practica ? 'Comenzar práctica' : 'Resolver';
-    errorElemento.hidden = true; resultadoElemento.hidden = true;
-    window.VisualizacionSoluciones.limpiar();
+    errorElemento.hidden = true; resultadoElemento.hidden = true; window.VisualizacionSoluciones.limpiar();
     if(practica) window.GuiaPractica.primeraVez();
   }
   document.getElementById('modo-practica').onclick = () => cambiarModo(true);
@@ -313,7 +238,7 @@
       const limpia = datos.filter(f => f.some(c => c !== undefined && c !== null && c !== ''));
       if (!limpia.length) { mostrarError("Archivo vacío o inválido."); return; }
       const f = limpia.length, c = limpia[0].length - 1;
-      if (f > 15 || c > 14 || c < 1) { mostrarError(`Dimensiones no soportadas: ${f}x${c}.`); return; }
+      if (f > fila_max || c > col_max - 1 || c < 1) { mostrarError(`Dimensiones no soportadas: ${f}x${c}.`); return; }
       let temp = [];
       try {
         for (let i = 0; i < f; i++) {

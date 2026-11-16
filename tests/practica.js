@@ -1,6 +1,6 @@
 const fs=require('fs'),vm=require('vm'),assert=require('assert');
 const c={window:{}};vm.createContext(c);
-for(const nombre of ['fracciones','gauss-jordan','practica-modelo'])vm.runInContext(fs.readFileSync(`${__dirname}/../js/${nombre}.js`,'utf8'),c);
+for(const nombre of ['configuracion','fracciones','gauss-jordan','practica-modelo'])vm.runInContext(fs.readFileSync(`${__dirname}/../js/${nombre}.js`,'utf8'),c);
 const {Fraccion:F,GaussJordan:G,PracticaModelo:M}=c.window;
 const matriz=a=>a.map(f=>f.map(F.desdeTexto));
 const textos=a=>a.map(f=>f.map(v=>v.aTexto()));

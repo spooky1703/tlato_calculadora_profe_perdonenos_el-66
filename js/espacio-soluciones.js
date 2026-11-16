@@ -2,9 +2,21 @@
   const F = global.Fraccion;
   function crear(resultado, original, n) {
     if (resultado.tipo !== 'infinitas') throw new Error('Esta vista requiere infinitas soluciones.');
-    const { libres, expresiones } = global.GaussJordan.parametrizar(resultado, n);
-    const origen = expresiones.map(ts => ts.find(t => t.constante)?.coeficiente || F.CERO);
-    const base = libres.map((_, k) => expresiones.map(ts => ts.find(t => t.parametro === `t${k + 1}`)?.coeficiente || F.CERO));
+    const F = global.Fraccion;
+    const libres = [];
+    for (let j = 0; j < n; j++) {
+      if (!resultado.columnasPivote.includes(j)) libres.push(j);
+    }
+    const origen = Array(n).fill(F.CERO);
+    const base = libres.map(() => Array(n).fill(F.CERO));
+    for (let k = 0; k < libres.length; k++) base[k][libres[k]] = F.UNO;
+    for (let i = 0; i < resultado.columnasPivote.length; i++) {
+      const columna = resultado.columnasPivote[i];
+      origen[columna] = resultado.matriz[i][n];
+      for (let k = 0; k < libres.length; k++) {
+        base[k][columna] = resultado.matriz[i][libres[k]].negar();
+      }
+    }
     function evaluar(parametros) {
       if (parametros.length !== libres.length) throw new Error('Faltan parámetros.');
       const punto = origen.map((v, j) => base.reduce((s, b, k) => s.sumar(b[j].multiplicar(parametros[k])), v));

@@ -3,6 +3,7 @@ const fs = require('fs');
 const vm = require('vm');
 const contexto = { window: {} };
 vm.createContext(contexto);
+vm.runInContext(fs.readFileSync(__dirname + '/../js/configuracion.js', 'utf8'), contexto);
 vm.runInContext(fs.readFileSync(__dirname + '/../js/fracciones.js', 'utf8'), contexto);
 vm.runInContext(fs.readFileSync(__dirname + '/../js/gauss-jordan.js', 'utf8'), contexto);
 const F = contexto.window.Fraccion;
@@ -30,7 +31,7 @@ let r = comprobar([['0','1','2'], ['1','1','3']], 2, 'unica', [2,2]);
 afirmar(r.matriz[0][2].aTexto() === '1' && r.matriz[1][2].aTexto() === '2', 'solución única correcta');
 // Infinitas soluciones con columna libre al inicio.
 r = comprobar([['0','1','2'], ['0','2','4']], 2, 'infinitas', [1,1]);
-afirmar(G.parametrizar(r, 2).libres[0] === 0, 'columna sin pivote al inicio');
+afirmar(!r.columnasPivote.includes(0), 'columna sin pivote al inicio');
 // Incompatible.
 r = comprobar([['1','1','2'], ['2','2','5']], 2, 'incompatible', [1,2]);
 afirmar(r.filaIncompatible >= 0, 'fila incompatible identificada');
@@ -38,7 +39,7 @@ afirmar(r.filaIncompatible >= 0, 'fila incompatible identificada');
 comprobar([['1','2'], ['2','4'], ['0','0']], 1, 'unica', [1,1]);
 // Más incógnitas que ecuaciones y dos variables libres.
 r = comprobar([['1','0','1','3']], 3, 'infinitas', [1,1]);
-afirmar(G.parametrizar(r, 3).libres.length === 2, 'varias variables libres');
+afirmar(3 - r.columnasPivote.length === 2, 'varias variables libres');
 // Fracciones, negativos y resultados fraccionarios.
 r = comprobar([['2','1']], 1, 'unica', [1,1]);
 afirmar(r.matriz[0][1].aTexto() === '1/2', 'resultado fraccionario');
@@ -62,12 +63,9 @@ function verificar(filas) {
   afirmar(r.matriz.every((f,j)=>j===i || f[p].esCero()),'columna pivote reducida');
  });
  if(r.tipo==='incompatible') { afirmar(r.matriz.some(f=>f.slice(0,n).every(v=>v.esCero()) && !f[n].esCero()),'contradicción'); return; }
- const {expresiones,libres}=G.parametrizar(r,n);
- // Verificar la constante y cada vector de la base prueba todos los parámetros.
- for(let k=-1;k<libres.length;k++) {
-  const x=expresiones.map(ts=>ts.reduce((v,t)=>v.sumar((k===-1?t.constante:t.parametro===`t${k+1}`)?t.coeficiente:F.CERO),F.CERO));
-  original.forEach(fila=>afirmar(fila.slice(0,n).reduce((v,a,j)=>v.sumar(a.multiplicar(x[j])),F.CERO).restar(k===-1?fila[n]:F.CERO).esCero(),'sustitución exacta de la familia'));
- }
+ const otra = G.reducir(r.matriz,n);
+ afirmar(JSON.stringify(otra.matriz.map(f=>f.map(v=>v.aTexto()))) === JSON.stringify(r.matriz.map(f=>f.map(v=>v.aTexto()))),'reducir dos veces no cambia el resultado');
+
 }
 [
  [['1','2','3'],['2','4','7'],['0','0','5']],
