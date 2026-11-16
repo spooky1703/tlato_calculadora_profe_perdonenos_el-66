@@ -333,7 +333,7 @@
     const nombre = archivo.name.toLowerCase();
     if (nombre.endsWith('.csv') || nombre.endsWith('.txt')) {
       const lector = new FileReader();
-      lector.onload = (ev) => procesar(ev.target.result.trim().split('\n').map(f => f.trim().split(/[\t,; ]+/)));
+      lector.onload = (ev) => procesar(ev.target.result.replace(/^\uFEFF/, '').replace(/["']/g, '').trim().split('\n').map(f => f.trim().split(/\s*[,;\t]\s*/)));
       lector.readAsText(archivo);
     } else if (nombre.endsWith('.xlsx') || nombre.endsWith('.xls')) {
       if (typeof XLSX === 'undefined') { mostrarError("Librería Excel no cargada. Actualiza el HTML."); return; }
