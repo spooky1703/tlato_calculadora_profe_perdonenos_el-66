@@ -289,7 +289,7 @@
 
   renderizarMatriz();
 
-  if (['localhost', '127.0.0.1', '[::1]', ''].includes(location.hostname)) {
+  if (window.ocr_temporal) {
     const cargarScript = ruta => new Promise((resolve, reject) => {
       const script = document.createElement('script'); script.src = ruta;
       script.onload = resolve; script.onerror = reject; document.head.append(script);
@@ -308,6 +308,6 @@
         filas = copia.length; incognitas = columnas - 1; valores = copia;
         errorElemento.hidden = true; renderizarMatriz(); return true;
       }});
-    }).catch(() => {});
+    }).catch(() => { console.error('No se pudo cargar el OCR temporal. Comprueba que revision-ocr esté incluida en la publicación.'); });
   }
 })();
