@@ -288,26 +288,4 @@
   }
 
   renderizarMatriz();
-
-  if (window.ocr_temporal) {
-    const cargarScript = ruta => new Promise((resolve, reject) => {
-      const script = document.createElement('script'); script.src = ruta;
-      script.onload = resolve; script.onerror = reject; document.head.append(script);
-    });
-    cargarScript('revision-ocr/parser.js').then(() => cargarScript('revision-ocr/revision.js')).then(() => {
-      const estilo = document.createElement('link'); estilo.rel = 'stylesheet'; estilo.href = 'revision-ocr/revision.css'; document.head.append(estilo);
-      window.TlatoRevisionOCR.iniciar({ cargar(datos) {
-        if (!Array.isArray(datos) || !datos.length || datos.length > fila_max) throw new Error('Cantidad de filas inválida.');
-        const columnas = datos[0].length;
-        if (columnas < 2 || columnas > col_max) throw new Error('Cantidad de columnas inválida.');
-        const copia = datos.map(fila => {
-          if (!Array.isArray(fila) || fila.length !== columnas) throw new Error('Todas las filas deben tener el mismo tamaño.');
-          return fila.map(valor => { F.desdeTexto(valor); return String(valor); });
-        });
-        if (!window.PracticaUI.salir()) return false;
-        filas = copia.length; incognitas = columnas - 1; valores = copia;
-        errorElemento.hidden = true; renderizarMatriz(); return true;
-      }});
-    }).catch(() => { console.error('No se pudo cargar el OCR temporal. Comprueba que revision-ocr esté incluida en la publicación.'); });
-  }
 })();
