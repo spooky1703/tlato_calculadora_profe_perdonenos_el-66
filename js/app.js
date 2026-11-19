@@ -234,41 +234,109 @@
 
   const procesarArchivo = (archivo) => {
     if (!archivo) return;
+
     const procesar = (datos) => {
-      const limpia = datos.filter(f => f.some(c => c !== undefined && c !== null && c !== ''));
-      if (!limpia.length) { mostrarError("Archivo vacío o inválido."); return; }
-      const f = limpia.length, c = limpia[0].length - 1;
-      if (f > fila_max || c > col_max - 1 || c < 1) { mostrarError(`Dimensiones no soportadas: ${f}x${c}.`); return; }
+      const limpia = [...datos];
+      while (limpia.length > 0 && limpia[limpia.length - 1].every(c => c === undefined || c === null || String(c).trim() === '')) {
+        limpia.pop();
+      }
+
+      if (!limpia.length) {
+        mostrarError("Archivo vacío o inválido.");
+        return;
+      }
+
+      const f = limpia.length;
+      const maxCols = Math.max(...limpia.map(fila => fila.length));
+      const c = maxCols - 1;
+
+      if (f > fila_max || c > col_max - 1 || c < 1) {
+        mostrarError(`Dimensiones no soportadas: ${f}x${c}.`);
+        return;
+      }
+
       let temp = [];
-      try {
-        for (let i = 0; i < f; i++) {
-          let filaTemp = [];
-          for (let j = 0; j <= c; j++) {
-            let val = limpia[i][j] !== undefined ? String(limpia[i][j]).trim() : '0';
-            if (val === '') val = '0';
+      let errores = [];
+
+      for (let i = 0; i < f; i++) {
+        const filaActual = limpia[i];
+
+        if (!filaActual || filaActual.every(celda => celda === undefined || celda === null || String(celda).trim() === '')) {
+          errores.push(`Fila ${i + 1} (fila completa vacía)`);
+          continue;
+        }
+
+        let filaTemp = [];
+        for (let j = 0; j <= c; j++) {
+          const valorCrudo = filaActual[j];
+          const val = (valorCrudo !== undefined && valorCrudo !== null) ? String(valorCrudo).trim() : '';
+
+          if (val === '') {
+            errores.push(`Fila ${i + 1}, Columna ${j + 1} (vacío)`);
+            continue;
+          }
+
+          try {
             F.desdeTexto(val);
             filaTemp.push(val);
+          } catch (err) {
+            errores.push(`Fila ${i + 1}, Columna ${j + 1} ("${val}": ${err.message})`);
           }
-          temp.push(filaTemp);
         }
-      } catch (err) { mostrarError(`Datos inválidos: ${err.message}`); return; }
-      filas = f; incognitas = c; valores = temp; renderizarMatriz();
+        temp.push(filaTemp);
+      }
+
+      if (errores.length > 0) {
+        mostrarError(`Error en el archivo. Revisa las posiciones: ${errores.join(' | ')}`);
+        return;
+      }
+
+      filas = f;
+      incognitas = c;
+      valores = temp;
+      renderizarMatriz();
     };
-    
+
     const nombre = archivo.name.toLowerCase();
     if (nombre.endsWith('.csv') || nombre.endsWith('.txt')) {
       const lector = new FileReader();
-      lector.onload = (ev) => procesar(ev.target.result.replace(/^\uFEFF/, '').replace(/["']/g, '').trim().split('\n').map(f => f.trim().split(/\s*[,;\t]\s*/)));
+      lector.onload = (ev) => {
+        const texto = ev.target.result
+          .replace(/^\uFEFF/, '')
+          .replace(/["']/g, '')
+          .replace(/\r\n/g, '\n')
+          .replace(/\r/g, '\n')
+          .replace(/\n+$/, ''); 
+
+        if (!texto) { procesar([]); return; }
+
+        const usaDelimitador = /[,;\t]/.test(texto);
+        const filasTexto = texto.split('\n').map(linea => {
+          if (linea === '') return [];
+          return usaDelimitador ? linea.split(/[,;\t]/) : linea.split(' ');
+        });
+
+        procesar(filasTexto);
+      };
       lector.readAsText(archivo);
     } else if (nombre.endsWith('.xlsx') || nombre.endsWith('.xls')) {
-      if (typeof XLSX === 'undefined') { mostrarError("Librería Excel no cargada. Actualiza el HTML."); return; }
+      if (typeof XLSX === 'undefined') {
+        mostrarError("Librería Excel no cargada. Actualiza el HTML.");
+        return;
+      }
       const lector = new FileReader();
       lector.onload = (ev) => {
-        const libro = XLSX.read(new Uint8Array(ev.target.result), {type: 'array'});
-        procesar(XLSX.utils.sheet_to_json(libro.Sheets[libro.SheetNames[0]], {header: 1}));
+        const libro = XLSX.read(new Uint8Array(ev.target.result), { type: 'array' });
+        procesar(XLSX.utils.sheet_to_json(libro.Sheets[libro.SheetNames[0]], {
+          header: 1,
+          defval: '',
+          blankrows: true
+        }));
       };
       lector.readAsArrayBuffer(archivo);
-    } else mostrarError("Formato no soportado (.txt, .csv, .xlsx).");
+    } else {
+      mostrarError("Formato no soportado (.txt, .csv, .xlsx).");
+    }
   };
 
   matrizElemento.addEventListener('dragover', (e) => { e.preventDefault(); matrizElemento.classList.add('arrastrando'); });
@@ -283,9 +351,10 @@
     inputArchivo.addEventListener('change', (e) => {
       errorElemento.hidden = true;
       procesarArchivo(e.target.files[0]);
-      inputArchivo.value = ''; // Permite cargar el mismo archivo dos veces seguidas si hay modificaciones
+      inputArchivo.value = ''; 
     });
   }
 
   renderizarMatriz();
 })();
+
