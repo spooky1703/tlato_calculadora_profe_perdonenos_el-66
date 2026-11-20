@@ -468,3 +468,51 @@ input.celda { cursor: text; }
     width: 100%;
   }
 }
+/* Aspecto de botones definidos para la barra de unidades */
+.tarjetas-unidades {
+  gap: 10px;
+}
+
+.tarjeta-unidad {
+  background: var(--fondo-panel);
+  border: 1.5px solid var(--borde);
+  border-radius: 8px;
+  padding: 9px 14px;
+  color: var(--texto-principal);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s ease;
+}
+
+.tarjeta-unidad.activa {
+  background: var(--primario);
+  border-color: var(--primario);
+  color: var(--texto-boton-primario);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.14);
+}
+
+.tarjeta-unidad.activa:hover {
+  background: var(--primario-hover);
+  border-color: var(--primario-hover);
+  transform: translateY(-1px);
+}
+
+.tarjeta-unidad.activa .tema-unidad {
+  border-left-color: currentColor;
+  opacity: 0.9;
+}
+
+.tarjeta-unidad.inactiva {
+  background: var(--fondo-panel);
+  border-color: var(--borde);
+  color: var(--texto-secundario);
+  opacity: 0.8;
+}
+
+.proximamente {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--boton-bg);
+  color: var(--texto-boton);
+  font-size: 0.7rem;
+  font-weight: 600;
+}
