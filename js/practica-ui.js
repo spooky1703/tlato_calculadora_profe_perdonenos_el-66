@@ -29,6 +29,8 @@
             try{if(F.contieneConstantes(celda.value))return;vista.append(valorVisual(F.desdeTexto(celda.value)));campo.classList.add('con-vista');}catch{}
           });
           celda.addEventListener('input',()=>{campo.classList.remove('con-vista');vista.replaceChildren();});
+          celda.addEventListener('beforeinput',e=>{if(/\s/.test(e.data||''))e.preventDefault();});
+          celda.addEventListener('paste',e=>{if(/\s/.test(e.clipboardData.getData('text')))e.preventDefault();});
           celda.type='text';celda.maxLength=256;celda.autocomplete='off';celda.spellcheck=false;
           celda.setAttribute('aria-label',`Respuesta fila ${i+1}, ${j===n?'término independiente':`columna ${j+1}`}`);
           celda.addEventListener('input',()=>{celda.classList.remove('respuesta-incorrecta');celda.removeAttribute('aria-invalid');});

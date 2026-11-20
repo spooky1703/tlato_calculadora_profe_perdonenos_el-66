@@ -21,6 +21,7 @@
     resultadoElemento.hidden = true; window.VisualizacionSoluciones.limpiar();
 
 
+    matrizElemento.style.setProperty('--columnas-editor', incognitas + 1);
     matrizElemento.replaceChildren();
     matrizElemento.style.gridTemplateColumns = `repeat(${incognitas}, max-content) 2px max-content`;
     matrizElemento.style.gridTemplateRows = `repeat(${filas}, auto)`;
@@ -40,7 +41,7 @@
             simbolos.className = 'expresion-constantes';
             simbolos.textContent = valor.toLowerCase().replace(/euler/g, 'e').replace(/pi/g, 'π').replace(/\*/g, '·').replace(/-/g, '−');
             celda.append(simbolos);
-            celda.title = `Expresión: ${valor}. π y e se calculan con aproximaciones de 40 decimales.`;
+            celda.title = `Expresión: ${valor}. π y e se calculan con aproximaciones de 4 decimales.`;
           } else {
             celda.append(fraccionVisual(numero));
           }
@@ -52,7 +53,7 @@
       matrizElemento.append(filaElemento);
     });
     agregarSeparador(matrizElemento, filas);
-    document.getElementById('dimensiones').textContent = `${filas} ecuaciones · ${incognitas} incógnitas`;
+    document.getElementById('dimensiones').textContent = `${filas} ${filas === 1 ? "fila" : "filas"} · ${incognitas} ${incognitas === 1 ? "columna" : "columnas"}`;
     document.getElementById('agregar-fila').disabled = filas >= fila_max;
     document.getElementById('quitar-fila').disabled = filas <= 1;
     document.getElementById('agregar-columna').disabled = incognitas >= col_max - 1;
@@ -64,11 +65,13 @@
     entrada.style.cssText = boton.style.cssText;
     entrada.className = boton.className; entrada.maxLength = 256; entrada.value = valores[i][j]; entrada.defaultValue = valores[i][j]; entrada.autocomplete = 'off';
     entrada.setAttribute('aria-label', `Valor de fila ${i + 1}, columna ${j + 1}`);
+    entrada.addEventListener('beforeinput', evento => { if (/\s/.test(evento.data || '')) evento.preventDefault(); });
+    entrada.addEventListener('paste', evento => { if (/\s/.test(evento.clipboardData.getData('text'))) { evento.preventDefault(); mostrarError('Pega un valor sin espacios.'); } });
     boton.replaceWith(entrada); entrada.focus(); entrada.select();
     let guardado = false;
     const guardar = () => {
       if (guardado) return; guardado = true;
-      valores[i][j] = entrada.value.trim();
+      valores[i][j] = entrada.value;
       errorElemento.hidden = true;
       try { F.desdeTexto(valores[i][j]); } catch (error) { mostrarError(`Fila ${i + 1}, columna ${j + 1}: ${error.message}`); }
       renderizarMatriz();

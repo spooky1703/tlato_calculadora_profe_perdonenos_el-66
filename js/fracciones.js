@@ -33,7 +33,8 @@
   }
   // Analizador cerrado: nunca ejecuta código ingresado por el usuario.
   function interpretar(texto) {
-    const valor = String(texto).trim().toLowerCase().replace(/−/g, '-').replace(/×/g, '*').replace(/÷/g, '/').replace(/euler/g, 'e').replace(/π/g, 'pi').replace(/,/g, '.');
+    if (/\s/.test(String(texto))) throw new Error('No uses espacios dentro de las celdas.');
+    const valor = String(texto).toLowerCase().replace(/−/g, '-').replace(/×/g, '*').replace(/÷/g, '/').replace(/euler/g, 'e').replace(/π/g, 'pi').replace(/,/g, '.');
     if (!valor) throw new Error('La celda está vacía. Escribe 0 si no hay coeficiente.');
     if (valor.length > 256) throw new Error('Usa expresiones de hasta 256 caracteres.');
     const tokens = valor.match(/(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?|pi|e|[()+*/^−-]/g) || [];
@@ -59,8 +60,8 @@
         if (tokens[i++] !== ')') throw new Error('Falta cerrar un paréntesis.');
         return v;
       }
-      if (t === 'pi') return numero('3.1415926535897932384626433832795028841971');
-      if (t === 'e') return numero('2.7182818284590452353602874713526624977572');
+      if (t === 'pi') return numero('3.1416');
+      if (t === 'e') return numero('2.7183');
       if (t && /^\d|^\./.test(t)) return numero(t);
       throw new Error('Falta un número o un paréntesis.');
     }

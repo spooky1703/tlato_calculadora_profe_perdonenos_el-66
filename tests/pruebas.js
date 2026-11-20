@@ -90,3 +90,9 @@ const contradiccionTrasNulas = G.reducir(matriz([['1','0'], ['0','0'], ['0','2']
 afirmar(contradiccionTrasNulas.filaIncompatible === 1, 'contradicción antes de las filas nulas');
 afirmar(contradiccionTrasNulas.matriz[1][1].esUno() && contradiccionTrasNulas.matriz[2].every(v=>v.esCero()), 'RREF incompatible ordenada');
 console.log(`Validación ampliada: ${total} comprobaciones correctas.`);
+
+for (const [entrada, esperado] of [['pi','3927/1250'],['π','3927/1250'],['e','27183/10000'],['Euler','27183/10000']]) afirmar(f(entrada).aTexto() === esperado, `constante a cuatro decimales: ${entrada}`);
+for (const entrada of ['1 +2',' 2','2 ', '1\t+2', 'p i', '1\n2']) {
+  let rechazado=false; try { f(entrada); } catch { rechazado=true; }
+  afirmar(rechazado, `rechazar espacios: ${entrada}`);
+}

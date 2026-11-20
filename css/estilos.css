@@ -268,7 +268,6 @@ input.celda { cursor: text; }
 }
 /* Una guía visual del formato antes de la primera carga. */
 #guia-archivo { width: min(94vw, 660px); max-height: 92vh; overflow: auto; padding: 24px; border: 1px solid var(--borde); border-radius: 16px; background: var(--fondo-panel); color: var(--texto-principal); }
-#guia-archivo::backdrop { background: #101318b8; }
 #guia-archivo .modal-cabecera { gap: 12px; }
 #guia-archivo h2 { font-size: 1.25rem; margin: 4px 0 0; letter-spacing: -.025em; }
 .etiqueta-guia { font-size: .64rem; letter-spacing: .12em; font-weight: 700; color: var(--texto-secundario); }
@@ -303,7 +302,7 @@ input.celda { cursor: text; }
 .detalle-archivo summary { cursor: pointer; }
 .pie-guia-archivo { display: flex; justify-content: space-between; gap: 10px; border-top: 1px solid var(--borde); padding-top: 16px; margin-top: 16px; }
 .enlace-formato { font-size: .78rem; background: transparent; border-color: transparent; color: var(--texto-secundario); }
-@media(max-width:620px) { #guia-archivo { padding: 18px; } #guia-archivo h2 { font-size: 1.1rem; } .reglas-archivo { grid-template-columns: 1fr; gap: 7px; } .pie-guia-archivo .boton { font-size: .8rem; } .cabecera-archivo { font-size: .7rem; } #listo-ejemplo-archivo { font-size: .62rem; } .acciones-dimensiones #ver-formato-archivo { justify-content: center; } }
+@media(max-width:620px) { #guia-archivo { padding: 18px; } #guia-archivo h2 { font-size: 1.1rem; } .reglas-archivo { grid-template-columns: 1fr; gap: 7px; } .pie-guia-archivo .boton { font-size: .8rem; } .cabecera-archivo { font-size: .7rem; } #listo-ejemplo-archivo { font-size: .62rem; } }
 @media(prefers-reduced-motion:reduce) { .tabla-ejemplo-excel td span { transition: none; } }
 
 /* Del archivo a la misma presentación de matriz de la calculadora. */
@@ -429,44 +428,33 @@ input.celda { cursor: text; }
 #grafica-infinitas { max-height: 340px; object-fit: contain; background: #F8FAF8; }
 
 .parametro-geometria input[type=text] { color: var(--texto-principal); background: var(--fondo-panel); }
-/* Acomodo lateral derecho para los controles de la matriz */
-.cuerpo-editor {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-}
-
-.cuerpo-editor .desplazamiento-matriz {
-  flex: 1;
-  min-width: 0;
-}
-
-.cuerpo-editor .acciones-dimensiones {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  width: 175px;
-  flex-shrink: 0;
-}
-
-.cuerpo-editor .acciones-dimensiones .boton {
-  width: 100%;
-  justify-content: center;
-}
-
+/* Panel amplio con una zona de trabajo centrada y proporcionada. */
+#editor-sistema { width: 100%; padding: clamp(18px, 3vw, 30px); }
+.carga-editor { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding-bottom: 16px; border-bottom: 1px solid var(--borde); }
+.contador-matriz { color: var(--texto-secundario); font-size: .85rem; font-weight: 600; font-variant-numeric: tabular-nums; padding: 7px 10px; background: var(--fondo-body); border-radius: 7px; }
+.cuerpo-editor { display: grid; grid-template-columns: minmax(0, 1fr) 138px; align-items: center; gap: clamp(18px, 3vw, 36px); width: 100%; max-width: none; margin: 0 auto 18px; padding: 18px 0; }
+.cuerpo-editor .desplazamiento-matriz { min-width: 0; width: 100%; max-height: min(60vh, 620px); overflow: auto; scrollbar-gutter: stable; overscroll-behavior: contain; container-type: inline-size; border-radius: 8px; }
+.cuerpo-editor .acciones-dimensiones { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; padding: 0 0 0 16px; border: 0; border-left: 1px solid var(--borde); background: transparent; }
+.cuerpo-editor .acciones-dimensiones .boton { display: inline-flex; align-items: center; justify-content: center; gap: 5px; min-width: 0; width: 100%; min-height: 44px; padding: 10px 6px; font-size: .8rem; white-space: nowrap; }
+.cuerpo-editor .acciones-dimensiones .material-symbols-outlined { font-size: 20px; }
+#editor-sistema .fila-matriz .celda { width: 76px; width: clamp(56px, calc((100cqw - 56px) / var(--columnas-editor) - 8px), 92px); height: 48px; font-size: 1rem; }
+#editor-sistema .acciones-principales { border-top: 1px solid var(--borde); padding-top: 16px; }
 @media (max-width: 620px) {
-  .cuerpo-editor {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 14px;
-  }
-
-  .cuerpo-editor .acciones-dimensiones {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    width: 100%;
-  }
+  #editor-sistema { padding: 14px; }
+  .cuerpo-editor { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .cuerpo-editor .acciones-dimensiones { grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; justify-self: center; border-left: 0; }
+  #editor-sistema .fila-matriz .celda { width: 60px; width: clamp(52px, calc((100cqw - 48px) / var(--columnas-editor) - 8px), 72px); height: 44px; }
+  .cuerpo-editor .desplazamiento-matriz { max-height: 52vh; }
+}
+.secciones-ayuda { display: flex; gap: 8px; margin: 16px 0; flex-wrap: wrap; }
+.secciones-ayuda [aria-pressed="true"] { background: var(--primario); color: var(--texto-boton-primario); border-color: var(--primario); }
+#modal-ayuda:has(#guia-archivo:not([hidden])) { width: min(94vw, 900px); }
+#modal-ayuda #guia-archivo { width: auto; max-height: none; padding: 0; border: 0; border-radius: 0; overflow: visible; }
+@media (max-width: 620px) {
+  .secciones-ayuda .boton { flex: 1; }
+  .cuerpo-editor .acciones-dimensiones { padding: 10px; }
+  .acciones-principales { display: grid; grid-template-columns: minmax(0, 1fr); }
+  .acciones-principales .boton { width: 100%; justify-content: center; }
 }
 /* Aspecto de botones definidos para la barra de unidades */
 .tarjetas-unidades {
@@ -516,3 +504,5 @@ input.celda { cursor: text; }
   font-size: 0.7rem;
   font-weight: 600;
 }
+/* Espacio a ambos lados de la columna aumentada en resultados. */
+.tabla-resultado { column-gap: 16px; }

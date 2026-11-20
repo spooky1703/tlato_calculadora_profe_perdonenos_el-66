@@ -103,7 +103,7 @@
       $('demo-constante-texto').textContent = texto.slice(0, Math.max(0, Math.floor((local % 3200 - 300) / 300)));
       $('demo-constante-valor').style.opacity = suave((local - 1600) / 600);
       x = 180; y = 159; $('demo-cursor').style.opacity = '1'; $('demo-clic').style.opacity = '0';
-      $('demo-leyenda').textContent = 'π y Euler: aproximados a 40 decimales';
+      $('demo-leyenda').textContent = 'π y Euler: aproximados a 4 decimales';
     }
     if (paso === 2) {
       const local = tiempo - 12000, fase = Math.min(3, Math.floor(local / 2500));
@@ -115,6 +115,9 @@
         grupo.setAttribute('transform', `translate(${55 + columna * 60} ${85 + fila * 37})`);
         grupo.style.opacity = (fila === 3 ? extraFila : 1) * (col === 3 ? extraColumna : 1);
       });
+      const derecha = 55 + (3 + extraColumna) * 60 + 55;
+      const abajo = 85 + (2 + extraFila) * 37 + 35;
+      $('demo-corchetes-dimension').setAttribute('d', `M47 80 H40 V${abajo} H47 M${derecha-7} 80 H${derecha} V${abajo} H${derecha-7}`);
       botonesDimension.forEach((rect, i) => { rect.setAttribute('fill', i === fase ? '#e4ecff' : 'white'); rect.setAttribute('stroke', i === fase ? '#4773e8' : '#cbd0d8'); });
       const desde = fase === 0 ? 240 : 95 + (fase - 1) * 43;
       x = 490; y = desde + (95 + fase * 43 - desde) * suave((local % 2500) / 700);
@@ -139,10 +142,21 @@
     $('animar-ayuda').setAttribute('aria-label', valor ? 'Pausar recorrido' : 'Reproducir recorrido');
     if (valor) frame = requestAnimationFrame(animar);
   }
+  function mostrarTema(tema) {
+    const carga = tema === 'archivo';
+    $('recorrido-calculadora').hidden = carga;
+    $('guia-archivo').hidden = !carga;
+    $('ayuda-calculadora').setAttribute('aria-pressed', String(!carga));
+    $('ayuda-carga').setAttribute('aria-pressed', String(carga));
+    if (carga) { reproducir(false); window.GuiaImportacion.iniciar(); }
+    else { window.GuiaImportacion.detener(); dibujar(); reproducir(!matchMedia('(prefers-reduced-motion: reduce)').matches); }
+  }
   function abrirRecorrido() {
-    tiempo = 0; pasoActual = -1; ayuda.showModal(); dibujar();
-    reproducir(!matchMedia('(prefers-reduced-motion: reduce)').matches);
-  };
+    tiempo = 0; pasoActual = -1; ayuda.showModal(); mostrarTema('calculadora');
+  }
+  window.AyudaTlato = {mostrar: mostrarTema};
+  $('ayuda-calculadora').onclick = () => mostrarTema('calculadora');
+  $('ayuda-carga').onclick = () => mostrarTema('archivo');
   $('como-usar').onclick = abrirRecorrido;
   $('cerrar-ayuda').onclick = () => ayuda.close();
   $('empezar-calculadora').onclick = () => { ayuda.close(); document.querySelector('#matriz .celda')?.focus(); };

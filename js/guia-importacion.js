@@ -1,12 +1,10 @@
 (() => {
-  const $ = id => document.getElementById(id), modal = $('guia-archivo');
+  const $ = id => document.getElementById(id), modal = $('modal-ayuda');
   const tabs = [$('ejemplo-txt'), $('ejemplo-excel')];
   const contenido = '1; 1; 0; 3\n0; 1; 1; 2\n1; 0; 1; 3';
-  let formato = 0, frame, inicio, entrada, pulsado = false;
-  try { pulsado = localStorage.getItem('tlato-cargar-pulsado') === '1'; } catch {}
-  $('ver-formato-archivo').hidden = !pulsado;
+  let formato = 0, frame, inicio, entrada;
   function animar(ahora) {
-    if (!modal.open) return;
+    if (!modal.open || $('guia-archivo').hidden) return;
     if (inicio === null) inicio = ahora;
     const reducido = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const tiempo = reducido ? 10000 : ahora - inicio;
@@ -40,21 +38,14 @@
     cancelAnimationFrame(frame); inicio = null; frame = requestAnimationFrame(animar);
     if(foco) tabs[indice].focus();
   }
-  function abrir(input) { entrada=input;modal.showModal();mostrar(0); }
+  function abrir(input) { entrada=input;mostrar(0); }
   tabs.forEach((tab,i) => {
     tab.onclick=()=>mostrar(i);
     tab.onkeydown=e=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();mostrar(e.key==='Home'?0:e.key==='End'?1:1-formato,true);}};
   });
-  $('cerrar-guia-archivo').onclick=()=>modal.close();
+  $('cerrar-guia-archivo').onclick=()=>window.AyudaTlato.mostrar('calculadora');
   $('repetir-ejemplo-archivo').onclick=()=>mostrar(formato);
   $('elegir-archivo-guia').onclick=()=>{modal.close();entrada?.click();};
-  $('ver-formato-archivo').onclick=()=>abrir($('input-archivo'));
   modal.addEventListener('close',()=>cancelAnimationFrame(frame));
-  window.GuiaImportacion={cargar(input){
-    const primera = !pulsado;
-    pulsado = true;
-    $('ver-formato-archivo').hidden = false;
-    try { localStorage.setItem('tlato-cargar-pulsado','1'); } catch {}
-    if (primera) abrir(input); else input.click();
-  }};
+  window.GuiaImportacion={iniciar(){abrir($('input-archivo'));}, detener(){cancelAnimationFrame(frame);}, cargar(input){input.click();}};
 })();
