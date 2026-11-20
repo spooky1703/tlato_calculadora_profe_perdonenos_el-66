@@ -76,7 +76,11 @@
     <button id="reabrir-guia-practica" type="button" class="boton enlace-formato" hidden>Ver guía de práctica</button>
     <p id="introduccion-practica" class="intro-practica" hidden>Completa una matriz por cada operación elemental. Solo valores racionales, sin π ni Euler.</p>
 <section id="editor-sistema" class="panel" aria-label="Editor de matriz">
-      <div class="panel-cabecera">
+      <div class="cuerpo-editor">
+        <div id="contenedor-matriz" class="desplazamiento-matriz" aria-label="Editor de matriz">
+          <div id="matriz" class="matriz"></div>
+        </div>
+
         <div class="acciones-dimensiones">
           <button type="button" id="agregar-fila" class="boton secundario"><span class="material-symbols-outlined">add</span> Fila</button>
           <button type="button" id="quitar-fila" class="boton secundario"><span class="material-symbols-outlined">remove</span> Fila</button>

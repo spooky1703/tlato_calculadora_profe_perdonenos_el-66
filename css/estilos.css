@@ -429,3 +429,42 @@ input.celda { cursor: text; }
 #grafica-infinitas { max-height: 340px; object-fit: contain; background: #F8FAF8; }
 
 .parametro-geometria input[type=text] { color: var(--texto-principal); background: var(--fondo-panel); }
+/* Acomodo lateral derecho para los controles de la matriz */
+.cuerpo-editor {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.cuerpo-editor .desplazamiento-matriz {
+  flex: 1;
+  min-width: 0;
+}
+
+.cuerpo-editor .acciones-dimensiones {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 175px;
+  flex-shrink: 0;
+}
+
+.cuerpo-editor .acciones-dimensiones .boton {
+  width: 100%;
+  justify-content: center;
+}
+
+@media (max-width: 620px) {
+  .cuerpo-editor {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+
+  .cuerpo-editor .acciones-dimensiones {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+  }
+}
