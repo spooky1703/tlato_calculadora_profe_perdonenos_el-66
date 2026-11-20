@@ -89,14 +89,14 @@ h3 { font-size: 1rem; margin: 22px 0 12px; color: var(--texto-principal); }
   background: var(--fondo-panel);
   color: var(--texto-principal);
 }
-.celda.invalida { border: 2px solid #E57373; background: #3D1A1A; }
+.celda.invalida { border: 2px solid #A30000; background: #D40000; color: #FFFFFF; font-weight: 600; }
 .celda-aumentada { border-left: 2px solid var(--acento); margin-left: 5px; padding-left: 12px; }
 .fila-matriz .celda-aumentada { position: relative; }
 .pie-matriz { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; color: var(--texto-secundario); font-size: .82rem; border-top: 1px solid var(--borde); padding-top: 10px; }
 .acciones-principales { margin-top: 18px; }
 
 .mensaje { padding: 10px 12px; border-radius: 7px; margin: 12px 0 0; font-size: .9rem; background: var(--boton-bg); color: var(--texto-principal); border: 1px solid var(--borde); }
-.error { color: #E57373; background: #3D1A1A; border: 1px solid #5C2727; }
+.error { color: #FFFFFF; background: #D40000; border: 1px solid #A30000; font-weight: 600; }
 
 .clasificacion { padding: 12px 14px; border-radius: 8px; background: var(--boton-bg); color: var(--texto-principal); margin: 14px 0 18px; font-weight: 650; display: inline-block; }
 .tabla-resultado { display: grid; gap: 7px; width: max-content; margin: 0 auto; }
