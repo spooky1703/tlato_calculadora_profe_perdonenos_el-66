@@ -55,7 +55,7 @@
       clic=Math.max(0,1-Math.abs(local-500)/250,1-Math.abs(local-3300)/250);
       if(local>700&&local<2500){ultima.rect.setAttribute('stroke','#c23f3f');ultima.rect.setAttribute('stroke-width',2);$('demo-practica-feedback').textContent='Una casilla por corregir';$('demo-practica-feedback').setAttribute('fill','var(--texto-principal)');}
       if(local>2400)ultima.texto.textContent='9';
-      if(local>3500){$('demo-practica-feedback').textContent='✓ Correcto · (1/2) F1 → F1';$('demo-practica-boton-texto').textContent='Siguiente paso';}
+      if(local>3500){$('demo-practica-feedback').textContent='✓ Correcto · R1 ← (1/2) R1';$('demo-practica-boton-texto').textContent='Siguiente paso';}
     }
     if(paso===3){[x,y]=mover(local,[[0,380,220],[1700,215,205],[4500,215,205]]);clic=Math.max(0,1-Math.abs(local-2200)/300);}
     $('cursor-guia-practica').style.opacity=paso===4?1-suave(local/250):1;$('cursor-guia-practica').setAttribute('transform',`translate(${x} ${y})`);$('clic-guia-practica').style.opacity=clic;

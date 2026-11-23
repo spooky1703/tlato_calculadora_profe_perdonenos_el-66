@@ -56,10 +56,10 @@
     return { original: copiar(original), pasos, final: copiar(matriz), resultado, columnasLibres };
   }
   function describir(op) {
-    if (op.tipo === 'intercambio') return `F${op.fila + 1} ↔ F${op.otra + 1}`;
-    if (op.tipo === 'escala') return `(${op.factor.aTexto()}) F${op.fila + 1} → F${op.fila + 1}`;
+    if (op.tipo === 'intercambio') return `R${op.fila + 1} ↔ R${op.otra + 1}`;
+    if (op.tipo === 'escala') return `R${op.fila + 1} ← (${op.factor.aTexto()}) R${op.fila + 1}`;
     const negativo = op.factor.n < 0n, factor = negativo ? op.factor.negar() : op.factor;
-    return `F${op.fila + 1} ${negativo ? '−' : '+'} ${factor.esUno() ? '' : `(${factor.aTexto()}) `}F${op.otra + 1} → F${op.fila + 1}`;
+    return `R${op.fila + 1} ← R${op.fila + 1} ${negativo ? '−' : '+'} ${factor.esUno() ? '' : `(${factor.aTexto()}) `}R${op.otra + 1}`;
   }
   function sesion(plan) {
     let indice = 0, errores = 0, erroresDelPaso = 0, resuelto = false;
