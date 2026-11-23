@@ -1,7 +1,8 @@
 (function (global) {
   const F = global.Fraccion;
 
-  function reducir(matrizEntrada, numeroIncognitas) {
+  function reducir(matrizEntrada, numeroIncognitas, registrar = null) {
+    const anotar = operacion => { if (registrar) registrar(operacion); };
     if (!Number.isInteger(numeroIncognitas) || numeroIncognitas < 1 || numeroIncognitas >= global.col_max) {
       throw new Error(`El número de incógnitas debe estar entre 1 y ${global.col_max - 1}.`);
     }
@@ -34,10 +35,12 @@
         const temporal = matriz[filaPivote];
         matriz[filaPivote] = matriz[candidata];
         matriz[candidata] = temporal;
+        anotar({tipo: "intercambio", fila: filaPivote, otra: candidata});
       }
 
       const pivote = matriz[filaPivote][columna];
       for (let j = 0; j <= numeroIncognitas; j++) matriz[filaPivote][j] = matriz[filaPivote][j].dividir(pivote);
+      anotar({tipo: "dividir", fila: filaPivote, factor: pivote.aTexto()});
 
       for (let i = 0; i < filas; i++) {
         if (i === filaPivote) continue;
@@ -46,6 +49,7 @@
         for (let j = 0; j <= numeroIncognitas; j++) {
           matriz[i][j] = matriz[i][j].restar(factor.multiplicar(matriz[filaPivote][j]));
         }
+        anotar({tipo: "restar", fila: i, otra: filaPivote, factor: factor.aTexto()});
       }
       columnasPivote.push(columna);
       filaPivote++;
@@ -70,18 +74,21 @@
         const temporal = matriz[rangoCoeficientes];
         matriz[rangoCoeficientes] = matriz[filaIncompatible];
         matriz[filaIncompatible] = temporal;
+        anotar({tipo: "intercambio", fila: rangoCoeficientes, otra: filaIncompatible});
         filaIncompatible = rangoCoeficientes;
       }
       const pivote = matriz[filaIncompatible][numeroIncognitas];
       for (let j = 0; j <= numeroIncognitas; j++) {
         matriz[filaIncompatible][j] = matriz[filaIncompatible][j].dividir(pivote);
       }
+      anotar({tipo: "dividir", fila: filaIncompatible, factor: pivote.aTexto()});
       for (let i = 0; i < filas; i++) {
         if (i === filaIncompatible) continue;
         const factor = matriz[i][numeroIncognitas];
         for (let j = 0; j <= numeroIncognitas; j++) {
           matriz[i][j] = matriz[i][j].restar(factor.multiplicar(matriz[filaIncompatible][j]));
         }
+        anotar({tipo: "restar", fila: i, otra: filaIncompatible, factor: factor.aTexto()});
       }
     }
     const rangoAumentada = rangoCoeficientes + (filaIncompatible >= 0 ? 1 : 0);
