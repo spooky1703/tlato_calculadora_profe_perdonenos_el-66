@@ -22,7 +22,7 @@
     $('dato-transferido').style.opacity = transfiriendo ? String(Math.sin(progreso * Math.PI)) : '0';
     [...$('matriz-desde-txt').children].forEach((el,i) => el.classList.toggle('cargada', tiempo >= 4200 + i * 80));
     const terminado = tiempo >= (formato ? 3400 : 5300);
-    $('estado-matriz-txt').textContent = tiempo < 3000 ? 'Esperando archivo' : tiempo < 5300 ? 'Cargando los valores…' : '✓ 3 ecuaciones · 3 incógnitas';
+    $('estado-matriz-txt').textContent = tiempo < 3000 ? 'Esperando archivo' : tiempo < 5300 ? 'Cargando los valores…' : '✓ 3 filas · 3 columnas';
     $('matriz-desde-txt').classList.toggle('matriz-lista', tiempo >= 5300);
     $('listo-ejemplo-archivo').textContent = terminado ? (formato ? '✓ Listo para cargar' : '✓ Así queda en Tlato') : tiempo >= 3000 && !formato ? 'Cargando matriz…' : 'Escribiendo…';
     $('listo-ejemplo-archivo').classList.toggle('listo', terminado);

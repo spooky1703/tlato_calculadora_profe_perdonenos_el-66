@@ -28,7 +28,7 @@
       rejilla.push({grupo, fila, col});
     }
   }
-  const botonesDimension = ['+ Fila', '+ Incógnita', '− Fila', '− Incógnita'].map((texto, i) => {
+  const botonesDimension = ['+ Fila', '+ Columna', '− Fila', '− Columna'].map((texto, i) => {
     const grupo = svgElemento('g', {}, $('demo-botones-dimension'));
     const rect = svgElemento('rect', {x: 410, y: 78 + i * 43, width: 149, height: 34, rx: 7, fill: 'white', stroke: '#cbd0d8'}, grupo);
     svgElemento('text', {x: 484, y: 100 + i * 43, 'text-anchor': 'middle'}, grupo, texto);
@@ -37,7 +37,7 @@
   const pasos = [
     ['Fracciones, así de fácil', 'Escribe 1/2. Al salir de la celda, se verá como una fracción.'],
     ['También π y Euler', 'Usa pi, e o euler, solos o en expresiones como 2pi.'],
-    ['Una matriz a tu medida', 'Añade o quita filas e incógnitas con los botones + y −.'],
+    ['Una matriz a tu medida', 'Añade o quita filas y columnas con los botones + y −.'],
     ['Escribe tu sistema', 'Una fila por ecuación. La última columna es b; Tab avanza.'],
     ['Resuelve con un clic', 'Pulsa Resolver para calcular tu sistema.'],
     ['Encuentra tu solución', 'Verás si hay una solución, infinitas o ninguna.']
@@ -123,8 +123,8 @@
       x = 490; y = desde + (95 + fase * 43 - desde) * suave((local % 2500) / 700);
       $('demo-clic').style.opacity = Math.max(0, 1 - Math.abs(local % 2500 - 750) / 250);
       $('demo-cursor').style.opacity = '1';
-      $('demo-tamano').textContent = `${3 + Math.round(extraFila)} ecuaciones · ${3 + Math.round(extraColumna)} incógnitas · b al final`;
-      $('demo-leyenda').textContent = ['Añade una fila: otra ecuación', 'Añade una columna: otra incógnita', 'Quita la última fila', 'Quita la última incógnita; b permanece'][fase];
+      $('demo-tamano').textContent = `${3 + Math.round(extraFila)} filas · ${3 + Math.round(extraColumna)} columnas`;
+      $('demo-leyenda').textContent = ['Añade una fila', 'Añade una columna', 'Quita la última fila', 'Quita la última columna'][fase];
     }
     $('demo-cursor').setAttribute('transform', `translate(${x} ${y})`);
     $('progreso-guia').style.width = `${tiempo / duracion * 100}%`;
