@@ -192,6 +192,7 @@
     document.getElementById('modo-calculadora').setAttribute('aria-pressed', String(!practica));
     document.getElementById('modo-practica').setAttribute('aria-pressed', String(practica));
     document.getElementById('introduccion-practica').hidden = !practica;
+    document.getElementById('credito-proyecto').hidden = practica;
     document.getElementById('reabrir-guia-practica').hidden = !practica;
     document.getElementById('resolver').textContent = practica ? 'Comenzar práctica' : 'Resolver';
     errorElemento.hidden = true; resultadoElemento.hidden = true; window.VisualizacionSoluciones.limpiar();

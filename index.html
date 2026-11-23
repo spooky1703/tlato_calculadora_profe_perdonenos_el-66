@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,600,0,0" />
-  <link rel="stylesheet" href="css/estilos.css?v=guia-carga-22nov">
+  <link rel="stylesheet" href="css/estilos.css?v=pie-por-modo">
   <script src="js/tema.js" defer></script>
   <script src="js/navegacion.js" defer></script>
   <script src="js/configuracion.js?v=limites-2" defer></script>
@@ -24,7 +24,7 @@
   <script src="js/practica-modelo.js?v=4" defer></script>
   <script src="js/practica-ui.js?v=ajustes-20nov" defer></script>
   <script src="js/guia-practica.js?v=3" defer></script>
-  <script src="js/app.js?v=guia-carga-22nov" defer></script>
+  <script src="js/app.js?v=pie-por-modo" defer></script>
   <script src="js/ayuda.js?v=guia-carga-22nov" defer></script>
 </head>
 <body>
@@ -73,7 +73,6 @@
       <button id="modo-calculadora" type="button" aria-pressed="true">Calculadora</button><button id="modo-practica" type="button" aria-pressed="false">Practicar</button>
     </div>
     <button id="reabrir-guia-practica" type="button" class="boton enlace-formato" hidden>Ver guía de práctica</button>
-    <p id="introduccion-practica" class="intro-practica" hidden>Recuerda: aplica una sola operación elemental por paso y conserva las filas que no cambian. Combinar operaciones o saltarte pasos puede restarte puntos.</p>
 <section id="editor-sistema" class="panel" aria-label="Editor de matriz">
       <div class="carga-editor">
         <input type="file" id="input-archivo" accept=".txt, .csv, .xlsx, .xls" hidden>
@@ -134,7 +133,10 @@
         <button type="button" id="explicar-infinitas" class="boton secundario" hidden>Ver gráfica de soluciones</button>
       </div>
     </section>
-    <footer>Profe le juro que no se vuelve a repetir ese -66 no me mande a extra pls.</footer>
+    <footer>
+      <p id="credito-proyecto">Proyecto del grupo 2AM2</p>
+      <p id="introduccion-practica" hidden>Recuerda: aplica una sola operación elemental por paso y conserva las filas que no cambian. Combinar operaciones o saltarte pasos puede restarte puntos.</p>
+    </footer>
   </main>
 
   <dialog id="modal-ayuda" aria-labelledby="titulo-ayuda">

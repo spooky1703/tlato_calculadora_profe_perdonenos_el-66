@@ -113,6 +113,7 @@ h3 { font-size: 1rem; margin: 22px 0 12px; color: var(--texto-principal); }
 .solucion-linea { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .acciones-resultado { margin-top: 20px; }
 footer { text-align: center; font-size: .82rem; padding: 4px 0 20px; }
+footer p { max-width: 85ch; margin: 0 auto; padding: 0 8px; line-height: 1.6; }
 
 [hidden] { display: none !important; }
 .modal-cabecera { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
@@ -344,7 +345,6 @@ input.celda { cursor: text; }
 .modos-unidad { display: inline-flex; gap: 3px; padding: 4px; margin: 0 0 18px; border: 1px solid var(--borde); border-radius: 9px; background: var(--fondo-panel); }
 .modos-unidad button { padding: 9px 18px; border: 0; border-radius: 6px; background: transparent; color: var(--texto-secundario); cursor: pointer; font-size: .88rem; }
 .modos-unidad button[aria-pressed=true] { background: var(--boton-bg); color: var(--texto-principal); font-weight: 600; }
-.intro-practica { max-width: 780px; margin: 0 0 18px; color: var(--texto-secundario); font-size: .9rem; line-height: 1.65; }
 .cabecera-practica { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
 .cabecera-practica h2 { margin-top: 5px; }
 .resumen-progreso { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: .82rem; margin: 20px 0 8px; color: var(--texto-secundario); }
