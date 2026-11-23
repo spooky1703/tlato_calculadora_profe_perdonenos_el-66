@@ -1,7 +1,10 @@
 (() => {
   const $ = id => document.getElementById(id), modal = $('modal-ayuda');
   const tabs = [$('ejemplo-txt'), $('ejemplo-excel')];
-  const contenido = '1; 1; 0; 3\n0; 1; 1; 2\n1; 0; 1; 3';
+  const contenido = '1;1;0;3\n0;1;1;2\n1;0;1;3';
+  const clavePrimeraCarga = 'tlato-guia-primera-carga-v1';
+  let cargaVista = false;
+  try { cargaVista = localStorage.getItem(clavePrimeraCarga) === '1'; } catch { /* Se recuerda durante esta visita. */ }
   let formato = 0, frame, inicio, entrada;
   function animar(ahora) {
     if (!modal.open || $('guia-archivo').hidden) return;
@@ -21,12 +24,14 @@
     $('dato-transferido').style.setProperty('--avance-transferencia', suavizado);
     $('dato-transferido').style.opacity = transfiriendo ? String(Math.sin(progreso * Math.PI)) : '0';
     [...$('matriz-desde-txt').children].forEach((el,i) => el.classList.toggle('cargada', tiempo >= 4200 + i * 80));
-    const terminado = tiempo >= (formato ? 3400 : 5300);
+    const terminado = tiempo >= 5300;
+    $('zona-carga-guia').style.setProperty('--avance-carga', suavizado);
+    $('zona-carga-guia').classList.toggle('demostrando-carga', transfiriendo && !reducido);
     $('estado-matriz-txt').textContent = tiempo < 3000 ? 'Esperando archivo' : tiempo < 5300 ? 'Cargando los valores…' : '✓ 3 filas · 3 columnas';
     $('matriz-desde-txt').classList.toggle('matriz-lista', tiempo >= 5300);
     $('listo-ejemplo-archivo').textContent = terminado ? (formato ? '✓ Listo para cargar' : '✓ Así queda en Tlato') : tiempo >= 3000 && !formato ? 'Cargando matriz…' : 'Escribiendo…';
     $('listo-ejemplo-archivo').classList.toggle('listo', terminado);
-    if (tiempo < (formato ? 3500 : 5500)) frame = requestAnimationFrame(animar);
+    if (tiempo < 5500) frame = requestAnimationFrame(animar);
   }
   function mostrar(indice, foco = false) {
     formato = indice;
@@ -34,7 +39,8 @@
     $('panel-ejemplo-txt').hidden = indice !== 0;
     $('panel-ejemplo-excel').hidden = indice !== 1;
     $('nombre-ejemplo-archivo').textContent = indice ? 'mi-sistema.xlsx' : 'mi-sistema.txt';
-    $('consejo-ejemplo-archivo').textContent = indice ? 'Solo la tabla de números, en la primera hoja.' : 'Separa los valores con punto y coma, sin espacios dentro de expresiones: 1/2.';
+    $('consejo-ejemplo-archivo').textContent = indice ? 'Excel: empieza en A1, en la primera hoja. Solo valores, sin fórmulas ni celdas combinadas.' : 'TXT: una fila por línea. Separa valores con ; y escribe expresiones sin espacios: 1/2.';
+    $('archivo-demo-carga').textContent = indice ? 'XLSX' : 'TXT';
     cancelAnimationFrame(frame); inicio = null; frame = requestAnimationFrame(animar);
     if(foco) tabs[indice].focus();
   }
@@ -47,5 +53,16 @@
   $('repetir-ejemplo-archivo').onclick=()=>mostrar(formato);
   $('elegir-archivo-guia').onclick=()=>{modal.close();entrada?.click();};
   modal.addEventListener('close',()=>cancelAnimationFrame(frame));
-  window.GuiaImportacion={iniciar(){abrir($('input-archivo'));}, detener(){cancelAnimationFrame(frame);}, cargar(input){input.click();}};
+  window.GuiaImportacion={
+    iniciar(){abrir($('input-archivo'));},
+    detener(){cancelAnimationFrame(frame);},
+    cargar(input){
+      if (cargaVista) { input.click(); return; }
+      if (!modal.open) modal.showModal();
+      window.AyudaTlato.mostrar('archivo');
+      entrada = input;
+      cargaVista = true;
+      try { localStorage.setItem(clavePrimeraCarga, '1'); } catch { /* El botón sigue funcionando sin almacenamiento. */ }
+    }
+  };
 })();

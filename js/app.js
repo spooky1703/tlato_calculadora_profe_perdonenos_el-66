@@ -317,6 +317,22 @@
     procesarArchivo(e.dataTransfer.files[0]);
   });
 
+  const zonaCargaGuia = document.getElementById('zona-carga-guia');
+  zonaCargaGuia.addEventListener('dragover', e => { e.preventDefault(); zonaCargaGuia.classList.add('arrastrando'); });
+  zonaCargaGuia.addEventListener('dragleave', e => {
+    if (!zonaCargaGuia.contains(e.relatedTarget)) zonaCargaGuia.classList.remove('arrastrando');
+  });
+  zonaCargaGuia.addEventListener('drop', e => {
+    e.preventDefault();
+    e.stopPropagation();
+    zonaCargaGuia.classList.remove('arrastrando');
+    const archivo = e.dataTransfer.files[0];
+    if (!archivo) return;
+    document.getElementById('modal-ayuda').close();
+    errorElemento.hidden = true;
+    procesarArchivo(archivo);
+  });
+
   if (btnSubir && inputArchivo) {
     btnSubir.addEventListener('click', () => window.GuiaImportacion.cargar(inputArchivo));
     inputArchivo.addEventListener('change', (e) => {
