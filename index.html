@@ -27,6 +27,7 @@
   <script src="js/guia-practica.js?v=notacion-23nov" defer></script>
   <script src="js/app.js?v=fracciones-unificadas-24nov" defer></script>
   <script src="js/matrices-cuadradas.js?v=fracciones-unificadas-24nov" defer></script>
+  <script src="js/unidad2-vectoriales.js?v=1" defer></script>
   <script src="js/ayuda.js?v=conjunto-solucion-24nov" defer></script>
 </head>
 <body>
@@ -44,9 +45,9 @@
             Álgebra lineal
           </span>
         </button>
-        <button type="button" class="tarjeta-unidad inactiva" disabled data-unidad="2">
+        <button type="button" class="tarjeta-unidad" data-unidad="2">
           <span class="numero-unidad">Unidad 2</span>
-          <span class="proximamente">Próximamente</span>
+          <span class="tema-unidad">Espacios vectoriales</span>
         </button>
         <button type="button" class="tarjeta-unidad inactiva" disabled data-unidad="3">
           <span class="numero-unidad">Unidad 3</span>
@@ -167,6 +168,60 @@
         <button type="button" id="explicar-infinitas" class="boton secundario" hidden>Ver gráfica de soluciones</button>
       </div>
     </section>
+    <div id="contenedor-unidad-2" hidden>
+      <div class="barra-herramientas">
+        <div class="modos-unidad operaciones-unidad" role="group" aria-label="Actividad de la Unidad 2">
+          <button id="u2-tab-generado" type="button" aria-pressed="true">
+            <span class="material-symbols-outlined" aria-hidden="true">help_outline</span>
+            <span>¿γ ∈ ⟨S⟩?</span>
+          </button>
+          <button id="u2-tab-li-ld" type="button" aria-pressed="false">
+            <span class="material-symbols-outlined" aria-hidden="true">account_tree</span>
+            <span>¿Son LI o LD?</span>
+          </button>
+          <button id="u2-tab-base" type="button" aria-pressed="false">
+            <span class="material-symbols-outlined" aria-hidden="true">filter_alt</span>
+            <span>Extraer Base</span>
+          </button>
+        </div>
+      </div>
+
+      <section id="panel-unidad-2" class="panel" aria-labelledby="u2-titulo-actividad">
+        <div class="carga-editor">
+          <div>
+            <h2 id="u2-titulo-actividad">¿El vector γ pertenece al espacio generado ⟨S⟩?</h2>
+            <p id="u2-desc-actividad" class="ayuda">Captura el conjunto S = {α₁, …, αₙ} y el vector objetivo γ para comprobar si γ ∈ ⟨S⟩.</p>
+          </div>
+          <span id="u2-dimensiones" class="contador-matriz" role="status">3 vectores · ℝ³</span>
+        </div>
+
+        <div class="cuerpo-editor">
+          <div class="desplazamiento-matriz" tabindex="0" aria-label="Captura de vectores de S y vector gamma">
+            <div id="u2-zona-vectores" class="u2-zona-vectores"></div>
+          </div>
+          <div class="acciones-dimensiones" role="group" aria-label="Cambiar cantidad de vectores o dimensión">
+            <button type="button" id="u2-agregar-vector" class="boton secundario"><span class="material-symbols-outlined" aria-hidden="true">add</span> Vector (α)</button>
+            <button type="button" id="u2-quitar-vector" class="boton secundario"><span class="material-symbols-outlined" aria-hidden="true">remove</span> Vector (α)</button>
+            <button type="button" id="u2-agregar-comp" class="boton secundario"><span class="material-symbols-outlined" aria-hidden="true">add</span> Dimensión (ℝⁿ)</button>
+            <button type="button" id="u2-quitar-comp" class="boton secundario"><span class="material-symbols-outlined" aria-hidden="true">remove</span> Dimensión (ℝⁿ)</button>
+          </div>
+        </div>
+
+        <div class="acciones-principales">
+          <button type="button" id="u2-calcular" class="boton principal"><span class="material-symbols-outlined" aria-hidden="true">calculate</span> Verificar si γ ∈ ⟨S⟩</button>
+          <button type="button" id="u2-limpiar" class="boton secundario"><span class="material-symbols-outlined" aria-hidden="true">restart_alt</span> Restablecer vectores</button>
+        </div>
+        <p id="u2-error" class="mensaje error" role="alert" hidden></p>
+      </section>
+
+      <section id="u2-resultado" class="panel resultado" aria-labelledby="u2-titulo-resultado" hidden>
+        <h2 id="u2-titulo-resultado">Resultado</h2>
+        <div id="u2-veredicto" class="clasificacion"></div>
+        <div id="u2-detalle" class="u2-detalle"></div>
+        <h3>Matriz escalonada reducida</h3>
+        <div id="u2-matriz-rref" class="desplazamiento-matriz"></div>
+      </section>
+    </div>
     <footer>
       <p id="credito-proyecto">Proyecto del grupo 2AM2</p>
       <p id="introduccion-practica" hidden>Recuerda: aplica una sola operación elemental por paso y conserva las filas que no cambian. Combinar operaciones o saltarte pasos puede restarte puntos.</p>

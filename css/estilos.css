@@ -582,3 +582,125 @@ input.celda { cursor: text; }
 .campo-cuadrada.con-vista:not(:focus-within) input { color: transparent; }
 .campo-cuadrada.con-vista:not(:focus-within) .vista-cuadrada { display: flex; }
 #tabla-cuadrada input[aria-invalid=true] { border-color: #b3261e; }
+/* ==================== UNIDAD 2: ESPACIOS VECTORIALES ==================== */
+#panel-unidad-2 { padding: clamp(16px, 3vw, 30px); border-radius: 18px; }
+#panel-unidad-2 .acciones-principales { border-top: 1px solid var(--borde); padding-top: 18px; }
+
+.u2-zona-vectores {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 16px;
+  width: max-content;
+  margin: 0 auto;
+  padding: 6px 4px;
+}
+
+.u2-bloque-conjunto {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.u2-etiqueta-conjunto {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--texto-secundario);
+  text-align: center;
+}
+
+.u2-fila-vectores {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.u2-vector-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.u2-vector-nombre {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--texto-principal);
+}
+
+.u2-vector-corchetes {
+  position: relative;
+  display: grid;
+  gap: 8px;
+  padding: 8px 12px;
+}
+
+.u2-vector-corchetes::before,
+.u2-vector-corchetes::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 7px;
+  border-top: 2px solid var(--texto-principal);
+  border-bottom: 2px solid var(--texto-principal);
+  pointer-events: none;
+}
+
+.u2-vector-corchetes::before { left: 0; border-left: 2px solid var(--texto-principal); }
+.u2-vector-corchetes::after { right: 0; border-right: 2px solid var(--texto-principal); }
+
+.u2-vector-corchetes .celda {
+  width: 68px;
+  height: 44px;
+}
+
+.u2-separador-gamma {
+  width: 2px;
+  align-self: stretch;
+  background: var(--borde);
+  margin: 22px 2px 0;
+}
+
+.u2-gamma-card .u2-vector-nombre {
+  color: var(--primario);
+}
+
+.u2-gamma-card .u2-vector-corchetes {
+  background: var(--fondo-body);
+  border-radius: 8px;
+}
+
+.u2-detalle {
+  margin: 8px 0 16px;
+  line-height: 1.65;
+  color: var(--texto-principal);
+}
+
+.u2-escalares, .u2-base-lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.u2-chip {
+  padding: 7px 12px;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  background: var(--fondo-body);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.u2-chip.descartado {
+  opacity: 0.65;
+  text-decoration: line-through;
+}
+
+@media (max-width: 620px) {
+  #panel-unidad-2 { padding: 14px; }
+  .u2-vector-corchetes .celda { width: 58px; height: 42px; }
+  .u2-zona-vectores { gap: 10px; }
+  .u2-fila-vectores { gap: 8px; }
+}
