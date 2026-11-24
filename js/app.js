@@ -218,7 +218,7 @@
         return;
       }
 
-      const f = limpia.length;
+const f = limpia.length;
       const maxCols = Math.max(...limpia.map(fila => fila.length));
       const c = maxCols - 1;
 
@@ -226,6 +226,15 @@
         mostrarError(`Dimensiones no soportadas: ${f}x${c}.`);
         return;
       }
+
+      // Solo permite enteros (-5, 10), decimales con punto (3.14, .5) o fracciones (-3/4)
+      const esNumeroValido = (str) => {
+        if (/^-?(?:\d+(?:\.\d+)?|\.\d+)$/.test(str)) return true;
+        if (/^-?\d+\/-?\d+$/.test(str)) {
+          return Number(str.split('/')[1]) !== 0; // Evita división entre cero
+        }
+        return false;
+      };
 
       let temp = [];
       let errores = [];
@@ -245,6 +254,11 @@
 
           if (val === '') {
             errores.push(`Fila ${i + 1}, Columna ${j + 1} (vacío)`);
+            continue;
+          }
+
+          if (!esNumeroValido(val)) {
+            errores.push(`Fila ${i + 1}, Columna ${j + 1} ("${val}": valor no válido)`);
             continue;
           }
 
@@ -275,17 +289,28 @@
       lector.onload = (ev) => {
         const texto = ev.target.result
           .replace(/^\uFEFF/, '')
-          .replace(/["']/g, '')
           .replace(/\r\n/g, '\n')
           .replace(/\r/g, '\n')
-          .replace(/\n+$/, ''); 
+          .replace(/\n+$/, '');
 
         if (!texto) { procesar([]); return; }
 
-        const usaDelimitador = /[,;\t]/.test(texto);
-        const filasTexto = texto.split('\n').map(linea => {
+        const lineas = texto.split('\n');
+        const noVacias = lineas.filter(l => l.trim() !== '');
+
+        // Detecta automáticamente si el archivo usa ; , tabulador o espacio
+        let separador = ' ';
+        if (nombre.endsWith('.csv')) {
+          separador = texto.includes(';') ? ';' : ',';
+        } else if (noVacias.length > 0) {
+          if (noVacias.every(l => l.includes(';'))) separador = ';';
+          else if (noVacias.every(l => l.includes(','))) separador = ',';
+          else if (noVacias.every(l => l.includes('\t'))) separador = '\t';
+        }
+
+        const filasTexto = lineas.map(linea => {
           if (linea === '') return [];
-          return usaDelimitador ? linea.split(/[,;\t]/) : linea.split(' ');
+          return linea.split(separador);
         });
 
         procesar(filasTexto);
@@ -339,10 +364,9 @@
     inputArchivo.addEventListener('change', (e) => {
       errorElemento.hidden = true;
       procesarArchivo(e.target.files[0]);
-      inputArchivo.value = ''; 
+      inputArchivo.value = '';
     });
   }
 
   renderizarMatriz();
 })();
-
