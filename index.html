@@ -11,21 +11,21 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,600,0,0" />
-  <link rel="stylesheet" href="css/estilos.css?v=pie-por-modo">
+  <link rel="stylesheet" href="css/estilos.css?v=geometria-23nov">
   <script src="js/tema.js" defer></script>
   <script src="js/navegacion.js" defer></script>
   <script src="js/configuracion.js?v=limites-2" defer></script>
   <script src="js/fracciones.js?v=ajustes-20nov" defer></script>
   <script src="js/gauss-jordan.js?v=limites-3" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
-  <script src="js/espacio-soluciones.js?v=2" defer></script>
-  <script src="js/visualizacion-soluciones.js?v=2" defer></script>
+  <script src="js/espacio-soluciones.js?v=geometria-23nov" defer></script>
+  <script src="js/visualizacion-soluciones.js?v=geometria-23nov" defer></script>
   <script src="js/guia-importacion.js?v=guia-carga-22nov" defer></script>
   <script src="js/practica-modelo.js?v=notacion-23nov" defer></script>
   <script src="js/practica-ui.js?v=ajustes-20nov" defer></script>
   <script src="js/guia-practica.js?v=notacion-23nov" defer></script>
   <script src="js/app.js?v=pie-por-modo" defer></script>
-  <script src="js/ayuda.js?v=guia-carga-22nov" defer></script>
+  <script src="js/ayuda.js?v=geometria-23nov" defer></script>
 </head>
 <body>
   <main class="contenedor">
@@ -145,18 +145,18 @@
     <div id="recorrido-calculadora">
     <p class="introduccion-recorrido">Mira cómo funciona. Puedes probarla cuando quieras.</p>
     <div class="demo-guia">
-      <svg id="animacion-guia" viewBox="0 0 600 320" role="img" aria-labelledby="descripcion-demo">
+      <svg id="animacion-guia" viewBox="0 0 600 350" role="img" aria-labelledby="descripcion-demo">
         <title id="descripcion-demo">Demostración animada.</title>
-        <rect width="600" height="320" rx="14" fill="var(--fondo-body)"/>
+        <rect width="600" height="350" rx="14" fill="var(--fondo-body)"/>
         <text x="28" y="34" class="demo-titulo" fill="var(--texto-principal)">Tu sistema, paso a paso</text>
-        <g id="demo-editor">
+        <g id="demo-editor" transform="translate(90 0)">
           <path d="M41 71 H33 V245 H41 M378 71 H386 V245 H378" fill="none" stroke="var(--texto-principal)" stroke-width="2"/>
           <text x="68" y="66" fill="var(--texto-principal)">x₁</text><text x="153" y="66" fill="var(--texto-principal)">x₂</text><text x="238" y="66" fill="var(--texto-principal)">x₃</text><text x="323" y="66" fill="var(--texto-principal)">b</text>
           <g id="demo-celdas"></g>
           <path d="M294 72 V247" stroke="var(--borde)" stroke-width="2"/>
           <rect id="demo-foco" x="48" y="77" width="68" height="44" rx="7" fill="none" stroke="var(--acento)" stroke-width="2"/>
         </g>
-        <g id="demo-resolver"><rect x="402" y="140" width="163" height="46" rx="9" fill="var(--primario)"/><text x="483" y="169" fill="var(--texto-boton-primario)" text-anchor="middle">Resolver</text></g>
+        <g id="demo-resolver"><rect x="123" y="257" width="163" height="38" rx="9" fill="var(--primario)"/><text x="204" y="282" fill="var(--texto-boton-primario)" text-anchor="middle">Resolver</text></g>
         <g id="demo-respuesta" opacity="0">
           <rect x="28" y="65" width="544" height="203" rx="10" fill="var(--fondo-panel)"/>
           <text x="52" y="100" fill="var(--primario)" class="demo-titulo">✓ Solución única</text>
@@ -192,7 +192,7 @@
           <text id="demo-tamano" x="55" y="251" fill="var(--texto-principal)"></text>
         </g>
         <g id="demo-cursor"><path d="M0 0 L0 23 L6 17 L12 29 L17 26 L11 15 L21 15 Z" fill="var(--acento)" stroke="var(--fondo-panel)" stroke-width="2"/><circle id="demo-clic" r="15" fill="none" stroke="var(--acento)" stroke-width="2" opacity="0"/></g>
-        <text id="demo-leyenda" x="300" y="298" text-anchor="middle" fill="var(--texto-secundario)"></text>
+        <text id="demo-leyenda" x="300" y="332" text-anchor="middle" fill="var(--texto-secundario)"></text>
       </svg>
       <div class="progreso-guia"><span id="progreso-guia"></span></div>
     </div>
@@ -258,12 +258,14 @@
     <p id="explicacion-infinitas"></p>
     <p id="proyeccion-infinitas" class="nota-geometria"></p>
     <div id="ejes-infinitas" class="controles-geometria"></div>
-    <div class="grafica-contenedor"><canvas id="grafica-infinitas" width="900" height="480" aria-label="Gráfica de la familia de soluciones y del punto seleccionado">La explicación, las coordenadas y la comprobación se muestran debajo.</canvas></div>
+    <div class="grafica-contenedor"><canvas id="grafica-infinitas" width="900" height="480" aria-label="Ecuaciones del sistema e intersección común en ejes x, y, z">La explicación, las coordenadas y la comprobación se muestran debajo.</canvas></div>
     <p id="estado-grafica" role="status"></p>
     <div class="controles-geometria"><button type="button" class="boton" id="girar-grafica">Girar vista</button><button type="button" class="boton" id="acercar-grafica">Acercar</button><button type="button" class="boton" id="alejar-grafica">Alejar</button><button type="button" class="boton" id="restablecer-grafica">Restablecer vista</button></div>
-    <p class="nota-geometria">Arrastra para girar. Verde: soluciones · Azul: punto elegido. Se muestra solo una parte del espacio.</p>
-    <h3>Cambia los parámetros</h3><p>Mueve un control o escribe un valor para cambiar el punto.</p>
-    <div id="parametros-infinitas"></div>
+    <div class="controles-geometria"><label>Intervalo común: de −L a L · L = <input id="limite-grafica" type="number" value="10" min="0.00000001" max="100000000" step="any"></label><label><input id="mostrar-normales" type="checkbox" checked> Vectores normales α</label></div>
+    <p class="nota-geometria">Arrastra para girar. La escala es igual en x, y, z y se conserva al cambiar de sistema. Acercar y alejar cambia todos los ejes por igual.</p>
+    <details open><summary>Ecuaciones y letras griegas</summary><div id="leyenda-geometria"></div></details>
+    <div id="controles-parametros"><h3>Cambia los parámetros</h3><p>Mueve un control o escribe un valor para cambiar el punto σ. La ventana no cambia automáticamente.</p>
+    <div id="parametros-infinitas"></div></div>
     <p id="error-parametro" class="mensaje error" role="alert" hidden></p>
     <details><summary>Ver punto y comprobación</summary><h3>Punto seleccionado</h3><div id="punto-infinitas" aria-live="polite"></div>
     <h3>Comprobación en tus ecuaciones</h3><div id="comprobacion-infinitas"></div></details>

@@ -503,3 +503,11 @@ input.celda { cursor: text; }
 }
 /* Espacio a ambos lados de la columna aumentada en resultados. */
 .tabla-resultado { column-gap: 16px; }
+
+/* La leyenda sigue disponible cuando las superficies se ocultan para compararlas. */
+#leyenda-geometria { display: grid; gap: 10px; max-height: 230px; overflow: auto; padding: 12px 2px; font-size: .9rem; }
+#leyenda-geometria label { display: flex; align-items: flex-start; gap: 9px; border-left: 4px solid var(--color-ecuacion); padding: 6px 10px; overflow-wrap: anywhere; }
+#leyenda-geometria input { flex: 0 0 auto; margin-top: 4px; }
+#limite-grafica { width: 110px; padding: 6px; color: var(--texto-principal); background: var(--fondo-panel); border: 1px solid var(--borde); border-radius: 6px; }
+#modal-infinitas .controles-geometria label { align-content: center; }
+#grafica-infinitas { background: #f4f8fb; max-height: none; }

@@ -67,13 +67,13 @@
     let clic = t < 9750 ? Math.max(0, 1 - Math.abs(fase - .5) * 8) : 0;
     if (t >= 10000) {
       const m = suave((t - 10000) / 1000);
-      x = 343 + (483 - 343) * m; y = 214 + (165 - 214) * m;
+      x = 343 + (114 - 343) * m; y = 214 + (276 - 214) * m;
       clic = Math.max(0, 1 - Math.abs(t - 11700) / 300);
     }
     $('demo-cursor').setAttribute('transform', `translate(${x} ${y})`);
     $('demo-clic').style.opacity = clic;
     $('demo-clic').setAttribute('r', 10 + (1 - clic) * 12);
-    $('demo-resolver').setAttribute('transform', `translate(${483 * clic * .025} ${163 * clic * .025}) scale(${1 - clic * .025})`);
+    $('demo-resolver').setAttribute('transform', `translate(${204 * clic * .025} ${276 * clic * .025}) scale(${1 - clic * .025})`);
     const revelation = suave((t - 13500) / 650);
     $('demo-editor').style.opacity = 1 - revelation;
     $('demo-resolver').style.opacity = 1 - revelation;
@@ -126,6 +126,7 @@
       $('demo-tamano').textContent = `${3 + Math.round(extraFila)} filas · ${3 + Math.round(extraColumna)} columnas`;
       $('demo-leyenda').textContent = ['Añade una fila', 'Añade una columna', 'Quita la última fila', 'Quita la última columna'][fase];
     }
+    if (paso === 3 || paso === 4) x += 90;
     $('demo-cursor').setAttribute('transform', `translate(${x} ${y})`);
     $('progreso-guia').style.width = `${tiempo / duracion * 100}%`;
   }
