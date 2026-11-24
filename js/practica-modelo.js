@@ -2,59 +2,33 @@
   const F = global.Fraccion;
   const copiar = matriz => matriz.map(fila => fila.slice());
   function generar(original, n) {
-    const resultado = global.GaussJordan.reducir(original, n);
-    const matriz = copiar(original), pasos = [], pivotes = [], columnasLibres = [];
-    let fila = 0, notas = [];
-    function registrar(operacion, objetivo, etapa, ejecutar) {
-      const anterior = copiar(matriz);
-      ejecutar();
-      pasos.push({ anterior, siguiente: copiar(matriz), operacion, objetivo, etapa, notas: notas.slice() });
+    const pasos = [], columnasLibres = [];
+    let notas = [];
+    // La práctica usa el mismo recorrido que la calculadora; solo agrega pistas.
+    const resultado = global.GaussJordan.reducir(original, n, null, (op, anterior, siguiente, col, etapa) => {
+      const columna = col === n ? 'b' : String(col + 1);
+      let operacion, objetivo;
+      if (op.tipo === 'intercambio') {
+        operacion = op;
+        objetivo = `Busca un pivote no nulo en la columna ${columna} y llévalo a la fila ${op.fila + 1}. Usa la primera fila inferior disponible.`;
+      } else if (op.tipo === 'dividir') {
+        operacion = { tipo: 'escala', fila: op.fila, factor: F.UNO.dividir(F.desdeTexto(op.factor)) };
+        objetivo = `Haz 1 el pivote de la fila ${op.fila + 1}, columna ${columna}.`;
+      } else {
+        operacion = { tipo: 'suma', fila: op.fila, otra: op.otra, factor: F.desdeTexto(op.factor).negar() };
+        objetivo = `Usa la fila pivote ${op.otra + 1} para hacer cero la casilla de la fila ${op.fila + 1}, columna ${columna}.`;
+      }
+      pasos.push({ anterior, siguiente, operacion, objetivo, etapa, notas: notas.slice() });
       notas = [];
-    }
-    // Incluir b permite terminar también los sistemas incompatibles en RREF.
-    for (let col = 0; col <= n && fila < matriz.length; col++) {
-      let candidata = fila;
-      while (candidata < matriz.length && matriz[candidata][col].esCero()) candidata++;
-      if (candidata === matriz.length) {
-        if (col < n) { columnasLibres.push(col); notas.push(`La columna ${col + 1} no tiene pivote disponible; se continúa con la siguiente.`); }
-        continue;
+    }, col => {
+      if (col < n) {
+        columnasLibres.push(col);
+        notas.push(`La columna ${col + 1} no tiene pivote disponible; se continúa con la siguiente.`);
       }
-      const actual = fila;
-      const nombreColumna = col === n ? 'b' : String(col + 1);
-      if (candidata !== actual) {
-        const otra = candidata;
-        registrar({ tipo: 'intercambio', fila: actual, otra }, `Busca un pivote no nulo en la columna ${nombreColumna} y llévalo a la fila ${actual + 1}. Usa la primera fila inferior disponible.`, 'Buscar pivote', () => {
-          [matriz[actual],matriz[otra]] = [matriz[otra],matriz[actual]];
-        });
-      }
-      const pivote = matriz[actual][col];
-      if (!pivote.esUno()) {
-        const factor = F.UNO.dividir(pivote);
-        registrar({ tipo: 'escala', fila: actual, factor }, `Haz 1 el pivote de la fila ${actual + 1}, columna ${nombreColumna}.`, 'Normalizar pivote', () => {
-          matriz[actual] = matriz[actual].map(v => v.multiplicar(factor));
-        });
-      }
-      for (let i = actual + 1; i < matriz.length; i++) {
-        const factor = matriz[i][col].negar();
-        if (factor.esCero()) continue;
-        registrar({ tipo: 'suma', fila: i, otra: actual, factor }, `Usa la fila pivote ${actual + 1} para hacer cero la casilla de la fila ${i + 1}, columna ${nombreColumna}.`, 'Ceros debajo', () => {
-          matriz[i] = matriz[i].map((v,j) => v.sumar(factor.multiplicar(matriz[actual][j])));
-        });
-      }
-      pivotes.push({ fila: actual, col }); fila++;
-    }
-    // Orden solicitado: eliminar arriba por columnas pivote, de izquierda a derecha.
-    for (const { fila: pivote, col } of pivotes) {
-      for (let i = 0; i < pivote; i++) {
-        const factor = matriz[i][col].negar();
-        if (factor.esCero()) continue;
-        registrar({ tipo: 'suma', fila: i, otra: pivote, factor }, `Usa la fila pivote ${pivote + 1} para hacer cero la casilla de la fila ${i + 1}, columna ${col === n ? 'b' : col + 1}.`, 'Ceros encima', () => {
-          matriz[i] = matriz[i].map((v,j) => v.sumar(factor.multiplicar(matriz[pivote][j])));
-        });
-      }
-    }
-    return { original: copiar(original), pasos, final: copiar(matriz), resultado, columnasLibres };
+    });
+    return { original: copiar(original), pasos, final: copiar(resultado.matriz), resultado, columnasLibres };
   }
+
   function describir(op) {
     if (op.tipo === 'intercambio') return `R${op.fila + 1} ↔ R${op.otra + 1}`;
     if (op.tipo === 'escala') return `R${op.fila + 1} ← (${op.factor.aTexto()}) R${op.fila + 1}`;

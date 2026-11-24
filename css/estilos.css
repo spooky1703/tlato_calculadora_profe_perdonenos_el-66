@@ -539,3 +539,40 @@ input.celda { cursor: text; }
 }
 
 #controles-parametros[hidden] { display: none !important; }
+
+/* Dos decisiones independientes: qué calcular y si resolver o practicar. */
+.barra-herramientas { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; margin: 24px 0; }
+.barra-herramientas .modos-unidad { margin: 0; border-radius: 14px; padding: 5px; }
+.barra-herramientas button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; border-radius: 10px; font-weight: 600; }
+.barra-herramientas button[aria-pressed=true] { color: var(--texto-boton-primario); background: var(--primario); }
+.barra-herramientas button:focus-visible { outline: 3px solid var(--acento); outline-offset: 2px; }
+.barra-herramientas button:not([aria-pressed=true]):hover { background: var(--fondo-body); }
+#editor-sistema, #panel-cuadrada { padding: clamp(16px, 3vw, 30px); border-radius: 18px; }
+.carga-editor { border-bottom: 0; }
+.contador-matriz { background: transparent; padding: 0; }
+.cuerpo-editor { grid-template-columns: minmax(0, 1fr) 170px; }
+.cuerpo-editor .acciones-dimensiones { border-left: 0; padding: 0; }
+#panel-cuadrada .acciones-principales { border-top: 1px solid var(--borde); padding-top: 18px; }
+.marco-cuadrada { position: relative; width: max-content; margin: 0 auto; padding: 4px 12px; }
+.marco-cuadrada::before, .marco-cuadrada::after { content: ''; position: absolute; top: 0; bottom: 0; width: 9px; border-top: 2px solid currentColor; border-bottom: 2px solid currentColor; pointer-events: none; }
+.marco-cuadrada::before { left: 0; border-left: 2px solid currentColor; }
+.marco-cuadrada::after { right: 0; border-right: 2px solid currentColor; }
+.marco-cuadrada table { border-spacing: 8px; }
+#tabla-cuadrada .celda { width: clamp(52px, calc((100cqw - 50px) / var(--orden-cuadrada) - 10px), 92px); height: 48px; }
+#resultado-cuadrada { border-top: 1px solid var(--borde); margin-top: 22px; padding-top: 4px; }
+.aviso-proximamente { text-align: center; padding: 48px 20px; }
+.aviso-proximamente > .material-symbols-outlined { display: block; margin-bottom: 18px; font-size: 40px; color: var(--acento); }
+.etiqueta-proximamente { display: inline-block; border-radius: 20px; padding: 6px 12px; background: var(--boton-bg); font-size: .8rem; font-weight: 600; margin-bottom: 16px; }
+.aviso-proximamente p { max-width: 390px; margin: 12px auto 24px; color: var(--texto-secundario); line-height: 1.6; }
+@media (max-width: 760px) {
+  .barra-herramientas { display: grid; grid-template-columns: minmax(0, 1fr); }
+  .barra-herramientas .modos-unidad { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .barra-herramientas .operaciones-unidad { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .operaciones-unidad button { flex-direction: column; gap: 6px; padding: 12px 3px; font-size: .78rem; }
+}
+@media (max-width: 620px) {
+  .cuerpo-editor { grid-template-columns: minmax(0, 1fr); }
+  .cuerpo-editor .acciones-dimensiones { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 0; }
+  .carga-editor { align-items: flex-start; flex-direction: column; }
+  .acciones-principales .boton { min-height: 46px; }
+}
