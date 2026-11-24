@@ -11,21 +11,21 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,600,0,0" />
-  <link rel="stylesheet" href="css/estilos.css?v=vista-inicial-24nov-2">
+  <link rel="stylesheet" href="css/estilos.css?v=conjunto-solucion-24nov">
   <script src="js/tema.js" defer></script>
   <script src="js/navegacion.js" defer></script>
   <script src="js/configuracion.js?v=limites-2" defer></script>
   <script src="js/fracciones.js?v=ajustes-20nov" defer></script>
   <script src="js/gauss-jordan.js?v=limites-3" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
-  <script src="js/espacio-soluciones.js?v=vista-inicial-24nov-2" defer></script>
-  <script src="js/visualizacion-soluciones.js?v=vista-inicial-24nov-2" defer></script>
+  <script src="js/espacio-soluciones.js?v=conjunto-solucion-24nov" defer></script>
+  <script src="js/visualizacion-soluciones.js?v=conjunto-solucion-24nov" defer></script>
   <script src="js/guia-importacion.js?v=guia-carga-22nov" defer></script>
   <script src="js/practica-modelo.js?v=notacion-23nov" defer></script>
   <script src="js/practica-ui.js?v=ajustes-20nov" defer></script>
   <script src="js/guia-practica.js?v=notacion-23nov" defer></script>
   <script src="js/app.js?v=pie-por-modo" defer></script>
-  <script src="js/ayuda.js?v=vista-inicial-24nov-2" defer></script>
+  <script src="js/ayuda.js?v=conjunto-solucion-24nov" defer></script>
 </head>
 <body>
   <main class="contenedor">
@@ -270,13 +270,11 @@
     </div>
     <div id="resumen-punto" aria-label="Coordenadas del punto" aria-live="polite" hidden></div>
     <p id="estado-grafica" role="status" hidden></p>
-    <div class="controles-geometria"><label id="control-destacar">Resaltar <select id="destacar-plano" aria-label="Resaltar una ecuación"><option value="-1">Todos</option></select></label><label><input id="mostrar-normales" type="checkbox"> Mostrar vectores γ</label></div>
+    <div class="controles-geometria"><label id="control-destacar">Resaltar <select id="destacar-plano" aria-label="Resaltar una ecuación"><option value="-1">Todos</option></select></label><label><input id="mostrar-normales" type="checkbox"> Mostrar vectores 𝛾</label></div>
     <details><summary>Ver ecuaciones y vectores</summary><div id="leyenda-geometria"></div></details>
-    <div id="controles-parametros"><h3>Explora otras soluciones</h3><p>Mueve el control: las demás coordenadas se ajustan solas.</p>
+    <div id="controles-parametros" hidden><h3>Explora otras soluciones</h3><p>Mueve el control: las demás coordenadas se ajustan solas.</p>
     <div id="parametros-infinitas"></div></div>
     <p id="error-parametro" class="mensaje error" role="alert" hidden></p>
-    <details><summary>Ver punto y comprobación</summary><h3>Punto seleccionado</h3><div id="punto-infinitas" aria-live="polite"></div>
-    <h3>Comprobación en tus ecuaciones</h3><div id="comprobacion-infinitas"></div></details>
   </dialog>
 
 

@@ -418,8 +418,6 @@ input.celda { cursor: text; }
 .parametro-geometria input[type=text] { width: 100%; padding: 8px; border: 1px solid var(--borde); border-radius: 5px; }
 .parametro-geometria input[aria-invalid=true] { border-color: #b42318; }
 .parametro-geometria input[type=range] { width: 100%; accent-color: #4F7568; }
-#punto-infinitas, #comprobacion-infinitas { display: grid; gap: 8px; overflow-wrap: anywhere; }
-#punto-infinitas { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
 #estado-grafica { font-size: .9rem; font-weight: 600; }
 @media(max-width:620px) { #modal-infinitas { padding: 16px; } .parametro-geometria { grid-template-columns: 65px minmax(40px,1fr) 80px; gap: 7px; } }
 #grafica-infinitas { max-height: 340px; object-fit: contain; background: #F8FAF8; }
@@ -539,3 +537,5 @@ input.celda { cursor: text; }
 @media(max-width:620px) {
   #grafica-infinitas { height: 300px; max-height: none; object-fit: cover; }
 }
+
+#controles-parametros[hidden] { display: none !important; }

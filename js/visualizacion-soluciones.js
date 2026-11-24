@@ -4,7 +4,7 @@
   const colores = ['#2463a0','#bd6434','#8053a5','#218879','#bb4773','#7b771e'];
   const nombres = ['x','y','z'];
   const vistaInicial={limite:5,azimut:-2.18,elevacion:-.38};
-  let modelo, ejes=[], punto, aproximado, geometria, visibles=[], limite=vistaInicial.limite;
+  let modelo, ejes=[], punto, geometria, visibles=[], limite=vistaInicial.limite;
   let azimut=vistaInicial.azimut, elevacion=vistaInicial.elevacion, arrastre=null;
   const suma=(a,b,k=1)=>a.map((v,i)=>v+k*b[i]);
   const dot=(a,b)=>a.reduce((s,v,i)=>s+v*b[i],0);
@@ -97,17 +97,23 @@
         const inicio=suma(centro.map(v=>v*.45),vertices[i%vertices.length],.55);
         const fin=suma(inicio,v,limite*.2/norma),p=proyectar(inicio),q=proyectar(fin);
         segmento(inicio,fin,colores[i%colores.length],2);const a=Math.atan2(q[1]-p[1],q[0]-p[0]);
-        ctx.beginPath();ctx.moveTo(q[0],q[1]);ctx.lineTo(q[0]-7*Math.cos(a-.45),q[1]-7*Math.sin(a-.45));ctx.lineTo(q[0]-7*Math.cos(a+.45),q[1]-7*Math.sin(a+.45));ctx.closePath();ctx.fillStyle=colores[i%colores.length];ctx.fill();etiqueta(fin,`γ${sub(i+1)}`,colores[i%colores.length]);
+        ctx.beginPath();ctx.moveTo(q[0],q[1]);ctx.lineTo(q[0]-7*Math.cos(a-.45),q[1]-7*Math.sin(a-.45));ctx.lineTo(q[0]-7*Math.cos(a+.45),q[1]-7*Math.sin(a+.45));ctx.closePath();ctx.fillStyle=colores[i%colores.length];ctx.fill();etiqueta(fin,`𝛾${sub(i+1)}`,colores[i%colores.length]);
       });
       let fuera=false;
       if(punto){const seleccion=ejes.map(i=>punto[i]);
         fuera=!E.cortarFamilia({origen:seleccion,base:[],dimension:0},limite).puntos.length;
         if(!fuera){const p=vector(seleccion);
         const q=proyectar(p);ctx.beginPath();ctx.arc(q[0],q[1],16,0,2*Math.PI);ctx.fillStyle='#18734c25';ctx.fill();marca(p,'#18734c',8);
-        const lx=Math.min(750,q[0]+58),ly=Math.max(66,q[1]-58);
-        ctx.beginPath();ctx.moveTo(q[0]+9,q[1]-9);ctx.lineTo(lx,ly+16);ctx.strokeStyle='#18734c';ctx.lineWidth=1.5;ctx.stroke();
-        ctx.fillStyle='white';ctx.fillRect(lx-7,ly-8,modelo.tipo==='unica'?119:97,32);ctx.font='bold 18px system-ui';ctx.fillStyle='#155a3c';ctx.fillText(modelo.tipo==='unica'?'Solución':'Tu punto',lx,ly+14);
       }}
+      // El rótulo pertenece a toda la figura verde, no al punto móvil.
+      const familia=geometria.familia;
+      if(familia.puntos.length||familia.tipo==='todo'){
+        const vertices=familia.puntos.map(vector);
+        const centro=vertices.length?vertices.reduce((r,p)=>suma(r,p,1/vertices.length),[0,0,0]):[0,0,0];
+        const q=proyectar(centro),lx=Math.min(700,q[0]+58),ly=Math.max(70,q[1]-65);
+        ctx.beginPath();ctx.moveTo(q[0],q[1]);ctx.lineTo(lx,ly+20);ctx.strokeStyle='#18734c';ctx.lineWidth=1.5;ctx.stroke();
+        ctx.fillStyle='white';ctx.fillRect(lx-7,ly-8,110,49);ctx.font='bold 18px system-ui';ctx.fillStyle='#155a3c';ctx.fillText('Conjunto',lx,ly+12);ctx.fillText('solución',lx,ly+33);
+      }
       const dimension=geometria.imagen.dimension;
       const fueraEcuaciones=geometria.ecuaciones.filter((f,i)=>visibles[i]&&!f.puntos.length&&!['todo','vacio'].includes(f.tipo)).length;
       const avisos=[];
@@ -125,26 +131,21 @@
     const error=$('error-parametro');error.hidden=true;
     try{
       if(modelo.tipo==='incompatible'){
-        punto=null;$('punto-infinitas').textContent='No hay punto que satisfaga todas las ecuaciones.';
-        $('comprobacion-infinitas').textContent='La reducción contiene una contradicción de la forma 0 = c, con c distinto de cero.';dibujar();return;
+        punto=null;$('resumen-punto').replaceChildren();dibujar();return;
       }
       const entradas=[...$('parametros-infinitas').querySelectorAll('input[type=text]')];
       const parametros=entradas.map((el,i)=>{el.removeAttribute('aria-invalid');try{return F.desdeTexto(el.value);}catch(e){el.setAttribute('aria-invalid','true');throw new Error(`${variable(modelo.libres[i])}: ${e.message}`);}});
       const evaluacion=modelo.evaluar(parametros);punto=evaluacion.punto;
       $('resumen-punto').replaceChildren();
       ejes.forEach(i=>texto($('resumen-punto'),`${variable(i)} = ${punto[i].aTexto()}`));
-      $('punto-infinitas').replaceChildren();texto($('punto-infinitas'),'Coordenadas del punto');
-      punto.forEach((v,i)=>texto($('punto-infinitas'),`${variable(i)} = ${v.aTexto()}`));
-      $('comprobacion-infinitas').replaceChildren();evaluacion.comprobaciones.forEach((c,i)=>texto($('comprobacion-infinitas'),`Ecuación ${i+1}: ${c.izquierda.aTexto()} = ${c.derecha.aTexto()} ${c.izquierda.restar(c.derecha).esCero()?'✓':'✗'}`));
-      if(aproximado||entradas.some(el=>F.contieneConstantes(el.value)))texto($('comprobacion-infinitas'),'π y Euler se representan con la aproximación de 4 decimales usada por la calculadora.','nota-geometria');
       dibujar();
-    }catch(e){error.hidden=false;error.textContent=e.message;punto=null;$('resumen-punto').replaceChildren();$('punto-infinitas').replaceChildren();$('comprobacion-infinitas').replaceChildren();dibujar();}
+    }catch(e){error.hidden=false;error.textContent=e.message;punto=null;$('resumen-punto').replaceChildren();dibujar();}
   }
   function leyenda(){
     const cont=$('leyenda-geometria');cont.replaceChildren();
     texto(cont,modelo.tipo==='incompatible'?'Cada color identifica una ecuación.':'Verde: soluciones. El punto marcado es una de ellas.');
     if(modelo.n>3){texto(cont,'Aquí ves solo las coordenadas elegidas. El cálculo usa todas las variables.');return;}
-    texto(cont,'γ indica la dirección de cada flecha, no su longitud en pantalla.');
+    texto(cont,'𝛾 indica la dirección de cada flecha, no su longitud en pantalla.');
     modelo.original.forEach((fila,i)=>{
       const label=document.createElement('label'),check=document.createElement('input');check.type='checkbox';check.checked=true;
       check.onchange=()=>{visibles[i]=check.checked;dibujar();};
@@ -159,7 +160,7 @@
       label.style.setProperty('--color-ecuacion',colores[i%colores.length]);
       const info=document.createElement('div');
       texto(info,ecuacion,'ecuacion-legible');
-      texto(info,cero?(fila[modelo.n].esCero()?'Se cumple siempre.':'No se puede cumplir.'):`γ${sub(i+1)} = (${normal.map(v=>v.aTexto()).join(', ')})`,'vector-legible');
+      texto(info,cero?(fila[modelo.n].esCero()?'Se cumple siempre.':'No se puede cumplir.'):`𝛾${sub(i+1)} = (${normal.map(v=>v.aTexto()).join(', ')})`,'vector-legible');
       check.setAttribute('aria-label',`Mostrar ecuación ${i+1}: ${ecuacion}`);
       label.append(check,info);cont.append(label);
     });
@@ -185,7 +186,7 @@
       select.onchange=()=>{const nuevo=Number(select.value),otro=ejes.indexOf(nuevo);if(otro!==-1){ejes[otro]=ejes[k];$('ejes-infinitas').querySelectorAll('select')[otro].value=ejes[k];}ejes[k]=nuevo;geometria=null;actualizar();};label.append(select);$('ejes-infinitas').append(label);
     });
     $('parametros-infinitas').replaceChildren();$('controles-parametros').hidden=modelo.tipo!=='infinitas';
-    modelo.libres.forEach((col,i)=>{
+    (modelo.tipo==='infinitas'?modelo.libres:[]).forEach((col,i)=>{
       const fila=document.createElement('div');fila.className='parametro-geometria';const label=document.createElement('label');label.htmlFor=`valor-t${i}`;label.textContent=`Elige el valor de ${variable(col)}`;
       const campo=document.createElement('input');campo.id=`valor-t${i}`;campo.type='text';campo.value='0';campo.maxLength=256;campo.autocomplete='off';campo.setAttribute('aria-label',`Valor de ${variable(col)}`);
       const slider=document.createElement('input');slider.type='range';slider.value=0;slider.setAttribute('aria-label',`Mover ${variable(col)}`);slider.dataset.indice=i;
@@ -238,5 +239,5 @@
   canvas.onpointermove=e=>{if(!arrastre)return;const factor=6/Math.max(1,canvas.getBoundingClientRect().width);azimut+=(e.clientX-arrastre[0])*factor;elevacion=Math.max(-1.4,Math.min(1.4,elevacion+(e.clientY-arrastre[1])*factor));arrastre=[e.clientX,e.clientY];dibujar();};
   canvas.onpointerup=canvas.onpointercancel=()=>{arrastre=null;};modal.addEventListener('close',()=>{arrastre=null;});
   if(window.ResizeObserver)new ResizeObserver(()=>{if(modal.open)dibujar();}).observe(canvas);
-  window.VisualizacionSoluciones={preparar(resultado,original,n,aprox){this.limpiar();modelo=E.crear(resultado,original,n);aproximado=aprox;$('explicar-infinitas').hidden=false;},limpiar(){modelo=null;punto=null;geometria=null;$('explicar-infinitas').hidden=true;if(modal.open)modal.close();}};
+  window.VisualizacionSoluciones={preparar(resultado,original,n,aprox){this.limpiar();modelo=E.crear(resultado,original,n);$('explicar-infinitas').hidden=false;},limpiar(){modelo=null;punto=null;geometria=null;$('explicar-infinitas').hidden=true;if(modal.open)modal.close();}};
 })();
