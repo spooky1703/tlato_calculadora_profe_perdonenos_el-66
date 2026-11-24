@@ -186,20 +186,36 @@
     }
   });
 
-  function cambiarModo(practica) {
+  let operacionActual = 'sistemas';
+  function cambiarModo(practica, operacion = operacionActual) {
     if (!window.PracticaUI.salir()) return;
     modoPractica = practica;
+    operacionActual = operacion;
+    const cuadrada = operacion !== 'sistemas';
+    const practicaSistema = practica && !cuadrada;
+    document.getElementById('editor-sistema').hidden = cuadrada;
+    document.getElementById('panel-cuadrada').hidden = !cuadrada || practica;
+    document.getElementById('practica-proximamente').hidden = !cuadrada || !practica;
+    document.getElementById('titulo-proximamente').textContent = operacion === 'inversa' ? 'Práctica de inversa' : 'Práctica de determinante';
+    document.getElementById('modo-sistemas').setAttribute('aria-pressed', String(!cuadrada));
+    document.getElementById('modo-inversa').setAttribute('aria-pressed', String(operacion === 'inversa'));
+    document.getElementById('modo-determinante').setAttribute('aria-pressed', String(operacion === 'determinante'));
+    if (cuadrada) window.MatricesCuadradas.cambiarModo(operacion);
     document.getElementById('modo-calculadora').setAttribute('aria-pressed', String(!practica));
     document.getElementById('modo-practica').setAttribute('aria-pressed', String(practica));
-    document.getElementById('introduccion-practica').hidden = !practica;
-    document.getElementById('credito-proyecto').hidden = practica;
-    document.getElementById('reabrir-guia-practica').hidden = !practica;
-    document.getElementById('resolver').textContent = practica ? 'Comenzar práctica' : 'Resolver';
+    document.getElementById('introduccion-practica').hidden = !practicaSistema;
+    document.getElementById('credito-proyecto').hidden = practicaSistema;
+    document.getElementById('reabrir-guia-practica').hidden = !practicaSistema;
+    document.getElementById('resolver').textContent = practicaSistema ? 'Comenzar práctica' : 'Resolver';
     errorElemento.hidden = true; resultadoElemento.hidden = true; window.VisualizacionSoluciones.limpiar();
-    if(practica) window.GuiaPractica.primeraVez();
+    if (practicaSistema) window.GuiaPractica.primeraVez();
   }
   document.getElementById('modo-practica').onclick = () => cambiarModo(true);
   document.getElementById('modo-calculadora').onclick = () => cambiarModo(false);
+  document.getElementById('volver-calculadora').onclick = () => cambiarModo(false);
+  document.getElementById('modo-sistemas').onclick = () => cambiarModo(modoPractica, 'sistemas');
+  document.getElementById('modo-inversa').onclick = () => cambiarModo(modoPractica, 'inversa');
+  document.getElementById('modo-determinante').onclick = () => cambiarModo(modoPractica, 'determinante');
 
   const inputArchivo = document.getElementById('input-archivo');
   const btnSubir = document.getElementById('btn-subir');
