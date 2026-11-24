@@ -553,11 +553,6 @@ input.celda { cursor: text; }
 .cuerpo-editor { grid-template-columns: minmax(0, 1fr) 170px; }
 .cuerpo-editor .acciones-dimensiones { border-left: 0; padding: 0; }
 #panel-cuadrada .acciones-principales { border-top: 1px solid var(--borde); padding-top: 18px; }
-.tamano-cuadrada { display: grid; gap: 10px; }
-.tamano-cuadrada label { font-size: .88rem; font-weight: 600; }
-.tamano-cuadrada input { width: 100%; min-height: 44px; padding: 8px 12px; border: 1px solid var(--borde); border-radius: 8px; color: var(--texto-principal); background: var(--fondo-panel); }
-.tamano-cuadrada .boton { justify-content: center; font-size: .85rem; }
-.tamano-cuadrada > span { color: var(--texto-secundario); font-size: .8rem; }
 .marco-cuadrada { position: relative; width: max-content; margin: 0 auto; padding: 4px 12px; }
 .marco-cuadrada::before, .marco-cuadrada::after { content: ''; position: absolute; top: 0; bottom: 0; width: 9px; border-top: 2px solid currentColor; border-bottom: 2px solid currentColor; pointer-events: none; }
 .marco-cuadrada::before { left: 0; border-left: 2px solid currentColor; }
@@ -578,9 +573,6 @@ input.celda { cursor: text; }
 @media (max-width: 620px) {
   .cuerpo-editor { grid-template-columns: minmax(0, 1fr); }
   .cuerpo-editor .acciones-dimensiones { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 0; }
-  .tamano-cuadrada { grid-template-columns: 1fr 1fr; align-items: center; }
-  .tamano-cuadrada > span { grid-column: 2; }
-  .tamano-cuadrada .boton { grid-row: 2; grid-column: 1; }
   .carga-editor { align-items: flex-start; flex-direction: column; }
   .acciones-principales .boton { min-height: 46px; }
 }

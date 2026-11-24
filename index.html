@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,600,0,0" />
-  <link rel="stylesheet" href="css/estilos.css?v=diseno-modos-24nov">
+  <link rel="stylesheet" href="css/estilos.css?v=botones-cuadrada-24nov">
   <script src="js/tema.js" defer></script>
   <script src="js/navegacion.js" defer></script>
   <script src="js/configuracion.js?v=limites-2" defer></script>
@@ -24,8 +24,8 @@
   <script src="js/practica-modelo.js?v=modos-24nov" defer></script>
   <script src="js/practica-ui.js?v=ajustes-20nov" defer></script>
   <script src="js/guia-practica.js?v=notacion-23nov" defer></script>
-  <script src="js/app.js?v=diseno-modos-24nov" defer></script>
-  <script src="js/matrices-cuadradas.js?v=diseno-modos-24nov" defer></script>
+  <script src="js/app.js?v=botones-cuadrada-24nov" defer></script>
+  <script src="js/matrices-cuadradas.js?v=botones-cuadrada-24nov" defer></script>
   <script src="js/ayuda.js?v=conjunto-solucion-24nov" defer></script>
 </head>
 <body>
@@ -118,11 +118,9 @@
       <div class="carga-editor"><div><h2 id="titulo-cuadrada">Inversa</h2><p class="ayuda">Matriz cuadrada · sin columna aumentada</p></div><span id="dimensiones-cuadrada" class="contador-matriz" role="status">3 filas · 3 columnas</span></div>
       <div class="cuerpo-editor">
         <div class="desplazamiento-matriz" tabindex="0" aria-label="Editor de matriz cuadrada"><div class="marco-cuadrada"><table id="tabla-cuadrada" aria-label="Matriz cuadrada"></table></div></div>
-        <div class="tamano-cuadrada">
-          <label for="orden-cuadrada">Filas y columnas</label>
-          <input id="orden-cuadrada" type="number" min="1" value="3" step="1">
-          <button id="cambiar-orden-cuadrada" type="button" class="boton">Cambiar tamaño</button>
-          <span>Se ajustan juntas.</span>
+        <div class="acciones-dimensiones" role="group" aria-label="Cambiar tamaño de la matriz cuadrada">
+          <button id="agregar-cuadrada" type="button" class="boton secundario" aria-label="Agregar fila y columna"><span class="material-symbols-outlined" aria-hidden="true">add</span> Fila y columna</button>
+          <button id="quitar-cuadrada" type="button" class="boton secundario" aria-label="Quitar fila y columna"><span class="material-symbols-outlined" aria-hidden="true">remove</span> Fila y columna</button>
         </div>
       </div>
       <div class="acciones-principales">

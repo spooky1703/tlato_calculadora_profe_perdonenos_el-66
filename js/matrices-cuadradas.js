@@ -3,15 +3,15 @@
   const tabla = document.getElementById('tabla-cuadrada');
   const resultado = document.getElementById('resultado-cuadrada');
   const error = document.getElementById('error-cuadrada');
-  const orden = document.getElementById('orden-cuadrada');
   let modo = 'inversa';
   let valores = Array.from({ length: 3 }, () => Array(3).fill('0'));
   const limite = Math.min(window.fila_max, window.col_max);
-  orden.max = limite;
 
   function limpiarResultado() { resultado.hidden = true; error.hidden = true; }
   function dibujar() {
     tabla.replaceChildren();
+    document.getElementById('agregar-cuadrada').disabled = valores.length >= limite;
+    document.getElementById('quitar-cuadrada').disabled = valores.length <= 1;
     document.getElementById('dimensiones-cuadrada').textContent = `${valores.length} filas · ${valores.length} columnas`;
     document.getElementById('panel-cuadrada').style.setProperty('--orden-cuadrada', valores.length);
     valores.forEach((fila, i) => {
@@ -26,15 +26,15 @@
       });
     });
   }
-  document.getElementById('cambiar-orden-cuadrada').onclick = () => {
-    const n = Number(orden.value);
-    if (!Number.isInteger(n) || n < 1 || n > limite) {
-      error.textContent = `El tamaño debe ser un entero entre 1 y ${limite}.`; error.hidden = false; return;
-    }
-    if (n < valores.length && valores.some((f, i) => f.some((v, j) => (i >= n || j >= n) && v !== '0' && v !== '')) && !confirm('Al reducir el tamaño se quitarán las últimas filas y columnas. ¿Continuar?')) return;
+  function cambiarTamano(cambio) {
+    const n = valores.length + cambio;
+    if (n < 1 || n > limite) return;
+    if (cambio < 0 && valores.some((f, i) => f.some((v, j) => (i >= n || j >= n) && v !== '0' && v !== '')) && !confirm('Se quitarán la última fila y la última columna con sus valores. ¿Continuar?')) return;
     valores = Array.from({ length: n }, (_, i) => Array.from({ length: n }, (_, j) => valores[i]?.[j] ?? '0'));
     limpiarResultado(); dibujar();
-  };
+  }
+  document.getElementById('agregar-cuadrada').onclick = () => cambiarTamano(1);
+  document.getElementById('quitar-cuadrada').onclick = () => cambiarTamano(-1);
   function mostrarMatriz(matriz) {
     const contenedor = document.createElement('div');
     contenedor.className = 'desplazamiento-matriz';
@@ -71,7 +71,7 @@
   };
   document.getElementById('limpiar-cuadrada').onclick = () => {
     valores = Array.from({ length: 3 }, () => Array(3).fill('0'));
-    orden.value = '3'; limpiarResultado(); dibujar();
+    limpiarResultado(); dibujar();
   };
   window.MatricesCuadradas = { cambiarModo(nuevo) {
     modo = nuevo; limpiarResultado();
