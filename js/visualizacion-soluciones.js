@@ -3,8 +3,8 @@
   const modal = $('modal-infinitas'), canvas = $('grafica-infinitas'), ctx = canvas.getContext('2d');
   const colores = ['#2463a0','#bd6434','#8053a5','#218879','#bb4773','#7b771e'];
   const nombres = ['x','y','z'];
-  let modelo, ejes=[], punto, aproximado, geometria, visibles=[], limite=10;
-  let azimut=-.65, elevacion=.5, zoom=1, arrastre=null;
+  let modelo, ejes=[], punto, aproximado, geometria, visibles=[], limite=50;
+  let azimut=-.65, elevacion=.5, arrastre=null;
   const suma=(a,b,k=1)=>a.map((v,i)=>v+k*b[i]);
   const dot=(a,b)=>a.reduce((s,v,i)=>s+v*b[i],0);
   const cruz=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
@@ -33,7 +33,7 @@
     ctx.clearRect(0,0,900,480);ctx.fillStyle='#f4f8fb';ctx.fillRect(0,0,900,480);
     try{
       if(!geometria)prepararGeometria();
-      const es3d=ejes.length===3, unidad=(es3d?128:180)*zoom/limite;
+      const es3d=ejes.length===3, unidad=(es3d?128:180)/limite;
       function proyectar(v){
         if(!es3d)return [450+v[0]*unidad,240-v[1]*unidad,v[2]];
         const a=v[0]*Math.cos(azimut)-v[1]*Math.sin(azimut), b=v[0]*Math.sin(azimut)+v[1]*Math.cos(azimut);
@@ -42,22 +42,23 @@
       function segmento(a,b,color,grosor=1){const p=proyectar(a),q=proyectar(b);ctx.beginPath();ctx.moveTo(p[0],p[1]);ctx.lineTo(q[0],q[1]);ctx.strokeStyle=color;ctx.lineWidth=grosor;ctx.stroke();}
       function etiqueta(p,t,color='#001d39'){const q=proyectar(p);ctx.font='18px system-ui';ctx.fillStyle=color;ctx.fillText(t,q[0]+7,q[1]-7);}
       function marca(p,color,radio=5){const q=proyectar(p);ctx.beginPath();ctx.arc(q[0],q[1],radio,0,2*Math.PI);ctx.fillStyle=color;ctx.fill();ctx.strokeStyle='white';ctx.lineWidth=2;ctx.stroke();}
-      const caras=[];
-      function figura(fig,color,solucion=false){
+      const caras=[], destacado=Number($('destacar-plano').value);
+      function figura(fig,color,solucion=false,indice=-1){
         const pts=ordenar(fig.puntos.map(vector));
-        if(pts.length>=3)caras.push({pts,color,solucion,prof:pts.reduce((s,p)=>s+proyectar(p)[2]/pts.length,0)});
+        if(pts.length>=3)caras.push({pts,color,solucion,indice,prof:pts.reduce((s,p)=>s+proyectar(p)[2]/pts.length,0)});
         else if(pts.length===2)segmento(pts[0],pts[1],color,solucion?4:2);
         else if(pts.length===1)marca(pts[0],color,solucion?7:4);
       }
-      // La caja, los ejes y todas las ecuaciones comparten exactamente el mismo intervalo.
+      // Los ejes y todas las ecuaciones comparten exactamente el mismo intervalo.
       const esquinas=Array.from({length:2**ejes.length},(_,i)=>[0,1,2].map(j=>j<ejes.length?((i>>j)&1?limite:-limite):0));
-      for(let i=0;i<esquinas.length;i++)for(let j=0;j<ejes.length;j++){const k=i^(1<<j);if(k>i)segmento(esquinas[i],esquinas[k],'#cad9e3');}
       const paso=limite/5;
-      if(ejes.length>=2)for(let k=-5;k<=5;k++){
-        segmento([-limite,k*paso,0],[limite,k*paso,0],'#dce5ec');
-        segmento([k*paso,-limite,0],[k*paso,limite,0],'#dce5ec');
+      // Una base tenue orienta la vista sin encerrar los planos en otra caja.
+      if(ejes.length>=2)for(let k=-2;k<=2;k++){
+        const altura=es3d?-limite:0;
+        segmento([-limite,k*limite/2,altura],[limite,k*limite/2,altura],'#e1e9ef');
+        segmento([k*limite/2,-limite,altura],[k*limite/2,limite,altura],'#e1e9ef');
       }
-      geometria.ecuaciones.forEach((fig,i)=>{if(visibles[i])figura(fig,colores[i%colores.length]);});
+      geometria.ecuaciones.forEach((fig,i)=>{if(visibles[i])figura(fig,colores[i%colores.length],false,i);});
       figura(geometria.familia,'#18734c',true);
       if(geometria.familia.tipo==='todo'){
         if(es3d){for(const i of [0,1,2]){const pts=esquinas.filter(p=>p[i]===limite);caras.push({pts:ordenar(pts),color:'#18734c',solucion:true,prof:pts.reduce((s,p)=>s+proyectar(p)[2]/pts.length,0)});}}
@@ -65,15 +66,16 @@
         else segmento([-limite,0,0],[limite,0,0],'#18734c',5);
       }
       // Transparencia y orden de profundidad: los planos se ven como superficies.
-      caras.sort((a,b)=>a.prof-b.prof).forEach(({pts,color,solucion})=>{
+      caras.sort((a,b)=>a.prof-b.prof).forEach(({pts,color,solucion,indice})=>{
+        const atenuado=!solucion&&destacado>=0&&indice!==destacado;
         ctx.beginPath();pts.forEach((p,i)=>{const q=proyectar(p);i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]);});ctx.closePath();
-        ctx.fillStyle=color+(solucion?'38':'28');ctx.fill();ctx.strokeStyle=color;ctx.lineWidth=solucion?2.5:1.3;ctx.stroke();
+        ctx.fillStyle=color+(solucion?'38':atenuado?'05':destacado>=0?'40':'18');ctx.fill();ctx.strokeStyle=color+(atenuado?'35':'ff');ctx.lineWidth=solucion?2.5:destacado===indice?2.5:1.3;ctx.stroke();
       });
       // La intersección se resalta encima de las superficies, sin ocultarla con transparencias.
       if(geometria.familia.puntos.length<=2)figura(geometria.familia,'#18734c',true);
       for(let i=0;i<ejes.length;i++){
         const a=[0,0,0],b=[0,0,0];a[i]=-limite;b[i]=limite;segmento(a,b,'#496174',1.8);etiqueta(b,nombres[i]);
-        for(const k of [-5,-3,-1,1,3,5]){const p=[0,0,0];p[i]=k*paso;const q=proyectar(p);ctx.fillStyle='#496174';ctx.fillRect(q[0]-2,q[1]-2,4,4);ctx.font='10px system-ui';ctx.fillText(Number(p[i].toPrecision(4)).toString(),q[0]+4,q[1]+13);}
+        for(const k of [-5,5]){const p=[0,0,0];p[i]=k*paso;const q=proyectar(p);ctx.fillStyle='#496174';ctx.fillRect(q[0]-2,q[1]-2,4,4);ctx.font='10px system-ui';ctx.fillText(Number(p[i].toPrecision(4)).toString(),q[0]+4,q[1]+13);}
       }
       etiqueta([0,0,0],'0','#496174');
       if($('mostrar-normales').checked && modelo.n<=3)geometria.ecuaciones.forEach((fig,i)=>{
@@ -89,16 +91,25 @@
         const inicio=suma(centro.map(v=>v*.45),vertices[i%vertices.length],.55);
         const fin=suma(inicio,v,1/norma),p=proyectar(inicio),q=proyectar(fin);
         segmento(inicio,fin,colores[i%colores.length],2);const a=Math.atan2(q[1]-p[1],q[0]-p[0]);
-        ctx.beginPath();ctx.moveTo(q[0],q[1]);ctx.lineTo(q[0]-7*Math.cos(a-.45),q[1]-7*Math.sin(a-.45));ctx.lineTo(q[0]-7*Math.cos(a+.45),q[1]-7*Math.sin(a+.45));ctx.closePath();ctx.fillStyle=colores[i%colores.length];ctx.fill();etiqueta(fin,`α${sub(i+1)}`,colores[i%colores.length]);
+        ctx.beginPath();ctx.moveTo(q[0],q[1]);ctx.lineTo(q[0]-7*Math.cos(a-.45),q[1]-7*Math.sin(a-.45));ctx.lineTo(q[0]-7*Math.cos(a+.45),q[1]-7*Math.sin(a+.45));ctx.closePath();ctx.fillStyle=colores[i%colores.length];ctx.fill();etiqueta(fin,`γ${sub(i+1)}`,colores[i%colores.length]);
       });
       let fuera=false;
-      if(punto){const p=vector(ejes.map(i=>punto[i]));fuera=!dentro(p);if(!fuera){marca(p,'#001d39',7);etiqueta(p,'σ');}}
-      const formas=['un punto','una recta','un plano','todo el espacio'];
+      if(punto){const p=vector(ejes.map(i=>punto[i]));fuera=!dentro(p);if(!fuera){
+        const q=proyectar(p);ctx.beginPath();ctx.arc(q[0],q[1],16,0,2*Math.PI);ctx.fillStyle='#18734c25';ctx.fill();marca(p,'#18734c',8);
+        const lx=Math.min(750,q[0]+58),ly=Math.max(66,q[1]-58);
+        ctx.beginPath();ctx.moveTo(q[0]+9,q[1]-9);ctx.lineTo(lx,ly+16);ctx.strokeStyle='#18734c';ctx.lineWidth=1.5;ctx.stroke();
+        ctx.fillStyle='white';ctx.fillRect(lx-7,ly-8,modelo.tipo==='unica'?119:97,32);ctx.font='bold 18px system-ui';ctx.fillStyle='#155a3c';ctx.fillText(modelo.tipo==='unica'?'Solución':'Tu punto',lx,ly+14);
+      }}
       const dimension=geometria.imagen.dimension;
       const fueraEcuaciones=geometria.ecuaciones.filter((f,i)=>visibles[i]&&!f.puntos.length&&!['todo','vacio'].includes(f.tipo)).length;
-      $('estado-grafica').textContent=(dimension<0?'No existe intersección común: el conjunto solución está vacío.':`${modelo.n>3?'La proyección del conjunto solución es':'La intersección común es'} ${formas[dimension]}.`)+` Ventana fija: −${limite} a ${limite} en todos los ejes.`+(fuera?' σ queda fuera de esta ventana; amplía el intervalo para verlo.':'')+(fueraEcuaciones?` ${fueraEcuaciones} ecuación(es) quedan fuera de la ventana.`:'')+(dimension>=0&&!geometria.familia.puntos.length&&geometria.familia.tipo!=='todo'?' La solución está fuera de la ventana; eso no significa que no exista.':'');
-      $('girar-grafica').disabled=!es3d;
-    }catch(error){ctx.clearRect(0,0,900,480);$('estado-grafica').textContent=`No es posible representar esta escala con fiabilidad: ${error.message}`;}
+      const avisos=[];
+      if(fuera)avisos.push('El punto queda fuera de la vista. Pulsa − para verlo.');
+      if(fueraEcuaciones)avisos.push(`${fueraEcuaciones} ecuación(es) fuera de la vista.`);
+      if(dimension>=0&&!geometria.familia.puntos.length&&geometria.familia.tipo!=='todo')avisos.push('La solución está fuera de la vista; aleja para verla.');
+      $('estado-grafica').textContent=avisos.join(' ');
+      $('estado-grafica').hidden=!avisos.length;
+    }catch(error){ctx.clearRect(0,0,900,480);$('estado-grafica').hidden=false;$('estado-grafica').textContent=`No es posible representar esta escala con fiabilidad: ${error.message}`;}
+
   }
   function actualizar(){
     const error=$('error-parametro');error.hidden=true;
@@ -108,8 +119,10 @@
         $('comprobacion-infinitas').textContent='La reducción contiene una contradicción de la forma 0 = c, con c distinto de cero.';dibujar();return;
       }
       const entradas=[...$('parametros-infinitas').querySelectorAll('input[type=text]')];
-      const parametros=entradas.map((el,i)=>{el.removeAttribute('aria-invalid');try{return F.desdeTexto(el.value);}catch(e){el.setAttribute('aria-invalid','true');throw new Error(`t${i+1}: ${e.message}`);}});
+      const parametros=entradas.map((el,i)=>{el.removeAttribute('aria-invalid');try{return F.desdeTexto(el.value);}catch(e){el.setAttribute('aria-invalid','true');throw new Error(`${variable(modelo.libres[i])}: ${e.message}`);}});
       const evaluacion=modelo.evaluar(parametros);punto=evaluacion.punto;
+      $('resumen-punto').replaceChildren();
+      if(modelo.tipo==='unica')punto.forEach((v,i)=>texto($('resumen-punto'),`${variable(i)} = ${v.aTexto()}`));
       $('punto-infinitas').replaceChildren();texto($('punto-infinitas'),'σ: punto solución seleccionado');
       punto.forEach((v,i)=>texto($('punto-infinitas'),`${variable(i)} = ${v.aTexto()}`));
       $('comprobacion-infinitas').replaceChildren();evaluacion.comprobaciones.forEach((c,i)=>texto($('comprobacion-infinitas'),`Ecuación ${i+1}: ${c.izquierda.aTexto()} = ${c.derecha.aTexto()} ${c.izquierda.restar(c.derecha).esCero()?'✓':'✗'}`));
@@ -121,22 +134,39 @@
     const cont=$('leyenda-geometria');cont.replaceChildren();
     texto(cont,modelo.tipo==='incompatible'?'No hay conjunto solución ni punto σ. Los colores identifican las ecuaciones.':'Verde: conjunto solución · σ: punto seleccionado.');
     if(modelo.n>3){texto(cont,'Vista proyectada: no se dibujan hiperplanos como si fueran planos de tres variables.');return;}
-    texto(cont,'Πᵢ identifica la ecuación i. αᵢ es su vector normal (perpendicular); las flechas muestran αᵢ / ‖αᵢ‖, de longitud 1.');
+    texto(cont,'Cada color corresponde a una ecuación. γ indica la dirección normal a su plano.');
     modelo.original.forEach((fila,i)=>{
       const label=document.createElement('label'),check=document.createElement('input');check.type='checkbox';check.checked=true;
       check.onchange=()=>{visibles[i]=check.checked;dibujar();};
       const normal=fila.slice(0,modelo.n),cero=normal.every(v=>v.esCero());
-      const ecuacion=normal.map((v,j)=>`(${v.aTexto()})${nombres[j]}`).join(' + ')+` = ${fila[modelo.n].aTexto()}`;
+      let ecuacion='';
+      normal.forEach((v,j)=>{
+        if(v.esCero())return;
+        const negativo=v.n<0n, magnitud=negativo?v.negar():v;
+        ecuacion+=(ecuacion?(negativo?' − ':' + '):(negativo?'−':''))+(magnitud.esUno()?'':magnitud.aTexto())+nombres[j];
+      });
+      ecuacion=(ecuacion||'0')+` = ${fila[modelo.n].aTexto()}`;
       label.style.setProperty('--color-ecuacion',colores[i%colores.length]);
-      label.append(check,document.createTextNode(`Π${sub(i+1)}: ${ecuacion}. α${sub(i+1)} = (${normal.map(v=>v.aTexto()).join(', ')}).${cero?(fila[modelo.n].esCero()?' 0 = 0: no restringe el espacio; no tiene normal no nulo.':' Contradicción: esta ecuación no tiene puntos.') : ''}`));cont.append(label);
+      const info=document.createElement('div');
+      texto(info,ecuacion,'ecuacion-legible');
+      texto(info,cero?(fila[modelo.n].esCero()?'Se cumple siempre.':'No se puede cumplir.'):`γ${sub(i+1)} = (${normal.map(v=>v.aTexto()).join(', ')})`,'vector-legible');
+      check.setAttribute('aria-label',`Mostrar ecuación ${i+1}: ${ecuacion}`);
+      label.append(check,info);cont.append(label);
     });
   }
   function abrir(){
-    if(!modelo)return;modal.showModal();azimut=-.65;elevacion=.5;zoom=1;
+    if(!modelo)return;modal.showModal();azimut=-.65;elevacion=.5;
     ejes=Array.from({length:Math.min(3,modelo.n)},(_,i)=>i);geometria=null;visibles=modelo.original.map(()=>true);
-    $('titulo-infinitas').textContent='Geometría del sistema';
-    $('explicacion-infinitas').textContent={unica:'Solución única: todas las ecuaciones tienen exactamente un punto en común.',infinitas:'Infinitas soluciones: la intersección común es una recta, un plano o un espacio de mayor dimensión.',incompatible:'Sin soluciones: las ecuaciones no tienen ningún punto en común. Pueden cruzarse por separado sin compartir una solución entre todas.'}[modelo.tipo];
-    $('proyeccion-infinitas').textContent=modelo.n>3?'Más de tres variables: esta vista es una proyección del conjunto solución sobre los ejes elegidos, no una representación completa del sistema. Si no hay soluciones, su proyección también está vacía.':`${modelo.n===3?'Cada ecuación no degenerada se representa mediante un plano.':modelo.n===2?'Cada ecuación no degenerada se representa mediante una recta.':'Cada ecuación no degenerada determina un punto en la recta numérica.'} Se dibuja una ventana finita; las superficies se extienden fuera de ella.`;
+    $('destacar-plano').replaceChildren();
+    const todos=document.createElement('option');todos.value=-1;todos.textContent='Todos';$('destacar-plano').append(todos);
+    if(modelo.n<=3)modelo.original.forEach((fila,i)=>{if(fila.slice(0,modelo.n).every(v=>v.esCero()))return;const op=document.createElement('option');op.value=i;op.textContent=`${modelo.n===3?'Plano':'Ecuación'} ${i+1}`;$('destacar-plano').append(op);});
+    $('control-destacar').hidden=modelo.n>3;
+    $('titulo-infinitas').textContent={unica:'Una solución',infinitas:'Infinitas soluciones',incompatible:'Sin soluciones'}[modelo.tipo];
+    $('resumen-punto').hidden=modelo.tipo!=='unica';
+    $('enfocar-solucion').hidden=modelo.tipo!=='unica';
+    $('explicacion-infinitas').textContent={unica:'Un solo punto cumple todas las ecuaciones.',infinitas:'Todos los puntos verdes son soluciones. Prueba a mover uno.',incompatible:'No hay ningún punto que cumpla todas las ecuaciones.'}[modelo.tipo];
+    $('proyeccion-infinitas').hidden=modelo.n<=3;
+    $('proyeccion-infinitas').textContent=modelo.n>3?'Proyección en tres ejes: no representa el sistema completo.':'';
     $('ejes-infinitas').replaceChildren();
     if(modelo.n>3)ejes.forEach((eje,k)=>{
       const label=document.createElement('label');label.textContent=`Eje ${nombres[k]} = `;const select=document.createElement('select');
@@ -145,19 +175,48 @@
     });
     $('parametros-infinitas').replaceChildren();$('controles-parametros').hidden=modelo.tipo!=='infinitas';
     modelo.libres.forEach((col,i)=>{
-      const fila=document.createElement('div');fila.className='parametro-geometria';const label=document.createElement('label');label.htmlFor=`valor-t${i}`;label.textContent=`t${i+1} = ${variable(col)}`;
-      const campo=document.createElement('input');campo.id=`valor-t${i}`;campo.type='text';campo.value='0';campo.maxLength=256;campo.autocomplete='off';
-      const slider=document.createElement('input');slider.type='range';slider.min=-5;slider.max=5;slider.step='.1';slider.value=0;slider.setAttribute('aria-label',`Mover t${i+1} entre −5 y 5`);
-      slider.oninput=()=>{campo.value=slider.value;actualizar();};campo.oninput=()=>{try{slider.value=Math.max(-5,Math.min(5,E.numero(F.desdeTexto(campo.value))));}catch{}actualizar();};fila.append(label,slider,campo);$('parametros-infinitas').append(fila);
+      const fila=document.createElement('div');fila.className='parametro-geometria';const label=document.createElement('label');label.htmlFor=`valor-t${i}`;label.textContent=`Elige el valor de ${variable(col)}`;
+      const campo=document.createElement('input');campo.id=`valor-t${i}`;campo.type='text';campo.value='0';campo.maxLength=256;campo.autocomplete='off';campo.setAttribute('aria-label',`Valor de ${variable(col)}`);
+      const slider=document.createElement('input');slider.type='range';slider.value=0;slider.setAttribute('aria-label',`Mover ${variable(col)}`);slider.dataset.indice=i;
+      const extremos=document.createElement('div');extremos.className='extremos-parametro';extremos.append(document.createElement('span'),document.createElement('span'));
+      slider.oninput=()=>{campo.value=slider.value;slider.setAttribute('aria-valuetext',`${variable(col)} = ${campo.value}`);actualizar();};
+      campo.oninput=()=>{try{slider.value=Math.max(-limite,Math.min(limite,E.numero(F.desdeTexto(campo.value))));}catch{}actualizar();};
+      fila.append(label,campo,slider,extremos);$('parametros-infinitas').append(fila);
     });
-    $('limite-grafica').value=limite;$('mostrar-normales').disabled=modelo.n>3;leyenda();actualizar();
+    actualizarZoom();$('mostrar-normales').disabled=modelo.n>3;leyenda();actualizar();
   }
   $('explicar-infinitas').onclick=abrir;$('cerrar-infinitas').onclick=()=>modal.close();
-  $('girar-grafica').onclick=()=>{azimut+=.3;dibujar();};
-  $('acercar-grafica').onclick=()=>{zoom=Math.min(3,zoom*1.2);dibujar();};$('alejar-grafica').onclick=()=>{zoom=Math.max(.3,zoom/1.2);dibujar();};
-  $('restablecer-grafica').onclick=()=>{azimut=-.65;elevacion=.5;zoom=1;dibujar();};
+  function actualizarZoom(){
+    $('intervalo-grafica').textContent=`−${limite} a ${limite}`;
+    $('parametros-infinitas').querySelectorAll('input[type=range]').forEach(slider=>{
+      slider.min=-limite;slider.max=limite;slider.step='any';
+      const campo=$('parametros-infinitas').querySelectorAll('input[type=text]')[Number(slider.dataset.indice)];
+      try{slider.value=Math.max(-limite,Math.min(limite,E.numero(F.desdeTexto(campo.value))));}catch{}
+      const extremos=slider.parentElement.querySelector('.extremos-parametro');extremos.firstChild.textContent=`−${limite}`;extremos.lastChild.textContent=limite;
+    });
+    $('acercar-grafica').disabled=limite<=1e-8;
+    $('alejar-grafica').disabled=limite>=1e8;
+  }
+  function cambiarZoom(factor){
+    limite=Number(Math.max(1e-8,Math.min(1e8,limite*factor)).toPrecision(8));
+    geometria=null;actualizarZoom();dibujar();
+  }
+  $('acercar-grafica').onclick=()=>cambiarZoom(.5);
+  $('alejar-grafica').onclick=()=>cambiarZoom(2);
   $('mostrar-normales').onchange=dibujar;
-  $('limite-grafica').onchange=()=>{const v=Number($('limite-grafica').value);if(!Number.isFinite(v)||v<1e-8||v>1e8){$('limite-grafica').value=limite;return;}limite=v;geometria=null;dibujar();};
+  $('destacar-plano').onchange=dibujar;
+  $('enfocar-solucion').onclick=()=>{
+    if(!punto)return;
+    try{const valores=ejes.map(i=>Math.abs(E.numero(punto[i])));limite=Number(Math.max(1,Math.min(1e8,Math.max(...valores)*1.6)).toPrecision(6));azimut=-.65;elevacion=.5;geometria=null;actualizarZoom();dibujar();}catch(e){$('estado-grafica').hidden=false;$('estado-grafica').textContent=e.message;}
+  };
+  canvas.onkeydown=e=>{
+    if(ejes.length!==3||!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key))return;
+    e.preventDefault();
+    if(e.key==='ArrowLeft')azimut-=.15;if(e.key==='ArrowRight')azimut+=.15;
+    if(e.key==='ArrowUp')elevacion=Math.min(1.4,elevacion+.15);
+    if(e.key==='ArrowDown')elevacion=Math.max(-1.4,elevacion-.15);
+    dibujar();
+  };
   canvas.onpointerdown=e=>{if(ejes.length!==3)return;arrastre=[e.clientX,e.clientY];canvas.setPointerCapture(e.pointerId);};
   canvas.onpointermove=e=>{if(!arrastre)return;azimut+=(e.clientX-arrastre[0])*.01;elevacion=Math.max(-1.4,Math.min(1.4,elevacion+(e.clientY-arrastre[1])*.01));arrastre=[e.clientX,e.clientY];dibujar();};
   canvas.onpointerup=canvas.onpointercancel=()=>{arrastre=null;};modal.addEventListener('close',()=>{arrastre=null;});
