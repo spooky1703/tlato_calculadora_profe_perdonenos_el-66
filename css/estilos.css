@@ -576,3 +576,9 @@ input.celda { cursor: text; }
   .carga-editor { align-items: flex-start; flex-direction: column; }
   .acciones-principales .boton { min-height: 46px; }
 }
+/* En edición se escribe 1/2; al salir aparece la fracción vertical. */
+.campo-cuadrada { position: relative; }
+.vista-cuadrada { position: absolute; inset: 1px; display: none; align-items: center; justify-content: center; pointer-events: none; overflow: auto; color: var(--texto-principal); }
+.campo-cuadrada.con-vista:not(:focus-within) input { color: transparent; }
+.campo-cuadrada.con-vista:not(:focus-within) .vista-cuadrada { display: flex; }
+#tabla-cuadrada input[aria-invalid=true] { border-color: #b3261e; }

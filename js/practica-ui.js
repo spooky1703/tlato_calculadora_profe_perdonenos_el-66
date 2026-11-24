@@ -1,12 +1,7 @@
 (() => {
   const $ = id => document.getElementById(id), F = window.Fraccion, M = window.PracticaModelo;
   let sesion, alFinal, entradas = [];
-  function valorVisual(v) {
-    const el=document.createElement('span');
-    if(v.d===1n)el.textContent=String(v.n);
-    else {el.className='fraccion';for(const [clase,valor] of [['numerador',v.n],['barra',''],['denominador',v.d]]){const parte=document.createElement('span');parte.className=clase;parte.textContent=String(valor);el.append(parte);}}
-    return el;
-  }
+  const valorVisual = window.FormatoMatematico.fraccion;
   function matrizEn(destino, matriz, editable=false) {
     const n=matriz[0].length-1, tabla=document.createElement('div');tabla.className=editable?'matriz matriz-respuesta':'tabla-resultado';
     tabla.style.gridTemplateColumns=`repeat(${n}, max-content) 2px max-content`;

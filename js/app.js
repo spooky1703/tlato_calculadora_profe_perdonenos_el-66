@@ -6,16 +6,7 @@
   let filas = 3, incognitas = 3, modoPractica = false;
   let valores = Array.from({ length: filas }, () => Array(incognitas + 1).fill('0'));
 
-  function fraccionVisual(fraccion) {
-    if (fraccion.d === 1n) return document.createTextNode(String(fraccion.n));
-    const contenedor = document.createElement('span');
-    contenedor.className = 'fraccion';
-    const numerador = document.createElement('span'); numerador.className = 'numerador'; numerador.textContent = String(fraccion.n);
-    const barra = document.createElement('span'); barra.className = 'barra';
-    const denominador = document.createElement('span'); denominador.className = 'denominador'; denominador.textContent = String(fraccion.d);
-    contenedor.append(numerador, barra, denominador);
-    return contenedor;
-  }
+  const fraccionVisual = window.FormatoMatematico.fraccion;
 
   function renderizarMatriz() {
     resultadoElemento.hidden = true; window.VisualizacionSoluciones.limpiar();
