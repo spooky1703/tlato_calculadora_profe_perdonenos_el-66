@@ -11,21 +11,21 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,600,0,0" />
-  <link rel="stylesheet" href="css/estilos.css?v=geometria-clara-24nov">
+  <link rel="stylesheet" href="css/estilos.css?v=vista-inicial-24nov-2">
   <script src="js/tema.js" defer></script>
   <script src="js/navegacion.js" defer></script>
   <script src="js/configuracion.js?v=limites-2" defer></script>
   <script src="js/fracciones.js?v=ajustes-20nov" defer></script>
   <script src="js/gauss-jordan.js?v=limites-3" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
-  <script src="js/espacio-soluciones.js?v=geometria-clara-24nov" defer></script>
-  <script src="js/visualizacion-soluciones.js?v=geometria-clara-24nov" defer></script>
+  <script src="js/espacio-soluciones.js?v=vista-inicial-24nov-2" defer></script>
+  <script src="js/visualizacion-soluciones.js?v=vista-inicial-24nov-2" defer></script>
   <script src="js/guia-importacion.js?v=guia-carga-22nov" defer></script>
   <script src="js/practica-modelo.js?v=notacion-23nov" defer></script>
   <script src="js/practica-ui.js?v=ajustes-20nov" defer></script>
   <script src="js/guia-practica.js?v=notacion-23nov" defer></script>
   <script src="js/app.js?v=pie-por-modo" defer></script>
-  <script src="js/ayuda.js?v=geometria-clara-24nov" defer></script>
+  <script src="js/ayuda.js?v=vista-inicial-24nov-2" defer></script>
 </head>
 <body>
   <main class="contenedor">
@@ -261,13 +261,14 @@
     <div class="grafica-contenedor grafica-interactiva">
       <canvas id="grafica-infinitas" width="900" height="480" tabindex="0" aria-label="Gráfica del sistema. Arrastra o usa las flechas para girar."></canvas>
       <div class="zoom-grafica" role="group" aria-label="Zoom de la gráfica">
-        <span id="intervalo-grafica" aria-live="polite">−50 a 50</span>
+        <span id="intervalo-grafica" aria-live="polite">−5 a 5</span>
+        <button type="button" id="reiniciar-vista" aria-label="Volver a la vista inicial: de menos cinco a cinco" title="Vista inicial">↺</button>
         <button type="button" id="enfocar-solucion" aria-label="Enfocar la intersección" title="Enfocar solución" hidden>◎</button>
         <button type="button" id="acercar-grafica" aria-label="Acercar: reducir intervalo" title="Acercar">+</button>
         <button type="button" id="alejar-grafica" aria-label="Alejar: ampliar intervalo" title="Alejar">−</button>
       </div>
     </div>
-    <div id="resumen-punto" aria-live="polite" hidden></div>
+    <div id="resumen-punto" aria-label="Coordenadas del punto" aria-live="polite" hidden></div>
     <p id="estado-grafica" role="status" hidden></p>
     <div class="controles-geometria"><label id="control-destacar">Resaltar <select id="destacar-plano" aria-label="Resaltar una ecuación"><option value="-1">Todos</option></select></label><label><input id="mostrar-normales" type="checkbox"> Mostrar vectores γ</label></div>
     <details><summary>Ver ecuaciones y vectores</summary><div id="leyenda-geometria"></div></details>

@@ -527,3 +527,15 @@ input.celda { cursor: text; }
 .parametro-geometria label { font-weight: 600; align-self: center; }
 #parametros-infinitas input[type=range] { grid-column: 1 / -1; min-height: 32px; margin: 0; accent-color: #18734c; }
 .extremos-parametro { grid-column: 1 / -1; display: flex; justify-content: space-between; font-size: .8rem; color: var(--texto-secundario); }
+
+/* Mantiene los controles cerca del dibujo sin deformar sus proporciones. */
+#grafica-infinitas { max-height: 340px; object-fit: contain; }
+@media(max-width:620px) {
+  .zoom-grafica { top: 5px; right: 5px; }
+  .zoom-grafica span { padding: 0 4px; }
+  .zoom-grafica button { width: 32px; height: 32px; }
+}
+
+@media(max-width:620px) {
+  #grafica-infinitas { height: 300px; max-height: none; object-fit: cover; }
+}

@@ -1,0 +1,1260 @@
+{
+  "analysis": {
+    "groups": [
+      {
+        "code": "AMC",
+        "names": [
+          "ARTURO MONTES"
+        ],
+        "rows": [
+          15,
+          8
+        ],
+        "ids": [
+          [
+            "AMC106",
+            "AMC107",
+            "AMC108",
+            "AMC109",
+            "AMC110",
+            "AMC111",
+            "AMC112",
+            "AMC113",
+            "AMC114",
+            "AMC115",
+            "AMC116",
+            "AMC117",
+            "AMC119",
+            "AMC120",
+            "AMC118"
+          ],
+          [
+            "AMC305",
+            "AMC306",
+            "AMC307",
+            "AMC308",
+            "AMC309",
+            "AMC310",
+            "AMC311",
+            "AMC312"
+          ]
+        ],
+        "dupes": []
+      },
+      {
+        "code": "MEAM",
+        "names": [
+          "Monserrat Elian Alcantara Macias"
+        ],
+        "rows": [
+          15,
+          10
+        ],
+        "ids": [
+          [
+            "MEAM46",
+            "MEAM47",
+            "MEAM48",
+            "MEAM49",
+            "MEAM50",
+            "MEAM51",
+            "MEAM52",
+            "MEAM53",
+            "MEAM54",
+            "MEAM55",
+            "MEAM56",
+            "MEAM57",
+            "MEAM58",
+            "MEAM59",
+            "MEAM60"
+          ],
+          [
+            "MEAM266",
+            "MEAM267",
+            "MEAM268",
+            "MEAM269",
+            "MEAM270",
+            "MEAM271",
+            "MEAM272",
+            "MEAM273",
+            "MEAM274",
+            "MEAM275"
+          ]
+        ],
+        "dupes": []
+      },
+      {
+        "code": "TCL",
+        "names": [
+          "Torres Cortes Leilani"
+        ],
+        "rows": [
+          15,
+          14
+        ],
+        "ids": [
+          [
+            "TCL166",
+            "TCL167",
+            "TCL168",
+            "TCL169",
+            "TCL170",
+            "TCL171",
+            "TCL172",
+            "TCL173",
+            "TCL175",
+            "TCL176",
+            "TCL177",
+            "TCL178",
+            "TCL179",
+            "TCL180"
+          ],
+          [
+            "TCL2",
+            "TCL1",
+            "TCL3",
+            "TCL4",
+            "TCL5",
+            "TCL6",
+            "TCL7",
+            "TCL8",
+            "TCL9",
+            "TCL10"
+          ]
+        ],
+        "dupes": [
+          {
+            "sheet": 2,
+            "id": "TCL1",
+            "row": 15
+          },
+          {
+            "sheet": 2,
+            "id": "TCL2",
+            "row": 16
+          },
+          {
+            "sheet": 2,
+            "id": "TCL3",
+            "row": 17
+          },
+          {
+            "sheet": 2,
+            "id": "TCL4",
+            "row": 18
+          },
+          {
+            "sheet": 1,
+            "id": "TCL173",
+            "row": 196
+          }
+        ]
+      },
+      {
+        "code": "XPRL",
+        "names": [
+          "Ximena Patricia Rubio Lira"
+        ],
+        "rows": [
+          15,
+          10
+        ],
+        "ids": [
+          [
+            "XPRL181",
+            "XPRL182",
+            "XPRL183",
+            "XPRL184",
+            "XPRL185",
+            "XPRL186",
+            "XPRL187",
+            "XPRL188",
+            "XPRL189",
+            "XPRL190",
+            "XPRL191",
+            "XPRL192",
+            "XPRL193",
+            "XPRL194",
+            "XPRL195"
+          ],
+          [
+            "XPRL256",
+            "XPRL257",
+            "XPRL258",
+            "XPRL259",
+            "XPRL260",
+            "XPRL261",
+            "XPRL262",
+            "XPRL263",
+            "XPRL264",
+            "XPRL265"
+          ]
+        ],
+        "dupes": []
+      },
+      {
+        "code": "PVCY",
+        "names": [
+          "Puga Valencia Carlos Yael"
+        ],
+        "rows": [
+          15,
+          10
+        ],
+        "ids": [
+          [
+            "PVCY91",
+            "PVCY92",
+            "PVCY93",
+            "PVCY94",
+            "PVCY95",
+            "PVCY96",
+            "PVCY97",
+            "PVCY98",
+            "PVCY99",
+            "PVCY100",
+            "PVCY101",
+            "PVCY102",
+            "PVCY103",
+            "PVCY104",
+            "PVCY105"
+          ],
+          [
+            "PVCY277",
+            "PVCY278",
+            "PVCY279",
+            "PVCY280",
+            "PVCY281",
+            "PVCY282",
+            "PVCY283",
+            "PVCY284",
+            "PVCY285",
+            "PVCY286"
+          ]
+        ],
+        "dupes": []
+      },
+      {
+        "code": "VMV",
+        "names": [
+          "VLADIMIR MELCHOR VALERIO"
+        ],
+        "rows": [
+          0,
+          10
+        ],
+        "ids": [
+          [],
+          [
+            "VMV295",
+            "VMV296",
+            "VMV297",
+            "VMV298",
+            "VMV299",
+            "VMV300",
+            "VMV301",
+            "VMV302",
+            "VMV303",
+            "VMV304"
+          ]
+        ],
+        "dupes": []
+      },
+      {
+        "code": "OML",
+        "names": [
+          "OSWALDO MORENO LORENZO",
+          "Oswaldo Moreno Lorenzo",
+          "Oswaldo Moreno lorenzo"
+        ],
+        "rows": [
+          9,
+          8
+        ],
+        "ids": [
+          [
+            "OML212",
+            "OML213",
+            "OML214",
+            "OML215",
+            "OML216",
+            "OML217",
+            "OML218",
+            "OML219",
+            "OML222"
+          ],
+          [
+            "OML112",
+            "OML113",
+            "OML114",
+            "OML115",
+            "OML116",
+            "OML117",
+            "OML118",
+            "OML119"
+          ]
+        ],
+        "dupes": []
+      },
+      {
+        "code": "PLB",
+        "names": [
+          "Paola Liñan"
+        ],
+        "rows": [
+          15,
+          2
+        ],
+        "ids": [
+          [
+            "PLB121",
+            "PLB122",
+            "PLB123",
+            "PLB124",
+            "PLB125",
+            "PLB126",
+            "PLB127",
+            "PLB128",
+            "PLB129",
+            "PLB130",
+            "PLB131",
+            "PLB132",
+            "PLB133",
+            "PLB134",
+            "PLB135"
+          ],
+          [
+            "PLB285",
+            "PLB288"
+          ]
+        ],
+        "dupes": []
+      },
+      {
+        "code": "FVP",
+        "names": [
+          "Fernanda Velasco Pérez",
+          "Fernanda Velasco Perez",
+          "Velasco Pérez Fernanda",
+          "Velasco Perez Fernanda"
+        ],
+        "rows": [
+          6,
+          2
+        ],
+        "ids": [
+          [
+            "FVP7",
+            "FVP1",
+            "FVP2",
+            "FVP3",
+            "FVP4"
+          ],
+          [
+            "FVP14",
+            "FVP15"
+          ]
+        ],
+        "dupes": [
+          {
+            "sheet": 1,
+            "id": "FVP04",
+            "row": 207
+          }
+        ]
+      },
+      {
+        "code": "KNLI",
+        "names": [
+          "Karla Naomi Luna Ibañez",
+          "Karla Naomi Luna"
+        ],
+        "rows": [
+          15,
+          1
+        ],
+        "ids": [
+          [
+            "KNLI196",
+            "KNLI197",
+            "KNLI198",
+            "KNLI199",
+            "KNLI200",
+            "KNLI201",
+            "KNLI202",
+            "KNLI203",
+            "KNLI204",
+            "KNLI206",
+            "KNLI207",
+            "KNLI208",
+            "KNLI209",
+            "KNLI210",
+            "KNLI205"
+          ],
+          [
+            "KNLI203"
+          ]
+        ],
+        "dupes": []
+      },
+      {
+        "code": "ANND",
+        "names": [
+          "Naomi Nuño"
+        ],
+        "rows": [
+          14,
+          3
+        ],
+        "ids": [
+          [
+            "ANND226",
+            "ANND227",
+            "ANND228",
+            "ANND229",
+            "ANND230",
+            "ANND231",
+            "ANND232",
+            "ANND233",
+            "ANND235",
+            "ANND236",
+            "ANND237",
+            "ANND238",
+            "ANND239",
+            "ANND240"
+          ],
+          [
+            "ANND231C",
+            "ANND233C",
+            "ANND241"
+          ]
+        ],
+        "dupes": []
+      },
+      {
+        "code": "CBC",
+        "names": [
+          "Camila Barrera",
+          "CAMILA BARRERA"
+        ],
+        "rows": [
+          12,
+          3
+        ],
+        "ids": [
+          [
+            "CBC16",
+            "CBC18",
+            "CBC19",
+            "CBC20",
+            "CBC21",
+            "CBC22",
+            "CBC23",
+            "CBC24",
+            "CBC25",
+            "CBC17",
+            "CBC26",
+            "CBC27"
+          ],
+          [
+            "CBC28",
+            "CBC29",
+            "CBC30"
+          ]
+        ],
+        "dupes": []
+      },
+      {
+        "code": "BBAY",
+        "names": [
+          "Bernabe Bernabe Ángel Yahir"
+        ],
+        "rows": [
+          15,
+          0
+        ],
+        "ids": [
+          [
+            "BBAY2",
+            "BBAY3",
+            "BBAY4",
+            "BBAY5",
+            "BBAY6",
+            "BBAY7",
+            "BBAY11",
+            "BBAY12",
+            "BBAY13",
+            "BBAY15",
+            "BBAY1",
+            "BBAY8",
+            "BBAY9",
+            "BBAY10",
+            "BBAY14"
+          ],
+          []
+        ],
+        "dupes": []
+      },
+      {
+        "code": "CAE",
+        "names": [
+          "Camacho Angel",
+          "camacho Angel"
+        ],
+        "rows": [
+          15,
+          0
+        ],
+        "ids": [
+          [
+            "CAE151",
+            "CAE152",
+            "CAE153",
+            "CAE154",
+            "CAE155",
+            "CAE156",
+            "CAE157",
+            "CAE158",
+            "CAE159",
+            "CAE160",
+            "CAE161",
+            "CAE162",
+            "CAE163",
+            "CAE164",
+            "CAE165"
+          ],
+          []
+        ],
+        "dupes": []
+      },
+      {
+        "code": "CAM",
+        "names": [
+          "Cristian Anastasio"
+        ],
+        "rows": [
+          15,
+          0
+        ],
+        "ids": [
+          [
+            "CAM152",
+            "CAM153",
+            "CAM154",
+            "CAM155",
+            "CAM151",
+            "CAM156",
+            "CAM157",
+            "CAM158",
+            "CAM159",
+            "CAM160",
+            "CAM161",
+            "CAM162",
+            "CAM163",
+            "CAM164",
+            "CAM165"
+          ],
+          []
+        ],
+        "dupes": []
+      },
+      {
+        "code": "JAMR",
+        "names": [
+          "Mota Rios José Alonso"
+        ],
+        "rows": [
+          15,
+          0
+        ],
+        "ids": [
+          [
+            "JAMR1",
+            "JAMR2",
+            "JAMR3",
+            "JAMR4",
+            "JAMR5",
+            "JAMR6",
+            "JAMR7",
+            "JAMR8",
+            "JAMR9",
+            "JAMR10",
+            "JAMR11",
+            "JAMR12",
+            "JAMR13",
+            "JAMR14",
+            "JAMR15"
+          ],
+          []
+        ],
+        "dupes": []
+      },
+      {
+        "code": "RVS",
+        "names": [
+          "Rafael Villasana"
+        ],
+        "rows": [
+          15,
+          0
+        ],
+        "ids": [
+          [
+            "RVS136",
+            "RVS137",
+            "RVS138",
+            "RVS139",
+            "RVS140",
+            "RVS141",
+            "RVS142",
+            "RVS143",
+            "RVS144",
+            "RVS145",
+            "RVS146",
+            "RVS147",
+            "RVS148",
+            "RVS149",
+            "RVS150"
+          ],
+          []
+        ],
+        "dupes": []
+      },
+      {
+        "code": "YNGR",
+        "names": [
+          "YURIDIA NICOLE GONZÁLEZ RAYA"
+        ],
+        "rows": [
+          15,
+          0
+        ],
+        "ids": [
+          [
+            "YNGR1",
+            "YNGR2",
+            "YNGR3",
+            "YNGR4",
+            "YNGR5",
+            "YNGR6",
+            "YNGR7",
+            "YNGR8",
+            "YNGR9",
+            "YNGR10",
+            "YNGR11",
+            "YNGR12",
+            "YNGR13",
+            "YNGR14",
+            "YNGR15"
+          ],
+          []
+        ],
+        "dupes": []
+      },
+      {
+        "code": "AJMC",
+        "names": [
+          ""
+        ],
+        "rows": [
+          15,
+          0
+        ],
+        "ids": [
+          [
+            "AJMC260",
+            "AJMC261",
+            "AJMC262",
+            "AJMC263",
+            "AJMC264",
+            "AJMC265",
+            "AJMC266",
+            "AJMC267",
+            "AJMC268",
+            "AJMC269",
+            "AJMC270",
+            "AJMC271",
+            "AJMC272",
+            "AJMC273",
+            "AJMC274"
+          ],
+          []
+        ],
+        "dupes": []
+      }
+    ],
+    "reviews": [
+      {
+        "code": "AMC",
+        "names": [
+          "ARTURO"
+        ],
+        "cases": [
+          [],
+          [
+            "AMC305",
+            "AMC306",
+            "MEAM266",
+            "MEAM267",
+            "MEAM268",
+            "MEAM269",
+            "MEAM270",
+            "MEAM271",
+            "TCL2",
+            "TCL1",
+            "TCL3",
+            "TCL4",
+            "AMC307"
+          ]
+        ],
+        "mentions": [
+          0,
+          51
+        ]
+      },
+      {
+        "code": "TCL",
+        "names": [
+          "LEILANI"
+        ],
+        "cases": [
+          [],
+          [
+            "AMC308",
+            "MEAM272",
+            "MEAM273",
+            "MEAM274",
+            "XPRL256",
+            "XPRL257",
+            "PVCY277",
+            "PVCY278",
+            "PVCY279",
+            "XPRL258",
+            "PVCY280",
+            "XPRL259",
+            "PVCY281",
+            "PVCY282",
+            "PVCY283",
+            "PVCY284",
+            "PVCY285",
+            "XPRL260",
+            "PVCY286",
+            "MEAM275",
+            "TCL5",
+            "XPRL261",
+            "TCL6",
+            "TCL7",
+            "TCL8",
+            "XPRL262",
+            "TCL9",
+            "TCL10",
+            "XPRL263",
+            "AMC310",
+            "VMV295",
+            "VMV296",
+            "VMV297",
+            "VMV298",
+            "VMV299",
+            "XPRL264",
+            "VMV300",
+            "VMV301",
+            "VMV302",
+            "VMV303",
+            "VMV304",
+            "XPRL265",
+            "OML112",
+            "OML113",
+            "AMC311",
+            "OML114",
+            "OML115",
+            "OML116",
+            "OML117",
+            "OML118",
+            "OML119",
+            "AMC312"
+          ]
+        ],
+        "mentions": [
+          0,
+          156
+        ]
+      },
+      {
+        "code": "EMMANUEL",
+        "names": [
+          "Emmanuel"
+        ],
+        "cases": [
+          [],
+          [
+            "ANND231C",
+            "ANND233C",
+            "ANND241"
+          ]
+        ],
+        "mentions": [
+          0,
+          9
+        ]
+      },
+      {
+        "code": "BBAY",
+        "names": [
+          "Angel Yahir",
+          "Angel Bernabe"
+        ],
+        "cases": [
+          [
+            "AMC106",
+            "AMC107",
+            "AMC108",
+            "BBAY5",
+            "BBAY6",
+            "BBAY7",
+            "BBAY12",
+            "BBAY13",
+            "BBAY15",
+            "BBAY1",
+            "BBAY8",
+            "BBAY10",
+            "BBAY14",
+            "CBC18",
+            "CBC19",
+            "CBC17",
+            "PLB121",
+            "PLB122",
+            "PLB123",
+            "PLB124",
+            "PLB125",
+            "PLB126",
+            "PLB127",
+            "PLB128",
+            "PLB129",
+            "PLB130",
+            "PLB131",
+            "PLB132",
+            "PLB133",
+            "PLB134",
+            "PLB135",
+            "TCL173",
+            "TCL175",
+            "TCL176",
+            "TCL177",
+            "TCL178",
+            "TCL179",
+            "TCL180",
+            "FVP1",
+            "YNGR4"
+          ],
+          []
+        ],
+        "mentions": [
+          120,
+          0
+        ]
+      },
+      {
+        "code": "LENIN",
+        "names": [
+          "Lenin Mendez"
+        ],
+        "cases": [
+          [
+            "AMC109",
+            "AMC110",
+            "CAM162",
+            "CAM163",
+            "CAM164",
+            "CAM165",
+            "PVCY91",
+            "PVCY92",
+            "PVCY93",
+            "PVCY94",
+            "PVCY95",
+            "PVCY96",
+            "PVCY97",
+            "PVCY98",
+            "PVCY99",
+            "PVCY100",
+            "PVCY101",
+            "PVCY102",
+            "PVCY103",
+            "PVCY104",
+            "PVCY105",
+            "TCL169",
+            "TCL170",
+            "TCL171",
+            "TCL172",
+            "TCL173",
+            "XPRL181",
+            "XPRL182",
+            "XPRL183",
+            "XPRL184",
+            "XPRL185",
+            "XPRL186",
+            "XPRL187",
+            "XPRL188",
+            "XPRL189",
+            "XPRL190",
+            "XPRL191"
+          ],
+          []
+        ],
+        "mentions": [
+          111,
+          0
+        ]
+      },
+      {
+        "code": "CAM",
+        "names": [
+          "Cristian Anastasio"
+        ],
+        "cases": [
+          [
+            "AMC111",
+            "AMC112",
+            "AMC113",
+            "AMC114",
+            "AMC115",
+            "AMC120",
+            "AMC118",
+            "CAM152",
+            "CAM153",
+            "CAM154",
+            "CAM155",
+            "CAM151",
+            "KNLI196",
+            "KNLI197",
+            "KNLI198",
+            "KNLI199",
+            "KNLI200",
+            "KNLI201",
+            "KNLI202",
+            "KNLI203",
+            "KNLI204",
+            "KNLI206",
+            "KNLI207",
+            "KNLI208",
+            "KNLI209",
+            "KNLI210",
+            "KNLI205",
+            "MEAM53",
+            "MEAM56",
+            "MEAM57",
+            "MEAM58",
+            "MEAM59",
+            "MEAM60",
+            "RVS148",
+            "RVS149",
+            "RVS150",
+            "TCL166",
+            "TCL167",
+            "TCL168"
+          ],
+          []
+        ],
+        "mentions": [
+          117,
+          0
+        ]
+      },
+      {
+        "code": "CBC",
+        "names": [
+          "Camila Barrera",
+          "Camila barrera"
+        ],
+        "cases": [
+          [
+            "AMC116",
+            "AMC117",
+            "AMC119",
+            "BBAY2",
+            "BBAY3",
+            "BBAY4",
+            "BBAY11",
+            "BBAY9",
+            "CAE156",
+            "CAE157",
+            "CAE158",
+            "CAE159",
+            "CAE160",
+            "CAE161",
+            "CAE162",
+            "CAE163",
+            "CAE164",
+            "CAE165",
+            "CBC16",
+            "CBC20",
+            "CBC21",
+            "CBC22",
+            "CBC23",
+            "CBC24",
+            "CBC25",
+            "CBC26",
+            "CBC27",
+            "CAM156",
+            "CAM157",
+            "CAM158",
+            "CAM159",
+            "CAM160",
+            "CAM161",
+            "FVP7",
+            "MEAM46",
+            "MEAM47",
+            "MEAM48",
+            "MEAM49",
+            "MEAM50",
+            "MEAM51",
+            "MEAM52",
+            "MEAM54",
+            "MEAM55",
+            "JAMR5",
+            "JAMR6",
+            "JAMR7",
+            "JAMR8",
+            "JAMR9",
+            "JAMR10",
+            "JAMR11",
+            "JAMR12",
+            "JAMR13",
+            "JAMR14",
+            "JAMR15",
+            "ANND227",
+            "ANND228",
+            "ANND229",
+            "ANND230",
+            "ANND235",
+            "ANND236",
+            "ANND237",
+            "ANND238",
+            "ANND239",
+            "ANND240",
+            "XPRL192",
+            "XPRL193",
+            "XPRL194",
+            "XPRL195",
+            "YNGR1",
+            "YNGR2",
+            "YNGR3",
+            "YNGR5",
+            "YNGR6",
+            "YNGR7",
+            "YNGR8",
+            "YNGR9",
+            "YNGR10",
+            "YNGR11",
+            "YNGR12",
+            "YNGR13",
+            "YNGR14",
+            "YNGR15",
+            "AJMC260",
+            "AJMC261",
+            "AJMC262",
+            "AJMC263",
+            "AJMC264",
+            "AJMC265",
+            "AJMC266",
+            "AJMC267",
+            "AJMC268",
+            "AJMC269",
+            "AJMC270",
+            "AJMC271",
+            "AJMC272",
+            "AJMC273",
+            "AJMC274"
+          ],
+          []
+        ],
+        "mentions": [
+          291,
+          0
+        ]
+      },
+      {
+        "code": "CAE",
+        "names": [
+          "Camacho Angel",
+          "camacho angel",
+          "camacho Angel"
+        ],
+        "cases": [
+          [
+            "CAE151",
+            "CAE152",
+            "CAE153",
+            "CAE154",
+            "CAE155",
+            "ANND231",
+            "ANND232",
+            "ANND233",
+            "OML212",
+            "OML213",
+            "OML214",
+            "OML215",
+            "OML216",
+            "OML217",
+            "OML218",
+            "OML219",
+            "OML222",
+            "RVS136",
+            "RVS137",
+            "RVS138",
+            "RVS139",
+            "RVS140",
+            "RVS141",
+            "RVS142",
+            "RVS143",
+            "RVS144",
+            "RVS145",
+            "RVS146",
+            "RVS147"
+          ],
+          []
+        ],
+        "mentions": [
+          87,
+          0
+        ]
+      },
+      {
+        "code": "JAMR",
+        "names": [
+          "Alonso Mota"
+        ],
+        "cases": [
+          [
+            "JAMR1",
+            "JAMR2",
+            "JAMR3",
+            "JAMR4",
+            "ANND226"
+          ],
+          []
+        ],
+        "mentions": [
+          15,
+          0
+        ]
+      },
+      {
+        "code": "ANND",
+        "names": [
+          "Naomi Nuño"
+        ],
+        "cases": [
+          [
+            "FVP2",
+            "FVP3",
+            "FVP4"
+          ],
+          []
+        ],
+        "mentions": [
+          12,
+          0
+        ]
+      }
+    ],
+    "anomalies": [],
+    "sheetStats": [
+      {
+        "sheet": "Respuestas de formulario 1",
+        "raw": 251,
+        "unique": 249,
+        "missingProcedure": 0,
+        "missingResult": 0,
+        "reviewed": 249,
+        "matchTrue": 246
+      },
+      {
+        "sheet": "Respuestas de formulario 2",
+        "raw": 81,
+        "unique": 77,
+        "missingProcedure": 0,
+        "missingResult": 0,
+        "reviewed": 68,
+        "matchTrue": 67
+      }
+    ]
+  },
+  "checks": [
+    {
+      "sheet": "Respuestas de formulario 2",
+      "reviewDifferent": [],
+      "pending": [
+        "AMC309",
+        "285PLB",
+        "288PLB",
+        "FVP14",
+        "FVP15",
+        "KNLI203",
+        "CBC028",
+        "CBC029",
+        "CBC030"
+      ],
+      "flags": [
+        {
+          "id": "AMC309",
+          "coinciden": "FALSE"
+        },
+        {
+          "id": "288PLB",
+          "coinciden": "FALSE"
+        },
+        {
+          "id": "FVP14",
+          "coinciden": "FALSE"
+        },
+        {
+          "id": "FVP15",
+          "coinciden": "FALSE"
+        },
+        {
+          "id": "KNLI203",
+          "coinciden": "FALSE"
+        },
+        {
+          "id": "ANND231C",
+          "coinciden": "FALSE"
+        },
+        {
+          "id": "ANND233C",
+          "coinciden": "FALSE"
+        },
+        {
+          "id": "CBC028",
+          "coinciden": "FALSE"
+        },
+        {
+          "id": "CBC029",
+          "coinciden": "FALSE"
+        },
+        {
+          "id": "CBC030",
+          "coinciden": "FALSE"
+        }
+      ]
+    },
+    {
+      "sheet": "Respuestas de formulario 1",
+      "reviewDifferent": [],
+      "pending": [],
+      "flags": [
+        {
+          "id": "RVS149",
+          "coinciden": "FALSE"
+        },
+        {
+          "id": "RVS150",
+          "coinciden": "FALSE"
+        },
+        {
+          "id": "TCL168",
+          "coinciden": "FALSE"
+        }
+      ]
+    }
+  ]
+}

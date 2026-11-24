@@ -1,0 +1,267 @@
+                TLATO CALCULADORA
+                Reporte de participaciones | Corte: 24 de noviembre de 2026
+
+
+
+
+ Reporte de participaciones
+ Resolución, revisión y desarrollo de la calculadora
+ Se revisaron las cuatro pestañas del archivo. Los ejercicios están en Respuestas de formulario 1 y Respuestas
+ de formulario 2; las pestañas Hoja 1 y Hoja 2 no aportan IDs de ejercicios al conteo.
+
+   Ejercicios distintos                               Problemas con revisor                     Integrantes identificados
+
+
+   326                                                317 de 326 (97.2%)                        20
+
+
+
+ Estadísticas generales
+
+   Indicador                                                         Hoja 1 de            Hoja 2 de                 Total
+                                                                     respuestas           respuestas
+
+
+   Registros con ID                                                  251                  81                        332
+
+   IDs distintos por hoja                                            249                  77                        326
+
+   Repeticiones excluidas                                            2                    4                         6
+
+   Problemas con revisor                                             249                  68                        317
+
+   Sin revisor registrado                                            0                    9                         9
+
+   Coincidencia marcada en columna M                                 246                  67                        313
+
+
+
+ Lectura de la participación
+ Producción registrada. Monserrat, Carlos Yael y Ximena tienen 25 ejercicios cada uno; Leilani tiene 24 y Arturo
+ 23. Este indicador mide IDs distintos cargados, no dificultad ni tiempo invertido.
+
+ Revisión. Camila concentra 97 asignaciones de revisión y Leilani 52. Se identifican 318 participaciones de
+ revisión sobre 317 problemas: TCL173 tiene dos revisores distintos en sus dos registros.
+
+ Desarrollo. La programación se atribuye a Nicole y Alonso; el desarrollo de la base de datos a Cristian y
+ Camacho, conforme a la información proporcionada. La hoja no permite cuantificar horas, cambios de código ni
+ entregables de estas tareas.
+
+ Los resultados y revisiones se contabilizan como participación registrada. Una casilla de coincidencia o el nombre de un revisor no
+ sustituye una comprobación matemática independiente.
+
+
+
+
+Fuente: Registro de Procedimientos - Clase | Conteo por ID, no por horas de trabajo                                                    1
+                TLATO CALCULADORA
+                Reporte de participaciones | Corte: 24 de noviembre de 2026
+
+
+
+
+ Integrantes y actividad realizada
+ Los roles pueden combinarse. Resolución y revisión se sustentan en el registro; programación y base de datos, en la asignación
+ indicada por el solicitante.
+
+   Integrantes                                                      Actividad realizada
+
+
+   Aidan Jusafat Martinez                                           Realizó problemas
+
+   Arturo Montes Cuervo                                             Realizó problemas; Revisó problemas
+
+   Barrera Chávez Camila                                            Realizó problemas; Revisó problemas
+
+   Bernabe Bernabe Ángel Yahir                                      Realizó problemas; Revisó problemas
+
+   Camacho Angel Emmanuel                                           Realizó problemas; Revisó problemas; Desarrollo de base de datos
+
+   Cristian Anastasio                                               Realizó problemas; Revisó problemas; Desarrollo de base de datos
+
+   Fernanda Velasco Pérez                                           Realizó problemas
+
+   José Alonso Mota Rios                                            Programación; Realizó problemas; Revisó problemas
+
+   Karla Naomi Luna Ibañez                                          Realizó problemas
+
+   Monserrat Elian Alcantara Macias                                 Realizó problemas
+
+   Méndez Sánchez Lenin Uziel                                       Revisó problemas
+
+   Nuño Díaz Alexia Naomi                                           Realizó problemas; Revisó problemas
+
+   Oswaldo Moreno Lorenzo                                           Realizó problemas
+
+   Paola Liñan                                                      Realizó problemas
+
+   Puga Valencia Carlos Yael                                        Realizó problemas
+
+   Rafael Villasana                                                 Realizó problemas
+
+   Torres Cortes Leilani                                            Realizó problemas; Revisó problemas
+
+   Vladimir Melchor Valerio                                         Realizó problemas
+
+   Ximena Patricia Rubio Lira                                       Realizó problemas
+
+   Yuridia Nicole González Raya                                     Programación; Realizó problemas
+
+
+ Identidades conciliadas: AJMC = Aidan Jusafat Martinez; “Emmanuel” y “Camacho Angel” = Camacho Angel Emmanuel; “Angel Yahir” y
+ “Angel Bernabe” = Bernabe Bernabe Ángel Yahir. Los nombres completos proporcionados en la conversación prevalecen sobre las
+ abreviaturas de la hoja.
+
+
+
+
+Fuente: Registro de Procedimientos - Clase | Conteo por ID, no por horas de trabajo                                                    2
+                TLATO CALCULADORA
+                Reporte de participaciones | Corte: 24 de noviembre de 2026
+
+
+
+
+ Participación por integrante
+ H1 y H2 corresponden a las hojas de respuestas 1 y 2. “Realizó” cuenta IDs distintos en cada hoja; “Revisó” cuenta problemas distintos
+ atribuidos a la persona.
+
+   Integrantes                                    Letras       Realizó        Realizó   Total       Revisó        Revisó        Total
+                                                  del ID       H1             H2        realizó     H1            H2            revisó
+
+   Monserrat Elian Alcantara Macias               MEAM         15             10        25          0             0             0
+
+
+   Puga Valencia Carlos Yael                      PVCY         15             10        25          0             0             0
+
+
+   Ximena Patricia Rubio Lira                     XPRL         15             10        25          0             0             0
+
+
+   Torres Cortes Leilani                          TCL          14             10        24          0             52            52
+
+
+   Arturo Montes Cuervo                           AMC          15             8         23          0             13            13
+
+
+   Nuño Díaz Alexia Naomi                         ANND         14             3         17          3             0             3
+
+
+   Oswaldo Moreno Lorenzo                         OML          9              8         17          0             0             0
+
+
+   Paola Liñan                                    PLB          15             2         17          0             0             0
+
+
+   Karla Naomi Luna Ibañez                        KNLI         15             1         16          0             0             0
+
+
+   Aidan Jusafat Martinez                         AJMC         15             0         15          0             0             0
+
+
+   Barrera Chávez Camila                          CBC          12             3         15          97            0             97
+
+
+   Bernabe Bernabe Ángel Yahir                    BBAY         15             0         15          40            0             40
+
+
+   Camacho Angel Emmanuel                         CAE          15             0         15          29            3             32
+
+
+   Cristian Anastasio                             CAM          15             0         15          39            0             39
+
+
+   José Alonso Mota Rios                          JAMR         15             0         15          5             0             5
+
+
+   Rafael Villasana                               RVS          15             0         15          0             0             0
+
+
+   Yuridia Nicole González Raya                   YNGR         15             0         15          0             0             0
+
+
+   Vladimir Melchor Valerio                       VMV          0              10        10          0             0             0
+
+
+   Fernanda Velasco Pérez                         FVP          5              2         7           0             0             0
+
+
+   Méndez Sánchez Lenin Uziel                     Sin ID       0              0         0           37            0             37
+
+
+   TOTAL                                                       249            77        326         250           68            318
+
+
+ Un cero significa que no se encontró una atribución en esa categoría; no demuestra ausencia de trabajo. Lenin figura con 37 revisiones y
+ ningún ID como autor. Nicole y Alonso también tienen 15 problemas realizados cada uno, además de su rol de programación.
+
+
+
+Fuente: Registro de Procedimientos - Clase | Conteo por ID, no por horas de trabajo                                                         3
+                TLATO CALCULADORA
+                Reporte de participaciones | Corte: 24 de noviembre de 2026
+
+
+
+
+ Los totales de realización suman las dos hojas como conjuntos de actividad distintos. KNLI203 aparece en ambas; ANND231C y
+ ANND233C se conservan como variantes distintas de los IDs sin sufijo. No se verificó si representan el mismo problema matemático.
+
+
+
+
+Fuente: Registro de Procedimientos - Clase | Conteo por ID, no por horas de trabajo                                                  4
+                TLATO CALCULADORA
+                Reporte de participaciones | Corte: 24 de noviembre de 2026
+
+
+
+
+ Hallazgos y criterios de conteo
+ 1. Duplicados que afectan el total
+
+   Hoja                                          IDs repetidos                           Efecto
+
+
+   Respuestas de formulario 1                    FVP04; TCL173                           251 filas -> 249 IDs distintos
+
+   Respuestas de formulario 2                    TCL1; TCL2; TCL3; TCL4                  81 filas -> 77 IDs distintos
+
+
+ TCL173 tiene revisiones atribuidas a Lenin y a Ángel Yahir en registros distintos. Se cuenta una sola vez como
+ ejercicio realizado y una vez para cada revisor. Las repeticiones restantes no aumentan el crédito individual de
+ resolución ni de revisión.
+
+ 2. Casos pendientes de atribución de revisión
+ Hoja 2 de respuestas: AMC309, 285PLB, 288PLB, FVP14, FVP15, KNLI203, CBC028, CBC029 y CBC030.
+ Todos los IDs distintos de la hoja 1 tienen al menos un revisor registrado.
+
+ 3. Estado declarado de los resultados
+ La columna M marca coincidencia en 313 de los 326 IDs distintos (96.0%). Los otros 13 están en FALSE. Este
+ valor se informa tal como está registrado: puede reflejar una discrepancia o una validación aún pendiente; no se
+ interpreta automáticamente como error matemático.
+
+ Hoja 1: RVS149, RVS150 y TCL168.
+ Hoja 2: AMC309, 288PLB, FVP14, FVP15, KNLI203, ANND231C, ANND233C, CBC028, CBC029 y CBC030.
+
+ 4. Método y alcance
+ Se agruparon IDs por sus letras, independientemente de que el número aparezca antes o después. Se
+ normalizaron espacios, guiones, mayúsculas y ceros iniciales; se conservaron sufijos de variante como C. Se
+ excluyeron filas sin ID y repeticiones del mismo ID dentro de cada hoja.
+
+ Las columnas O, Q y R repiten el mismo nombre dentro de cada registro consultado. No se multiplicó por tres la
+ revisión: se contó una sola participación por persona, ID y hoja. Los cambios de nombre, orden de apellidos y
+ abreviaturas se conciliaron con los nombres del registro y las aclaraciones del solicitante.
+
+ Los 326 IDs distintos tienen enlaces tanto de procedimiento como de resultado en las columnas F y G. Se
+ comprobó su presencia, no el acceso ni el contenido de todos los archivos enlazados. No se modificó el Google
+ Sheet durante este análisis.
+
+ Fuente consultada: Registro de Procedimientos - Clase. Corte de consulta: 24/11/2026.
+ Abrir el registro original de Google Sheets.
+
+
+
+
+Fuente: Registro de Procedimientos - Clase | Conteo por ID, no por horas de trabajo                                       5
+
