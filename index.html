@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,600,0,0" />
-  <link rel="stylesheet" href="css/estilos.css?v=fracciones-unificadas-24nov">
+  <link rel="stylesheet" href="css/estilos.css?v=importacion-corregible-24nov">
   <script src="js/tema.js" defer></script>
   <script src="js/navegacion.js" defer></script>
   <script src="js/configuracion.js?v=limites-2" defer></script>
@@ -23,13 +23,15 @@
   <script src="js/visualizacion-soluciones.js?v=conjunto-solucion-24nov" defer></script>
   <script src="js/guia-importacion.js?v=guia-carga-22nov" defer></script>
   <script src="js/practica-modelo.js?v=modos-24nov" defer></script>
-  <script src="js/practica-ui.js?v=fracciones-unificadas-24nov" defer></script>
+  <script src="js/practica-ui.js?v=importacion-corregible-24nov" defer></script>
   <script src="js/guia-practica.js?v=notacion-23nov" defer></script>
-  <script src="js/app.js?v=fracciones-unificadas-24nov" defer></script>
-  <script src="js/matrices-cuadradas.js?v=fracciones-unificadas-24nov" defer></script>
-  <script src="js/unidad2-vectoriales.js?v=1" defer></script>
-  <script src="js/ayuda.js?v=conjunto-solucion-24nov" defer></script>
-  <script src="js/unidad3-ortogonalidad.js?v=1" defer></script>
+  <script src="js/importar-matriz.js?v=1" defer></script>
+  <script src="js/app.js?v=importacion-corregible-24nov" defer></script>
+  <script src="js/matrices-cuadradas.js?v=importacion-corregible-24nov" defer></script>
+  <script src="js/unidad2.js?v=1" defer></script>
+  <script src="js/editor-vectores.js?v=1" defer></script>
+  <script src="js/unidad2-vectoriales.js?v=interpretaciones-24nov" defer></script>
+  <script src="js/unidad3-ortogonalidad.js?v=editor-24nov" defer></script>
   <script src="js/ayuda.js?v=conjunto-solucion-24nov" defer></script>
 </head>
 <body>
@@ -119,7 +121,7 @@
     </section>
 
     <section id="panel-cuadrada" class="panel" hidden aria-labelledby="titulo-cuadrada">
-      <div class="carga-editor"><div><h2 id="titulo-cuadrada"></h2><p class="ayuda"></p></div><span id="dimensiones-cuadrada" class="contador-matriz" role="status">3 filas · 3 columnas</span></div>
+      <div class="carga-editor"><button id="btn-subir-cuadrada" type="button" class="boton secundario"><span class="material-symbols-outlined" aria-hidden="true">upload_file</span> Cargar archivo</button><div><h2 id="titulo-cuadrada"></h2><p class="ayuda"></p></div><span id="dimensiones-cuadrada" class="contador-matriz" role="status">3 filas · 3 columnas</span></div>
       <div class="cuerpo-editor">
         <div class="desplazamiento-matriz" tabindex="0" aria-label="Editor de matriz cuadrada"><div class="marco-cuadrada"><table id="tabla-cuadrada" aria-label="Matriz cuadrada"></table></div></div>
         <div class="acciones-dimensiones" role="group" aria-label="Cambiar tamaño de la matriz cuadrada">
@@ -276,6 +278,9 @@
         <div id="u3-verificacion" class="u2-base-lista"></div>
       </section>
     </div>
+    <footer>
+      <p id="credito-proyecto">Proyecto del grupo 2AM2</p>
+      <p id="introduccion-practica" hidden>Recuerda: aplica una sola operación elemental por paso y conserva las filas que no cambian. Combinar operaciones o saltarte pasos puede restarte puntos.</p>
     </footer>
   </main>
 

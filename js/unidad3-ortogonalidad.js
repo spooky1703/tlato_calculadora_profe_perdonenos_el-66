@@ -83,11 +83,10 @@
         celda.className = 'celda';
         celda.setAttribute('aria-label', `${nombre}, componente ${compIdx + 1}`);
         try {
-          const num = F.desdeTexto(val);
-          celda.append(fraccionVisual(num));
+          celda.append(window.FormatoMatematico.expresion(val));
         } catch {
-          celda.textContent = val || '0';
-          celda.classList.add('invalida');
+          celda.textContent = val || 'Vacío';
+          celda.classList.add('invalida'); celda.setAttribute('aria-invalid', 'true');
         }
         celda.addEventListener('click', () => editarComponente(idxVector, compIdx, celda));
         corchetes.append(celda);
@@ -100,39 +99,9 @@
 
   function editarComponente(idxVector, compIdx, boton) {
     const arreglo = vectoresS[idxVector];
-    const entrada = document.createElement('input');
-    entrada.className = 'celda';
-    entrada.maxLength = 128;
-    entrada.value = arreglo[compIdx];
-    entrada.defaultValue = arreglo[compIdx];
-    entrada.autocomplete = 'off';
-
-    boton.replaceWith(entrada);
-    entrada.focus();
-    entrada.select();
-
-    let guardado = false;
-    const guardar = () => {
-      if (guardado) return;
-      guardado = true;
-      arreglo[compIdx] = entrada.value.trim() === '' ? '0' : entrada.value.trim();
-      errorEl.hidden = true;
-      try {
-        F.desdeTexto(arreglo[compIdx]);
-      } catch (err) {
-        mostrarError(`α${idxVector + 1}, fila ${compIdx + 1}: ${err.message}`);
-      }
-      renderizarVectores();
-    };
-
-    entrada.addEventListener('blur', guardar);
-    entrada.addEventListener('keydown', e => {
-      if (e.key === 'Escape') { entrada.value = entrada.defaultValue; entrada.blur(); }
-      if (e.key === 'Enter' || e.key === 'Tab') {
-        e.preventDefault();
-        guardar();
-      }
-    });
+    window.EditorVectores.editar(boton, zonaVectores, arreglo[compIdx], valor => {
+      arreglo[compIdx] = valor; errorEl.hidden = true;
+    }, renderizarVectores, mostrarError);
   }
 
   function renderizarVectores() {
@@ -156,14 +125,14 @@
 
     document.getElementById('u3-dimensiones').textContent =
       `${numVectores} ${numVectores === 1 ? 'vector' : 'vectores'} · ℝ${dimension}`;
-    document.getElementById('u3-agregar-vector').disabled = numVectores >= 12;
+    document.getElementById('u3-agregar-vector').disabled = numVectores >= window.col_max - 1;
     document.getElementById('u3-quitar-vector').disabled = numVectores <= 1;
-    document.getElementById('u3-agregar-comp').disabled = dimension >= 12;
+    document.getElementById('u3-agregar-comp').disabled = dimension >= window.fila_max;
     document.getElementById('u3-quitar-comp').disabled = dimension <= 1;
   }
 
   document.getElementById('u3-agregar-vector').onclick = () => {
-    if (numVectores >= 12) return;
+    if (numVectores >= window.col_max - 1) return;
     vectoresS.push(Array(dimension).fill('0'));
     numVectores++;
     renderizarVectores();
@@ -171,13 +140,14 @@
 
   document.getElementById('u3-quitar-vector').onclick = () => {
     if (numVectores <= 1) return;
+    if (vectoresS[numVectores - 1].some(v => v !== '0' && v !== '') && !confirm('Se quitará el último vector con sus valores. ¿Continuar?')) return;
     vectoresS.pop();
     numVectores--;
     renderizarVectores();
   };
 
   document.getElementById('u3-agregar-comp').onclick = () => {
-    if (dimension >= 12) return;
+    if (dimension >= window.fila_max) return;
     vectoresS.forEach(v => v.push('0'));
     dimension++;
     renderizarVectores();
@@ -185,6 +155,7 @@
 
   document.getElementById('u3-quitar-comp').onclick = () => {
     if (dimension <= 1) return;
+    if (vectoresS.some(v => v[dimension - 1] !== '0' && v[dimension - 1] !== '') && !confirm('Se quitará la última componente de los vectores. ¿Continuar?')) return;
     vectoresS.forEach(v => v.pop());
     dimension--;
     renderizarVectores();

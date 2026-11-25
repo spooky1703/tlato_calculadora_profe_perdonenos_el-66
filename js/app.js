@@ -6,6 +6,7 @@
   let filas = 3, incognitas = 3, modoPractica = false;
   let valores = Array.from({ length: filas }, () => Array(incognitas + 1).fill('0'));
 
+  let erroresImportados = new Map();
   const fraccionVisual = window.FormatoMatematico.fraccion;
 
   function renderizarMatriz() {
@@ -26,6 +27,7 @@
         if (j === incognitas) celda.classList.add('celda-aumentada');
         celda.setAttribute('aria-label', `Editar fila ${i + 1}, ${j === incognitas ? 'término independiente' : `coeficiente de x${j + 1}`}`);
         try {
+          if (erroresImportados.get(`${i},${j}`) === valor) throw new Error('Corrige el valor importado.');
           const numero = F.desdeTexto(valor);
           if (F.contieneConstantes(valor)) {
             const simbolos = document.createElement('span');
@@ -37,7 +39,7 @@
             celda.append(fraccionVisual(numero));
           }
         }
-        catch { celda.textContent = valor || 'Editar'; celda.classList.add('invalida'); }
+        catch { celda.textContent = valor || 'Vacío'; celda.classList.add('invalida'); celda.setAttribute('aria-invalid', 'true'); }
         celda.addEventListener('click', () => editarCelda(i, j, celda));
         filaElemento.append(celda);
       });
@@ -63,6 +65,7 @@
     const guardar = () => {
       if (guardado) return; guardado = true;
       valores[i][j] = entrada.value;
+      erroresImportados.delete(`${i},${j}`);
       errorElemento.hidden = true;
       try { F.desdeTexto(valores[i][j]); } catch (error) { mostrarError(`Fila ${i + 1}, columna ${j + 1}: ${error.message}`); }
       renderizarMatriz();
@@ -99,7 +102,10 @@
   function leerMatriz() {
     errorElemento.hidden = true;
     return valores.map((fila, i) => fila.map((valor, j) => {
-      try { return F.desdeTexto(valor); }
+      try {
+        if (erroresImportados.get(`${i},${j}`) === valor) throw new Error('Corrige la celda roja importada.');
+        return F.desdeTexto(valor);
+      }
       catch (error) { throw Object.assign(new Error(`Fila ${i + 1}, columna ${j + 1}: ${error.message}`), { fila: i, columna: j }); }
     }));
   }
@@ -144,6 +150,7 @@
   });
 
   document.getElementById('limpiar').addEventListener('click', () => {
+    erroresImportados.clear();
     filas = 3; incognitas = 3; valores = Array.from({ length: filas }, () => Array(incognitas + 1).fill('0'));
     resultadoElemento.hidden = true; window.VisualizacionSoluciones.limpiar(); errorElemento.hidden = true; renderizarMatriz();
   });
@@ -181,6 +188,7 @@
   function cambiarModo(practica, operacion = operacionActual) {
     if (!window.PracticaUI.salir()) return;
     modoPractica = practica;
+    numeroCarga++;
     operacionActual = operacion;
     const cuadrada = operacion !== 'sistemas';
     const practicaSistema = practica && !cuadrada;
@@ -211,144 +219,48 @@
   const inputArchivo = document.getElementById('input-archivo');
   const btnSubir = document.getElementById('btn-subir');
 
-  const procesarArchivo = (archivo) => {
+  let numeroCarga = 0;
+  const procesarArchivo = async (archivo) => {
     if (!archivo) return;
-
-    const procesar = (datos) => {
-      const limpia = [...datos];
-      while (limpia.length > 0 && limpia[limpia.length - 1].every(c => c === undefined || c === null || String(c).trim() === '')) {
-        limpia.pop();
+    const solicitud = ++numeroCarga;
+    const destino = operacionActual;
+    const cuadrada = destino !== 'sistemas';
+    const informar = mensaje => cuadrada ? window.MatricesCuadradas.mostrarError(mensaje) : mostrarError(mensaje);
+    try {
+      const carga = await window.ImportarMatriz.leer(archivo, cuadrada);
+      // Una lectura vieja nunca reemplaza una carga más reciente ni otro modo.
+      if (solicitud !== numeroCarga || destino !== operacionActual) return;
+      if (cuadrada) window.MatricesCuadradas.cargar(carga);
+      else {
+        filas = carga.valores.length; incognitas = carga.valores[0].length - 1;
+        valores = carga.valores;
+        erroresImportados = new Map(carga.errores.map(e => [`${e.fila},${e.columna}`, valores[e.fila][e.columna]]));
+        errorElemento.hidden = true; renderizarMatriz();
+        if (carga.errores.length) mostrarError(window.ImportarMatriz.aviso(carga.errores));
       }
-
-      if (!limpia.length) {
-        mostrarError("Archivo vacío o inválido.");
-        return;
-      }
-
-const f = limpia.length;
-      const maxCols = Math.max(...limpia.map(fila => fila.length));
-      const c = maxCols - 1;
-
-      if (f > fila_max || c > col_max - 1 || c < 1) {
-        mostrarError(`Dimensiones no soportadas: ${f}x${c}.`);
-        return;
-      }
-
-      // Solo permite enteros (-5, 10), decimales con punto (3.14, .5) o fracciones (-3/4)
-      const esNumeroValido = (str) => {
-        if (/^-?(?:\d+(?:\.\d+)?|\.\d+)$/.test(str)) return true;
-        if (/^-?\d+\/-?\d+$/.test(str)) {
-          return Number(str.split('/')[1]) !== 0; // Evita división entre cero
-        }
-        return false;
-      };
-
-      let temp = [];
-      let errores = [];
-
-      for (let i = 0; i < f; i++) {
-        const filaActual = limpia[i];
-
-        if (!filaActual || filaActual.every(celda => celda === undefined || celda === null || String(celda).trim() === '')) {
-          errores.push(`Fila ${i + 1} (fila completa vacía)`);
-          continue;
-        }
-
-        let filaTemp = [];
-        for (let j = 0; j <= c; j++) {
-          const valorCrudo = filaActual[j];
-          const val = (valorCrudo !== undefined && valorCrudo !== null) ? String(valorCrudo).trim() : '';
-
-          if (val === '') {
-            errores.push(`Fila ${i + 1}, Columna ${j + 1} (vacío)`);
-            continue;
-          }
-
-          if (!esNumeroValido(val)) {
-            errores.push(`Fila ${i + 1}, Columna ${j + 1} ("${val}": valor no válido)`);
-            continue;
-          }
-
-          try {
-            F.desdeTexto(val);
-            filaTemp.push(val);
-          } catch (err) {
-            errores.push(`Fila ${i + 1}, Columna ${j + 1} ("${val}": ${err.message})`);
-          }
-        }
-        temp.push(filaTemp);
-      }
-
-      if (errores.length > 0) {
-        mostrarError(`Error en el archivo. Revisa las posiciones: ${errores.join(' | ')}`);
-        return;
-      }
-
-      filas = f;
-      incognitas = c;
-      valores = temp;
-      renderizarMatriz();
-    };
-
-    const nombre = archivo.name.toLowerCase();
-    if (nombre.endsWith('.csv') || nombre.endsWith('.txt')) {
-      const lector = new FileReader();
-      lector.onload = (ev) => {
-        const texto = ev.target.result
-          .replace(/^\uFEFF/, '')
-          .replace(/\r\n/g, '\n')
-          .replace(/\r/g, '\n')
-          .replace(/\n+$/, '');
-
-        if (!texto) { procesar([]); return; }
-
-        const lineas = texto.split('\n');
-        const noVacias = lineas.filter(l => l.trim() !== '');
-
-        // Detecta automáticamente si el archivo usa ; , tabulador o espacio
-        let separador = ' ';
-        if (nombre.endsWith('.csv')) {
-          separador = texto.includes(';') ? ';' : ',';
-        } else if (noVacias.length > 0) {
-          if (noVacias.every(l => l.includes(';'))) separador = ';';
-          else if (noVacias.every(l => l.includes(','))) separador = ',';
-          else if (noVacias.every(l => l.includes('\t'))) separador = '\t';
-        }
-
-        const filasTexto = lineas.map(linea => {
-          if (linea === '') return [];
-          return linea.split(separador);
-        });
-
-        procesar(filasTexto);
-      };
-      lector.readAsText(archivo);
-    } else if (nombre.endsWith('.xlsx') || nombre.endsWith('.xls')) {
-      if (typeof XLSX === 'undefined') {
-        mostrarError("Librería Excel no cargada. Actualiza el HTML.");
-        return;
-      }
-      const lector = new FileReader();
-      lector.onload = (ev) => {
-        const libro = XLSX.read(new Uint8Array(ev.target.result), { type: 'array' });
-        procesar(XLSX.utils.sheet_to_json(libro.Sheets[libro.SheetNames[0]], {
-          header: 1,
-          defval: '',
-          blankrows: true
-        }));
-      };
-      lector.readAsArrayBuffer(archivo);
-    } else {
-      mostrarError("Formato no soportado (.txt, .csv, .xlsx).");
+    } catch (error) {
+      if (solicitud === numeroCarga && destino === operacionActual) informar(error.message);
     }
   };
 
-  matrizElemento.addEventListener('dragover', (e) => { e.preventDefault(); matrizElemento.classList.add('arrastrando'); });
-  matrizElemento.addEventListener('dragleave', (e) => { e.preventDefault(); matrizElemento.classList.remove('arrastrando'); });
-  matrizElemento.addEventListener('drop', (e) => {
-    e.preventDefault(); matrizElemento.classList.remove('arrastrando'); errorElemento.hidden = true;
-    procesarArchivo(e.dataTransfer.files[0]);
-  });
+  function recibirArchivos(archivos) {
+    if (archivos.length !== 1) {
+      const mensaje = 'Carga un solo archivo de matriz a la vez.';
+      if (operacionActual === 'sistemas') mostrarError(mensaje);
+      else window.MatricesCuadradas.mostrarError(mensaje);
+      return;
+    }
+    procesarArchivo(archivos[0]);
+  }
+  for (const id of ['editor-sistema', 'panel-cuadrada']) {
+    const zona = document.getElementById(id);
+    zona.addEventListener('dragover', e => { e.preventDefault(); zona.classList.add('arrastrando'); });
+    zona.addEventListener('dragleave', e => { if (!zona.contains(e.relatedTarget)) zona.classList.remove('arrastrando'); });
+    zona.addEventListener('drop', e => {
+      e.preventDefault(); zona.classList.remove('arrastrando'); recibirArchivos(e.dataTransfer.files);
+    });
+  }
+  document.getElementById('btn-subir-cuadrada').onclick = () => inputArchivo.click();
 
   const zonaCargaGuia = document.getElementById('zona-carga-guia');
   zonaCargaGuia.addEventListener('dragover', e => { e.preventDefault(); zonaCargaGuia.classList.add('arrastrando'); });
@@ -363,14 +275,14 @@ const f = limpia.length;
     if (!archivo) return;
     document.getElementById('modal-ayuda').close();
     errorElemento.hidden = true;
-    procesarArchivo(archivo);
+    recibirArchivos(e.dataTransfer.files);
   });
 
   if (btnSubir && inputArchivo) {
     btnSubir.addEventListener('click', () => window.GuiaImportacion.cargar(inputArchivo));
     inputArchivo.addEventListener('change', (e) => {
       errorElemento.hidden = true;
-      procesarArchivo(e.target.files[0]);
+      if (e.target.files.length) recibirArchivos(e.target.files);
       inputArchivo.value = '';
     });
   }

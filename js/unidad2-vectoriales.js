@@ -151,11 +151,10 @@
       celda.className = 'celda';
       celda.setAttribute('aria-label', `${nombre}, componente ${compIdx + 1}`);
       try {
-        const num = F.desdeTexto(val);
-        celda.append(fraccionVisual(num));
+        celda.append(window.FormatoMatematico.expresion(val));
       } catch {
-        celda.textContent = val || '0';
-        celda.classList.add('invalida');
+        celda.textContent = val || 'Vacío';
+        celda.classList.add('invalida'); celda.setAttribute('aria-invalid', 'true');
       }
       celda.addEventListener('click', () => editarComponente(esGamma, idxVector, compIdx, celda));
       corchetes.append(celda);
@@ -167,39 +166,9 @@
 
   function editarComponente(esGamma, idxVector, compIdx, boton) {
     const arreglo = esGamma ? vectorGamma : vectoresS[idxVector];
-    const entrada = document.createElement('input');
-    entrada.className = 'celda';
-    entrada.maxLength = 128;
-    entrada.value = arreglo[compIdx];
-    entrada.defaultValue = arreglo[compIdx];
-    entrada.autocomplete = 'off';
-
-    boton.replaceWith(entrada);
-    entrada.focus();
-    entrada.select();
-
-    let guardado = false;
-    const guardar = () => {
-      if (guardado) return;
-      guardado = true;
-      arreglo[compIdx] = entrada.value.trim() === '' ? '0' : entrada.value.trim();
-      errorEl.hidden = true;
-      try {
-        F.desdeTexto(arreglo[compIdx]);
-      } catch (err) {
-        mostrarError(`${esGamma ? 'γ' : `α${idxVector + 1}`}, fila ${compIdx + 1}: ${err.message}`);
-      }
-      renderizarVectores();
-    };
-
-    entrada.addEventListener('blur', guardar);
-    entrada.addEventListener('keydown', e => {
-      if (e.key === 'Escape') { entrada.value = entrada.defaultValue; entrada.blur(); }
-      if (e.key === 'Enter' || e.key === 'Tab') {
-        e.preventDefault();
-        guardar();
-      }
-    });
+    window.EditorVectores.editar(boton, zonaVectores, arreglo[compIdx], valor => {
+      arreglo[compIdx] = valor; errorEl.hidden = true;
+    }, renderizarVectores, mostrarError);
   }
 
   function renderizarVectores() {
@@ -239,9 +208,9 @@
 
     document.getElementById('u2-dimensiones').textContent =
       `${numVectores} ${numVectores === 1 ? 'vector' : 'vectores'} · ℝ${dimension}`;
-    document.getElementById('u2-agregar-vector').disabled = numVectores >= 12;
+    document.getElementById('u2-agregar-vector').disabled = numVectores >= window.col_max - 1;
     document.getElementById('u2-quitar-vector').disabled = numVectores <= 1;
-    document.getElementById('u2-agregar-comp').disabled = dimension >= 12;
+    document.getElementById('u2-agregar-comp').disabled = dimension >= window.fila_max;
     document.getElementById('u2-quitar-comp').disabled = dimension <= 1;
   }
 
@@ -265,7 +234,7 @@
   document.getElementById('u2-tab-base').onclick = () => cambiarActividad('base');
 
   document.getElementById('u2-agregar-vector').onclick = () => {
-    if (numVectores >= 12) return;
+    if (numVectores >= window.col_max - 1) return;
     vectoresS.push(Array(dimension).fill('0'));
     numVectores++;
     renderizarVectores();
@@ -273,13 +242,14 @@
 
   document.getElementById('u2-quitar-vector').onclick = () => {
     if (numVectores <= 1) return;
+    if (vectoresS[numVectores - 1].some(v => v !== '0' && v !== '') && !confirm('Se quitará el último vector con sus valores. ¿Continuar?')) return;
     vectoresS.pop();
     numVectores--;
     renderizarVectores();
   };
 
   document.getElementById('u2-agregar-comp').onclick = () => {
-    if (dimension >= 12) return;
+    if (dimension >= window.fila_max) return;
     vectoresS.forEach(v => v.push('0'));
     vectorGamma.push('0');
     dimension++;
@@ -288,6 +258,7 @@
 
   document.getElementById('u2-quitar-comp').onclick = () => {
     if (dimension <= 1) return;
+    if (vectoresS.some(v => v[dimension - 1] !== '0' && v[dimension - 1] !== '') && !confirm('Se quitará la última componente de los vectores. ¿Continuar?')) return;
     vectoresS.forEach(v => v.pop());
     vectorGamma.pop();
     dimension--;
@@ -338,24 +309,8 @@
   document.getElementById('u2-calcular').onclick = () => {
     errorEl.hidden = true;
     try {
-      const colsS = vectoresS.map((vec, vIdx) =>
-        vec.map((txt, fIdx) => {
-          try { return F.desdeTexto(txt); }
-          catch (e) { throw new Error(`Vector α${vIdx + 1}, fila ${fIdx + 1}: ${e.message}`); }
-        })
-      );
-
-      const colB = (actividad === 'generado' ? vectorGamma : Array(dimension).fill('0')).map((txt, fIdx) => {
-        try { return F.desdeTexto(txt); }
-        catch (e) { throw new Error(`Vector γ, fila ${fIdx + 1}: ${e.message}`); }
-      });
-
-      const matrizAumentada = Array.from({ length: dimension }, (_, i) => [
-        ...colsS.map(col => col[i]),
-        colB[i]
-      ]);
-
-      const res = GaussJordan.reducir(matrizAumentada, numVectores);
+      const analisis = window.Unidad2.analizar(vectoresS, vectorGamma, actividad);
+      const res = analisis.resultado;
       renderizarRref(res.matriz, numVectores);
       detalleEl.replaceChildren();
 
@@ -370,14 +325,13 @@
           const p = document.createElement('p');
           p.textContent = res.tipo === 'unica'
             ? 'Existen escalares únicos c₁, …, cₙ tales que γ = c₁α₁ + … + cₙαₙ:'
-            : 'Existen infinitos escalares (asignando 0 a las variables libres, una solución particular es):';
+            : 'Hay infinitas combinaciones. Esta se obtiene eligiendo cero para los coeficientes libres:';
           detalleEl.append(p);
 
           const lista = document.createElement('div');
           lista.className = 'u2-escalares';
           for (let j = 0; j < numVectores; j++) {
-            const filaPiv = res.pivotes.indexOf(j);
-            const valorEscalar = filaPiv !== -1 ? res.matriz[filaPiv][numVectores] : F.desdeTexto('0');
+            const valorEscalar = analisis.coeficientes[j];
             const chip = document.createElement('span');
             chip.className = 'u2-chip';
             chip.append(`c${j + 1} = `, fraccionVisual(valorEscalar));
@@ -386,23 +340,20 @@
           detalleEl.append(lista);
         }
       } else if (actividad === 'li-ld') {
-        if (res.tipo === 'unica') {
+        if (analisis.independientes) {
           veredictoEl.textContent = '✓ Conjunto Linealmente Independiente (LI)';
           const p = document.createElement('p');
           p.textContent = `Los ${numVectores} vectores tienen pivote en cada columna (solo admite la solución trivial c₁ = … = c${numVectores} = 0). Ningún vector es redundante.`;
           detalleEl.append(p);
         } else {
           veredictoEl.textContent = '⚠ Conjunto Linealmente Dependiente (LD)';
-          const libres = [];
-          for (let j = 0; j < numVectores; j++) {
-            if (!res.pivotes.includes(j)) libres.push(`α${j + 1}`);
-          }
+          const libres = analisis.libres.map(j => `c${j + 1}`);
           const p = document.createElement('p');
           p.textContent = `Existen variables libres (${libres.join(', ')}), por lo que hay soluciones no triviales y al menos un vector depende de los demás.`;
           detalleEl.append(p);
         }
       } else if (actividad === 'base') {
-        const indicesPivote = res.pivotes.filter(col => col < numVectores);
+        const indicesPivote = analisis.indicesBase;
         const dimSubespacio = indicesPivote.length;
 
         if (dimSubespacio === 0) {
@@ -422,9 +373,15 @@
             const enBase = indicesPivote.includes(j);
             const chip = document.createElement('span');
             chip.className = 'u2-chip' + (enBase ? '' : ' descartado');
-            chip.textContent = enBase
-              ? `✓ α${j + 1} = (${vectoresS[j].join(', ')})`
-              : `✗ α${j + 1} (redundante)`;
+            if (enBase) {
+              chip.append(`✓ α${j + 1} = (`);
+              analisis.originales[j].forEach((v, i) => {
+                if (i) chip.append(', ');
+                chip.append(fraccionVisual(v));
+              });
+              chip.append(')');
+            } else chip.textContent = `α${j + 1}: no necesario en esta base`;
+
             lista.append(chip);
           }
           detalleEl.append(lista);

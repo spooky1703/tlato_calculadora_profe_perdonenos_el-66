@@ -770,3 +770,5 @@ input.celda { cursor: text; }
     grid-template-columns: minmax(0, 1fr);
   }
 }
+#tabla-cuadrada input[aria-invalid=true] { border: 2px solid #a30000; background: #d40000; color: #fff; }
+.panel.arrastrando { outline: 3px dashed var(--acento); outline-offset: -7px; }

@@ -4,6 +4,7 @@
   const resultado = document.getElementById('resultado-cuadrada');
   const error = document.getElementById('error-cuadrada');
   let modo = 'inversa';
+  let erroresImportados = new Map();
   let valores = Array.from({ length: 3 }, () => Array(3).fill('0'));
   const limite = Math.min(window.fila_max, window.col_max);
 
@@ -28,12 +29,13 @@
           vista.replaceChildren(); campo.classList.remove('con-vista');
           input.removeAttribute('aria-invalid');
           try {
+            if (erroresImportados.get(`${i},${j}`) === input.value) throw new Error('Corrige el valor importado.');
             vista.append(window.FormatoMatematico.expresion(input.value));
             campo.classList.add('con-vista');
           } catch { input.setAttribute('aria-invalid', 'true'); }
         }
         input.oninput = () => {
-          valores[i][j] = input.value; limpiarResultado();
+          valores[i][j] = input.value; erroresImportados.delete(`${i},${j}`); limpiarResultado();
           campo.classList.remove('con-vista'); input.removeAttribute('aria-invalid');
         };
         input.onblur = actualizarVista;
@@ -77,7 +79,10 @@
     limpiarResultado(); resultado.replaceChildren();
     try {
       const matriz = valores.map((fila, i) => fila.map((v, j) => {
-        try { return F.desdeTexto(v); }
+        try {
+          if (erroresImportados.get(`${i},${j}`) === v) throw new Error('Corrige la celda roja importada.');
+          return F.desdeTexto(v);
+        }
         catch (e) { throw new Error(`Fila ${i + 1}, columna ${j + 1}: ${e.message}`); }
       }));
       const titulo = document.createElement('h3');
@@ -95,10 +100,19 @@
     } catch (e) { error.textContent = e.message; error.hidden = false; }
   };
   document.getElementById('limpiar-cuadrada').onclick = () => {
+    erroresImportados.clear();
     valores = Array.from({ length: 3 }, () => Array(3).fill('0'));
     limpiarResultado(); dibujar();
   };
-  window.MatricesCuadradas = { cambiarModo(nuevo) {
+  window.MatricesCuadradas = {
+    mostrarError(mensaje) { error.textContent = mensaje; error.hidden = false; },
+    cargar(carga) {
+      valores = carga.valores;
+      erroresImportados = new Map(carga.errores.map(e => [`${e.fila},${e.columna}`, valores[e.fila][e.columna]]));
+      limpiarResultado(); dibujar();
+      if (carga.errores.length) this.mostrarError(window.ImportarMatriz.aviso(carga.errores));
+    },
+    cambiarModo(nuevo) {
     modo = nuevo; limpiarResultado();
     document.getElementById('titulo-cuadrada').textContent = modo === 'inversa' ? 'Inversa' : 'Determinante';
     document.getElementById('calcular-cuadrada').textContent = modo === 'inversa' ? 'Calcular inversa' : 'Calcular determinante';
