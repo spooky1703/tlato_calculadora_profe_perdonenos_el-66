@@ -760,4 +760,13 @@ input.celda { cursor: text; }
 @media (max-width: 620px) {
   #panel-unidad-3 { padding: 14px; }
 }
+.u3-actividad-pill button {
+  padding: 9px 18px;
+  font-size: 0.88rem;
+}
 
+@media (max-width: 760px) {
+  .barra-herramientas .u3-actividad-pill {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
