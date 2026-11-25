@@ -704,3 +704,60 @@ input.celda { cursor: text; }
   .u2-zona-vectores { gap: 10px; }
   .u2-fila-vectores { gap: 8px; }
 }
+/* ==================== UNIDAD 3: ORTOGONALIDAD ==================== */
+#panel-unidad-3 { padding: clamp(16px, 3vw, 30px); border-radius: 18px; }
+#panel-unidad-3 .acciones-principales { border-top: 1px solid var(--borde); padding-top: 18px; }
+
+.u3-vector-ortogonal .u2-vector-nombre {
+  color: var(--primario);
+}
+
+.u3-vector-ortogonal .u2-vector-corchetes {
+  background: var(--fondo-body);
+  border-radius: 8px;
+}
+
+.u3-pasos {
+  display: grid;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.u3-paso-card {
+  padding: 14px 16px;
+  border: 1px solid var(--borde);
+  border-left: 4px solid var(--acento);
+  border-radius: 10px;
+  background: var(--fondo-body);
+  line-height: 1.6;
+}
+
+.u3-paso-card.descartado {
+  border-left-color: #D40000;
+  opacity: 0.85;
+}
+
+.u3-paso-titulo {
+  font-weight: 700;
+  color: var(--texto-principal);
+  margin-bottom: 4px;
+}
+
+.u3-paso-formula {
+  font-size: 0.9rem;
+  color: var(--texto-secundario);
+  margin-bottom: 6px;
+}
+
+.u3-paso-vector {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
+
+@media (max-width: 620px) {
+  #panel-unidad-3 { padding: 14px; }
+}
+

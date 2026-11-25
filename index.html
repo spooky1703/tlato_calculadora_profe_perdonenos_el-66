@@ -29,6 +29,8 @@
   <script src="js/matrices-cuadradas.js?v=fracciones-unificadas-24nov" defer></script>
   <script src="js/unidad2-vectoriales.js?v=1" defer></script>
   <script src="js/ayuda.js?v=conjunto-solucion-24nov" defer></script>
+  <script src="js/unidad3-ortogonalidad.js?v=1" defer></script>
+  <script src="js/ayuda.js?v=conjunto-solucion-24nov" defer></script>
 </head>
 <body>
   <main class="contenedor">
@@ -49,9 +51,9 @@
           <span class="numero-unidad">Unidad 2</span>
           <span class="tema-unidad">Espacios vectoriales</span>
         </button>
-        <button type="button" class="tarjeta-unidad inactiva" disabled data-unidad="3">
+       <button type="button" class="tarjeta-unidad" data-unidad="3">
           <span class="numero-unidad">Unidad 3</span>
-          <span class="proximamente">Próximamente</span>
+          <span class="tema-unidad">Ortogonalidad</span>
         </button>
       </div>
     </section>
@@ -233,6 +235,67 @@
         <div id="u2-detalle" class="u2-detalle"></div>
         <h3>Matriz escalonada reducida</h3>
         <div id="u2-matriz-rref" class="desplazamiento-matriz"></div>
+      </section>
+    </div>
+    <!-- ==================== UNIDAD 3: ORTOGONALIDAD ==================== -->
+    <div id="contenedor-unidad-3" hidden>
+      <div class="barra-herramientas">
+        <div class="modos-unidad" role="group" aria-label="Modo de trabajo Unidad 3">
+          <button id="u3-modo-calculadora" type="button" aria-pressed="true">Calculadora</button>
+          <button id="u3-modo-practica" type="button" aria-pressed="false">Practicar</button>
+        </div>
+        <div class="modos-unidad operaciones-unidad" role="group" aria-label="Actividad de la Unidad 3">
+          <button id="u3-tab-gs" type="button" aria-pressed="true">
+            <span class="material-symbols-outlined" aria-hidden="true">orthogonal</span>
+            <span>Base Ortogonal (Gram-Schmidt)</span>
+          </button>
+        </div>
+      </div>
+
+      <section id="u3-practica-proximamente" class="panel aviso-proximamente" hidden aria-labelledby="u3-titulo-proximamente">
+        <span class="material-symbols-outlined" aria-hidden="true">school</span>
+        <span class="etiqueta-proximamente">En desarrollo</span>
+        <h2 id="u3-titulo-proximamente">Práctica de Ortogonalidad</h2>
+        <p>Se está trabajando en el desarrollo matemático de esta sección paso a paso. Mientras tanto, puedes usar la calculadora.</p>
+        <button id="u3-volver-calculadora" type="button" class="boton principal">Ir a la calculadora</button>
+      </section>
+
+      <section id="panel-unidad-3" class="panel" aria-labelledby="u3-titulo-actividad">
+        <div class="carga-editor">
+          <div>
+            <h2 id="u3-titulo-actividad">Ortogonalizar conjunto (Gram-Schmidt)</h2>
+            <p class="ayuda">Captura S = {α₁, α₂, …, αₙ} para obtener una base ortogonal B = {u₁, u₂, …, uₙ} con fracciones exactas.</p>
+          </div>
+          <span id="u3-dimensiones" class="contador-matriz" role="status">3 vectores · ℝ³</span>
+        </div>
+
+        <div class="cuerpo-editor">
+          <div class="desplazamiento-matriz" tabindex="0" aria-label="Captura de vectores de S">
+            <div id="u3-zona-vectores" class="u2-zona-vectores"></div>
+          </div>
+          <div class="acciones-dimensiones" role="group" aria-label="Cambiar cantidad de vectores o dimensión">
+            <button type="button" id="u3-agregar-vector" class="boton secundario"><span class="material-symbols-outlined" aria-hidden="true">add</span> Vector (α)</button>
+            <button type="button" id="u3-quitar-vector" class="boton secundario"><span class="material-symbols-outlined" aria-hidden="true">remove</span> Vector (α)</button>
+            <button type="button" id="u3-agregar-comp" class="boton secundario"><span class="material-symbols-outlined" aria-hidden="true">add</span> Dimensión (ℝⁿ)</button>
+            <button type="button" id="u3-quitar-comp" class="boton secundario"><span class="material-symbols-outlined" aria-hidden="true">remove</span> Dimensión (ℝⁿ)</button>
+          </div>
+        </div>
+
+        <div class="acciones-principales">
+          <button type="button" id="u3-calcular" class="boton principal"><span class="material-symbols-outlined" aria-hidden="true">calculate</span> Obtener base ortogonal</button>
+          <button type="button" id="u3-limpiar" class="boton secundario"><span class="material-symbols-outlined" aria-hidden="true">restart_alt</span> Restablecer vectores</button>
+        </div>
+        <p id="u3-error" class="mensaje error" role="alert" hidden></p>
+      </section>
+
+      <section id="u3-resultado" class="panel resultado" aria-labelledby="u3-titulo-resultado" hidden>
+        <h2 id="u3-titulo-resultado">Base Ortogonal Obtenida</h2>
+        <div id="u3-veredicto" class="clasificacion"></div>
+        <div id="u3-base-vectores" class="desplazamiento-matriz"></div>
+        <h3>Proceso paso a paso (Gram-Schmidt)</h3>
+        <div id="u3-pasos" class="u3-pasos"></div>
+        <h3>Comprobación de 90° (Producto punto)</h3>
+        <div id="u3-verificacion" class="u2-base-lista"></div>
       </section>
     </div>
     </footer>
