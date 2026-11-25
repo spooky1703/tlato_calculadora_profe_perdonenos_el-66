@@ -168,8 +168,13 @@
         <button type="button" id="explicar-infinitas" class="boton secundario" hidden>Ver gráfica de soluciones</button>
       </div>
     </section>
+    <!-- ==================== UNIDAD 2: ESPACIOS VECTORIALES ==================== -->
     <div id="contenedor-unidad-2" hidden>
       <div class="barra-herramientas">
+        <div class="modos-unidad" role="group" aria-label="Modo de trabajo Unidad 2">
+          <button id="u2-modo-calculadora" type="button" aria-pressed="true">Calculadora</button>
+          <button id="u2-modo-practica" type="button" aria-pressed="false">Practicar</button>
+        </div>
         <div class="modos-unidad operaciones-unidad" role="group" aria-label="Actividad de la Unidad 2">
           <button id="u2-tab-generado" type="button" aria-pressed="true">
             <span class="material-symbols-outlined" aria-hidden="true">help_outline</span>
@@ -185,6 +190,14 @@
           </button>
         </div>
       </div>
+
+      <section id="u2-practica-proximamente" class="panel aviso-proximamente" hidden aria-labelledby="u2-titulo-proximamente">
+        <span class="material-symbols-outlined" aria-hidden="true">school</span>
+        <span class="etiqueta-proximamente">En desarrollo</span>
+        <h2 id="u2-titulo-proximamente">Práctica de Espacios Vectoriales</h2>
+        <p>Se está trabajando en el desarrollo matemático de esta sección paso a paso. Mientras tanto, puedes usar la calculadora.</p>
+        <button id="u2-volver-calculadora" type="button" class="boton principal">Ir a la calculadora</button>
+      </section>
 
       <section id="panel-unidad-2" class="panel" aria-labelledby="u2-titulo-actividad">
         <div class="carga-editor">
@@ -222,9 +235,6 @@
         <div id="u2-matriz-rref" class="desplazamiento-matriz"></div>
       </section>
     </div>
-    <footer>
-      <p id="credito-proyecto">Proyecto del grupo 2AM2</p>
-      <p id="introduccion-practica" hidden>Recuerda: aplica una sola operación elemental por paso y conserva las filas que no cambian. Combinar operaciones o saltarte pasos puede restarte puntos.</p>
     </footer>
   </main>
 

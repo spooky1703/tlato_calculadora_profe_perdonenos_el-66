@@ -18,6 +18,8 @@
   ].filter(Boolean);
 
   const contenedorU2 = document.getElementById('contenedor-unidad-2');
+  const panelU2 = document.getElementById('panel-unidad-2');
+  const avisoPracticaU2 = document.getElementById('u2-practica-proximamente');
   const zonaVectores = document.getElementById('u2-zona-vectores');
   const errorEl = document.getElementById('u2-error');
   const resultadoEl = document.getElementById('u2-resultado');
@@ -26,6 +28,7 @@
   const matrizRrefEl = document.getElementById('u2-matriz-rref');
 
   let unidadActiva = '1';
+  let modoPracticaU2 = false;
   let actividad = 'generado'; // 'generado' | 'li-ld' | 'base'
   let numVectores = 3;
   let dimension = 3;
@@ -55,6 +58,20 @@
     }
   };
 
+  function cambiarModoU2(practica) {
+    modoPracticaU2 = practica;
+    document.getElementById('u2-modo-calculadora').setAttribute('aria-pressed', String(!practica));
+    document.getElementById('u2-modo-practica').setAttribute('aria-pressed', String(practica));
+    panelU2.hidden = practica;
+    avisoPracticaU2.hidden = !practica;
+    resultadoEl.hidden = true;
+    errorEl.hidden = true;
+  }
+
+  document.getElementById('u2-modo-calculadora').onclick = () => cambiarModoU2(false);
+  document.getElementById('u2-modo-practica').onclick = () => cambiarModoU2(true);
+  document.getElementById('u2-volver-calculadora').onclick = () => cambiarModoU2(false);
+
   function cambiarUnidad(num) {
     if (num === unidadActiva) return;
     unidadActiva = num;
@@ -73,6 +90,7 @@
       if (navMovil) {
         navMovil.innerHTML = '<span class="indicador-activo" aria-hidden="true"></span> Unidad 2 <span class="detalle-unidad-movil">· Espacios vectoriales</span>';
       }
+      cambiarModoU2(modoPracticaU2);
       renderizarVectores();
     } else {
       contenedorU2.hidden = true;
@@ -316,7 +334,6 @@
         catch (e) { throw new Error(`Vector γ, fila ${fIdx + 1}: ${e.message}`); }
       });
 
-      // Construir matriz aumentada [α1 α2 ... αn | b]
       const matrizAumentada = Array.from({ length: dimension }, (_, i) => [
         ...colsS.map(col => col[i]),
         colB[i]
