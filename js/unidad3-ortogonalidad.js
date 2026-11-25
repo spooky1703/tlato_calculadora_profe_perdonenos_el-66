@@ -2,24 +2,7 @@
   const F = window.Fraccion;
   const fraccionVisual = window.FormatoMatematico.fraccion;
 
-  const subtituloHeader = document.querySelector('.identidad-tlato p');
-  const navMovil = document.querySelector('.unidad-actual-movil');
-  const tarjetasUnidades = document.querySelectorAll('.tarjeta-unidad[data-unidad]');
-
-  const bloquesU1 = [
-    document.querySelector('.barra-herramientas'),
-    document.getElementById('practica-proximamente'),
-    document.getElementById('reabrir-guia-practica'),
-    document.getElementById('editor-sistema'),
-    document.getElementById('panel-cuadrada'),
-    document.getElementById('panel-practica'),
-    document.getElementById('seccion-resultado')
-  ].filter(Boolean);
-
-  const contenedorU2 = document.getElementById('contenedor-unidad-2');
-  const contenedorU3 = document.getElementById('contenedor-unidad-3');
   const panelU3 = document.getElementById('panel-unidad-3');
-  const avisoPracticaU3 = document.getElementById('u3-practica-proximamente');
   const zonaVectores = document.getElementById('u3-zona-vectores');
   const errorEl = document.getElementById('u3-error');
   const resultadoEl = document.getElementById('u3-resultado');
@@ -28,7 +11,6 @@
   const pasosEl = document.getElementById('u3-pasos');
   const verificacionEl = document.getElementById('u3-verificacion');
 
-  let modoPracticaU3 = false;
   let numVectores = 3;
   let dimension = 3;
 
@@ -65,49 +47,17 @@
   function esVectorNulo(v) {
     return v.every(esCero);
   }
-function cambiarModoU3() {
-    panelU3.hidden = false;
-    resultadoEl.hidden = true;
-    errorEl.hidden = true;
+
+  function cambiarModoU3() {
+    if (panelU3) panelU3.hidden = false;
+    if (resultadoEl) resultadoEl.hidden = true;
+    if (errorEl) errorEl.hidden = true;
   }
 
-  // Sincronización de navegación entre Unidad 1, 2 y 3
-  tarjetasUnidades.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const destino = btn.dataset.unidad;
-      if (destino === '3') {
-        tarjetasUnidades.forEach(b => {
-          const esU3 = b.dataset.unidad === '3';
-          b.classList.toggle('activa', esU3);
-          if (esU3) b.setAttribute('aria-current', 'page');
-          else b.removeAttribute('aria-current');
-        });
-        bloquesU1.forEach(el => {
-          if (el.dataset.prevHidden === undefined) {
-            el.dataset.prevHidden = el.hidden ? '1' : '0';
-          }
-          el.hidden = true;
-        });
-        if (contenedorU2) contenedorU2.hidden = true;
-        contenedorU3.hidden = false;
-        subtituloHeader.textContent = 'Ortogonalidad';
-        if (navMovil) {
-          navMovil.innerHTML = '<span class="indicador-activo" aria-hidden="true"></span> Unidad 3 <span class="detalle-unidad-movil">· Ortogonalidad</span>';
-        }
-        cambiarModoU3(modoPracticaU3);
-        renderizarVectores();
-
-        const nav = document.getElementById('navegacion-unidades');
-        const menuBtn = document.getElementById('menu-unidades');
-        if (nav && nav.classList.contains('abierta')) {
-          nav.classList.remove('abierta');
-          if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
-        }
-      } else {
-        contenedorU3.hidden = true;
-      }
-    });
-  });
+  window.inicializarUnidad3 = () => {
+    cambiarModoU3();
+    renderizarVectores();
+  };
 
   function crearTarjetaVector(nombre, datos, idxVector, esResultado = false) {
     const card = document.createElement('div');
@@ -319,7 +269,6 @@ function cambiarModoU3() {
 
       veredictoEl.textContent = `✓ Base ortogonal B = {${baseOrtogonal.map((_, i) => `u${i + 1}`).join(', ')}} · ${baseOrtogonal.length} ${baseOrtogonal.length === 1 ? 'vector' : 'vectores'} a 90°`;
 
-      // Renderizar tarjetas visuales de u1, u2, ...
       baseVectoresEl.replaceChildren();
       const filaRes = document.createElement('div');
       filaRes.className = 'u2-fila-vectores';
@@ -328,7 +277,6 @@ function cambiarModoU3() {
       });
       baseVectoresEl.append(filaRes);
 
-      // Renderizar pasos didácticos
       pasosEl.replaceChildren();
       historialPasos.forEach(paso => {
         const card = document.createElement('div');
@@ -350,7 +298,6 @@ function cambiarModoU3() {
         pasosEl.append(card);
       });
 
-      // Comprobación automática de 90° (producto punto entre pares)
       verificacionEl.replaceChildren();
       if (baseOrtogonal.length === 1) {
         const chip = document.createElement('span');

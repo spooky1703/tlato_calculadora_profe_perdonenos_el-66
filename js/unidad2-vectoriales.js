@@ -19,7 +19,6 @@
 
   const contenedorU2 = document.getElementById('contenedor-unidad-2');
   const panelU2 = document.getElementById('panel-unidad-2');
-  const avisoPracticaU2 = document.getElementById('u2-practica-proximamente');
   const zonaVectores = document.getElementById('u2-zona-vectores');
   const errorEl = document.getElementById('u2-error');
   const resultadoEl = document.getElementById('u2-resultado');
@@ -28,7 +27,6 @@
   const matrizRrefEl = document.getElementById('u2-matriz-rref');
 
   let unidadActiva = '1';
-  let modoPracticaU2 = false;
   let actividad = 'generado'; // 'generado' | 'li-ld' | 'base'
   let numVectores = 3;
   let dimension = 3;
@@ -57,14 +55,22 @@
       boton: 'Obtener base de ⟨S⟩'
     }
   };
-function cambiarModoU2() {
-    panelU2.hidden = false;
-    resultadoEl.hidden = true;
-    errorEl.hidden = true;
+
+  function cambiarModoU2() {
+    if (panelU2) panelU2.hidden = false;
+    if (resultadoEl) resultadoEl.hidden = true;
+    if (errorEl) errorEl.hidden = true;
   }
 
   function cambiarUnidad(num) {
     if (num === unidadActiva) return;
+
+    if (unidadActiva === '1') {
+      bloquesU1.forEach(el => {
+        el.dataset.u1Visible = el.hidden ? '0' : '1';
+      });
+    }
+
     unidadActiva = num;
 
     tarjetasUnidades.forEach(btn => {
@@ -74,23 +80,42 @@ function cambiarModoU2() {
       else btn.removeAttribute('aria-current');
     });
 
-    if (num === '2') {
-      bloquesU1.forEach(el => { el.dataset.prevHidden = el.hidden ? '1' : '0'; el.hidden = true; });
-      contenedorU2.hidden = false;
-      subtituloHeader.textContent = 'Espacios vectoriales';
+    const contenedorU3 = document.getElementById('contenedor-unidad-3');
+
+    if (num === '1') {
+      if (contenedorU2) contenedorU2.hidden = true;
+      if (contenedorU3) contenedorU3.hidden = true;
+      bloquesU1.forEach(el => {
+        if (el.dataset.u1Visible === undefined) {
+          el.hidden = !(el.classList.contains('barra-herramientas') || el.id === 'editor-sistema');
+        } else {
+          el.hidden = el.dataset.u1Visible === '0';
+        }
+      });
+      if (subtituloHeader) subtituloHeader.textContent = 'Resolución de sistemas de ecuaciones lineales mediante Gauss-Jordan';
+      if (navMovil) {
+        navMovil.innerHTML = '<span class="indicador-activo" aria-hidden="true"></span> Unidad 1 <span class="detalle-unidad-movil">· Álgebra lineal</span>';
+      }
+    } else if (num === '2') {
+      bloquesU1.forEach(el => { el.hidden = true; });
+      if (contenedorU3) contenedorU3.hidden = true;
+      if (contenedorU2) contenedorU2.hidden = false;
+      if (subtituloHeader) subtituloHeader.textContent = 'Espacios vectoriales';
       if (navMovil) {
         navMovil.innerHTML = '<span class="indicador-activo" aria-hidden="true"></span> Unidad 2 <span class="detalle-unidad-movil">· Espacios vectoriales</span>';
       }
-      cambiarModoU2(modoPracticaU2);
+      cambiarModoU2();
       renderizarVectores();
-    } else {
-      contenedorU2.hidden = true;
-      bloquesU1.forEach(el => {
-        if (el.dataset.prevHidden === '0') el.hidden = false;
-      });
-      subtituloHeader.textContent = 'Resolución de sistemas de ecuaciones lineales mediante Gauss-Jordan';
+    } else if (num === '3') {
+      bloquesU1.forEach(el => { el.hidden = true; });
+      if (contenedorU2) contenedorU2.hidden = true;
+      if (contenedorU3) contenedorU3.hidden = false;
+      if (subtituloHeader) subtituloHeader.textContent = 'Ortogonalidad';
       if (navMovil) {
-        navMovil.innerHTML = '<span class="indicador-activo" aria-hidden="true"></span> Unidad 1 <span class="detalle-unidad-movil">· Álgebra lineal</span>';
+        navMovil.innerHTML = '<span class="indicador-activo" aria-hidden="true"></span> Unidad 3 <span class="detalle-unidad-movil">· Ortogonalidad</span>';
+      }
+      if (typeof window.inicializarUnidad3 === 'function') {
+        window.inicializarUnidad3();
       }
     }
 
