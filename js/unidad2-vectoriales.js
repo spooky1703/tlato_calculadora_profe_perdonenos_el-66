@@ -57,20 +57,11 @@
       boton: 'Obtener base de ⟨S⟩'
     }
   };
-
-  function cambiarModoU2(practica) {
-    modoPracticaU2 = practica;
-    document.getElementById('u2-modo-calculadora').setAttribute('aria-pressed', String(!practica));
-    document.getElementById('u2-modo-practica').setAttribute('aria-pressed', String(practica));
-    panelU2.hidden = practica;
-    avisoPracticaU2.hidden = !practica;
+function cambiarModoU2() {
+    panelU2.hidden = false;
     resultadoEl.hidden = true;
     errorEl.hidden = true;
   }
-
-  document.getElementById('u2-modo-calculadora').onclick = () => cambiarModoU2(false);
-  document.getElementById('u2-modo-practica').onclick = () => cambiarModoU2(true);
-  document.getElementById('u2-volver-calculadora').onclick = () => cambiarModoU2(false);
 
   function cambiarUnidad(num) {
     if (num === unidadActiva) return;

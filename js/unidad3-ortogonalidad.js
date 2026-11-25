@@ -65,20 +65,11 @@
   function esVectorNulo(v) {
     return v.every(esCero);
   }
-
-  function cambiarModoU3(practica) {
-    modoPracticaU3 = practica;
-    document.getElementById('u3-modo-calculadora').setAttribute('aria-pressed', String(!practica));
-    document.getElementById('u3-modo-practica').setAttribute('aria-pressed', String(practica));
-    panelU3.hidden = practica;
-    avisoPracticaU3.hidden = !practica;
+function cambiarModoU3() {
+    panelU3.hidden = false;
     resultadoEl.hidden = true;
     errorEl.hidden = true;
   }
-
-  document.getElementById('u3-modo-calculadora').onclick = () => cambiarModoU3(false);
-  document.getElementById('u3-modo-practica').onclick = () => cambiarModoU3(true);
-  document.getElementById('u3-volver-calculadora').onclick = () => cambiarModoU3(false);
 
   // Sincronización de navegación entre Unidad 1, 2 y 3
   tarjetasUnidades.forEach(btn => {
