@@ -10,7 +10,7 @@
   const fraccionVisual = window.FormatoMatematico.fraccion;
 
   function renderizarMatriz() {
-    resultadoElemento.hidden = true; window.VisualizacionSoluciones.limpiar();
+    resultadoElemento.hidden = true; window.GraficaColumnas.limpiar();
 
 
     matrizElemento.style.setProperty('--columnas-editor', incognitas + 1);
@@ -152,7 +152,7 @@
   document.getElementById('limpiar').addEventListener('click', () => {
     erroresImportados.clear();
     filas = 3; incognitas = 3; valores = Array.from({ length: filas }, () => Array(incognitas + 1).fill('0'));
-    resultadoElemento.hidden = true; window.VisualizacionSoluciones.limpiar(); errorElemento.hidden = true; renderizarMatriz();
+    resultadoElemento.hidden = true; window.GraficaColumnas.limpiar(); errorElemento.hidden = true; renderizarMatriz();
   });
 
   document.getElementById('resolver').addEventListener('click', () => {
@@ -162,10 +162,10 @@
       const presentar = () => {
       const resultado = GaussJordan.reducir(matriz, incognitas);
       renderizarMatrizResultado(resultado.matriz);
-      window.VisualizacionSoluciones.preparar(resultado, matriz, incognitas, aproximado);
+      window.GraficaColumnas.preparar(resultado, matriz, incognitas, aproximado);
       const clasificacion = document.getElementById('clasificacion');
       const textos = {
-        unica: 'sistema con solucion unica',
+        unica: 'sistema con solución única',
         infinitas: 'sistema con infinitas soluciones',
         incompatible: 'sistema sin soluciones'
       };
@@ -180,7 +180,7 @@
       } else presentar();
     } catch (error) {
       mostrarError(error.message, error.fila, error.columna);
-      resultadoElemento.hidden = true; window.VisualizacionSoluciones.limpiar();
+      resultadoElemento.hidden = true; window.GraficaColumnas.limpiar();
     }
   });
 
@@ -206,7 +206,7 @@
     document.getElementById('credito-proyecto').hidden = practicaSistema;
     document.getElementById('reabrir-guia-practica').hidden = !practicaSistema;
     document.getElementById('resolver').textContent = practicaSistema ? 'Comenzar práctica' : 'Resolver';
-    errorElemento.hidden = true; resultadoElemento.hidden = true; window.VisualizacionSoluciones.limpiar();
+    errorElemento.hidden = true; resultadoElemento.hidden = true; window.GraficaColumnas.limpiar();
     if (practicaSistema) window.GuiaPractica.primeraVez();
   }
   document.getElementById('modo-practica').onclick = () => cambiarModo(true);

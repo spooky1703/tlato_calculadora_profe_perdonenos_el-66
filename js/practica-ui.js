@@ -84,7 +84,7 @@
     $('nota-practica').textContent=total?`${sesion.nota.toFixed(2)} / 10`:'Ya estaba reducida';
     $('detalle-nota-practica').textContent=total?`Completaste ${total} pasos; ${sesion.intentos.filter(p=>p.errores===0&&!p.pista).length} a la primera sin pistas. ${sesion.errores} ${sesion.errores===1?'intento incorrecto':'intentos incorrectos'} y ${sesion.pistas} ${sesion.pistas===1?'pista':'pistas'}. Nota: 10 × ${total} / (${total} + ${sesion.errores} + ${sesion.pistas}).`:'Esta matriz no necesita operaciones. No se asigna calificación porque no hubo pasos que evaluar.';
     const resultado=sesion.plan.resultado;
-    $('clasificacion-practica').textContent=resultado.tipo==='unica'?'sistema con solucion unica':resultado.tipo==='infinitas'?'sistema con infinitas soluciones':'sistema sin soluciones';
+    $('clasificacion-practica').textContent=resultado.tipo==='unica'?'sistema con solución única':resultado.tipo==='infinitas'?'sistema con infinitas soluciones':'sistema sin soluciones';
   }
   function salir() {
     if(sesion&&!sesion.terminada&&!confirm('¿Salir de la práctica? Se perderá el progreso y la calificación de esta sesión.'))return false;
