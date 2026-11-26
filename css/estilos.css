@@ -838,3 +838,61 @@ input.celda { cursor: text; }
     display: none;
   }
 }
+
+#modal-infinitas { width: min(95vw, 920px); max-height: 90vh; overflow: auto; border: 1px solid var(--borde); border-radius: 12px; padding: 24px; color: var(--texto-principal); background: var(--fondo-panel); }
+#modal-infinitas::backdrop { background: #101318b8; }
+#modal-infinitas p { line-height: 1.65; }
+#modal-infinitas .modal-cabecera { gap: 16px; }
+.nota-geometria { background: var(--fondo-body); padding: 10px 13px; border-radius: 7px; font-size: .88rem; }
+.controles-geometria { display: flex; flex-wrap: wrap; gap: 9px; margin: 14px 0; }
+.controles-geometria select { padding: 7px; border: 1px solid var(--borde); border-radius: 5px; background: var(--fondo-panel); color: var(--texto-principal); }
+.grafica-contenedor { border: 1px solid var(--borde); border-radius: 8px; overflow: hidden; }
+#grafica-infinitas { width: 100%; height: auto; display: block; touch-action: none; cursor: grab; }
+#grafica-infinitas:active { cursor: grabbing; }
+.parametro-geometria { display: grid; grid-template-columns: 100px minmax(60px, 1fr) 110px; gap: 12px; align-items: center; padding: 8px 0; }
+.parametro-geometria input[type=text] { width: 100%; padding: 8px; border: 1px solid var(--borde); border-radius: 5px; }
+.parametro-geometria input[aria-invalid=true] { border-color: #b42318; }
+.parametro-geometria input[type=range] { width: 100%; accent-color: #4F7568; }
+#estado-grafica { font-size: .9rem; font-weight: 600; }
+@media(max-width:620px) { #modal-infinitas { padding: 16px; } .parametro-geometria { grid-template-columns: 65px minmax(40px,1fr) 80px; gap: 7px; } }
+#grafica-infinitas { max-height: 340px; object-fit: contain; background: #F8FAF8; }
+
+.parametro-geometria input[type=text] { color: var(--texto-principal); background: var(--fondo-panel); }
+
+/* La leyenda sigue disponible cuando las superficies se ocultan para compararlas. */
+#leyenda-geometria { display: grid; gap: 10px; max-height: 230px; overflow: auto; padding: 12px 2px; font-size: .9rem; }
+#leyenda-geometria label { display: flex; align-items: flex-start; gap: 9px; border-left: 4px solid var(--color-ecuacion); padding: 6px 10px; overflow-wrap: anywhere; }
+#leyenda-geometria input { flex: 0 0 auto; margin-top: 4px; }
+#modal-infinitas .controles-geometria label { align-content: center; }
+#grafica-infinitas { background: #f4f8fb; max-height: none; }
+
+.grafica-interactiva { position: relative; }
+.zoom-grafica { position: absolute; right: 10px; top: 10px; display: flex; align-items: center; gap: 2px; padding: 4px; border: 1px solid var(--borde); border-radius: 10px; background: var(--fondo-panel); box-shadow: 0 2px 8px #001d3912; }
+.zoom-grafica span { padding: 0 8px; font-size: .78rem; color: var(--texto-secundario); }
+.zoom-grafica button { width: 36px; height: 36px; padding: 0; border: 0; border-radius: 7px; background: var(--boton-bg); color: var(--texto-principal); font-size: 24px; cursor: pointer; }
+.zoom-grafica button:disabled { opacity: .4; cursor: default; }
+.zoom-grafica button:focus-visible, #grafica-infinitas:focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
+
+#resumen-punto { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 12px 0; }
+#resumen-punto[hidden] { display: none; }
+#resumen-punto div { background: var(--fondo-body); border: 1px solid var(--borde); border-radius: 8px; padding: 7px 14px; font-weight: 600; overflow-wrap: anywhere; max-width: 100%; }
+.ecuacion-legible { font-size: 1rem; font-weight: 600; }
+.vector-legible { font-size: .85rem; margin-top: 4px; color: var(--texto-secundario); }
+#parametros-infinitas .parametro-geometria { grid-template-columns: 1fr 100px; gap: 8px 16px; background: var(--fondo-body); border-radius: 12px; padding: 14px 16px; margin: 10px 0; }
+.parametro-geometria label { font-weight: 600; align-self: center; }
+#parametros-infinitas input[type=range] { grid-column: 1 / -1; min-height: 32px; margin: 0; accent-color: #18734c; }
+.extremos-parametro { grid-column: 1 / -1; display: flex; justify-content: space-between; font-size: .8rem; color: var(--texto-secundario); }
+
+/* Mantiene los controles cerca del dibujo sin deformar sus proporciones. */
+#grafica-infinitas { max-height: 340px; object-fit: contain; }
+@media(max-width:620px) {
+  .zoom-grafica { top: 5px; right: 5px; }
+  .zoom-grafica span { padding: 0 4px; }
+  .zoom-grafica button { width: 32px; height: 32px; }
+}
+
+@media(max-width:620px) {
+  #grafica-infinitas { height: 300px; max-height: none; object-fit: cover; }
+}
+
+#controles-parametros[hidden] { display: none !important; }

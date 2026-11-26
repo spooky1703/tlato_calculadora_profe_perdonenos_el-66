@@ -10,7 +10,7 @@
   const fraccionVisual = window.FormatoMatematico.fraccion;
 
   function renderizarMatriz() {
-    resultadoElemento.hidden = true; window.GraficaColumnas.limpiar();
+    resultadoElemento.hidden = true; window.GraficaColumnas.limpiar(); window.VisualizacionSoluciones.limpiar();
 
 
     matrizElemento.style.setProperty('--columnas-editor', incognitas + 1);
@@ -152,7 +152,7 @@
   document.getElementById('limpiar').addEventListener('click', () => {
     erroresImportados.clear();
     filas = 3; incognitas = 3; valores = Array.from({ length: filas }, () => Array(incognitas + 1).fill('0'));
-    resultadoElemento.hidden = true; window.GraficaColumnas.limpiar(); errorElemento.hidden = true; renderizarMatriz();
+    resultadoElemento.hidden = true; window.GraficaColumnas.limpiar(); window.VisualizacionSoluciones.limpiar(); errorElemento.hidden = true; renderizarMatriz();
   });
 
   document.getElementById('resolver').addEventListener('click', () => {
@@ -163,6 +163,7 @@
       const resultado = GaussJordan.reducir(matriz, incognitas);
       renderizarMatrizResultado(resultado.matriz);
       window.GraficaColumnas.preparar(resultado, matriz, incognitas, aproximado);
+      window.VisualizacionSoluciones.preparar(resultado, matriz, incognitas, aproximado);
       const clasificacion = document.getElementById('clasificacion');
       const textos = {
         unica: 'sistema con solución única',
@@ -180,7 +181,7 @@
       } else presentar();
     } catch (error) {
       mostrarError(error.message, error.fila, error.columna);
-      resultadoElemento.hidden = true; window.GraficaColumnas.limpiar();
+      resultadoElemento.hidden = true; window.GraficaColumnas.limpiar(); window.VisualizacionSoluciones.limpiar();
     }
   });
 
@@ -206,7 +207,7 @@
     document.getElementById('credito-proyecto').hidden = practicaSistema;
     document.getElementById('reabrir-guia-practica').hidden = !practicaSistema;
     document.getElementById('resolver').textContent = practicaSistema ? 'Comenzar práctica' : 'Resolver';
-    errorElemento.hidden = true; resultadoElemento.hidden = true; window.GraficaColumnas.limpiar();
+    errorElemento.hidden = true; resultadoElemento.hidden = true; window.GraficaColumnas.limpiar(); window.VisualizacionSoluciones.limpiar();
     if (practicaSistema) window.GuiaPractica.primeraVez();
   }
   document.getElementById('modo-practica').onclick = () => cambiarModo(true);

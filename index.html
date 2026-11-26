@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,600,0,0" />
-  <link rel="stylesheet" href="css/estilos.css?v=columnas-25nov">
+  <link rel="stylesheet" href="css/estilos.css?v=anterior-25nov-columnas-25nov">
   <script src="js/tema.js" defer></script>
   <script src="js/navegacion.js" defer></script>
   <script src="js/configuracion.js?v=limites-2" defer></script>
@@ -19,6 +19,8 @@
   <script src="js/formato-matematico.js?v=1" defer></script>
   <script src="js/gauss-jordan.js?v=modos-24nov" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+  <script src="js/espacio-soluciones.js?v=anterior-25nov" defer></script>
+  <script src="js/visualizacion-soluciones.js?v=anterior-25nov" defer></script>
   <script src="js/espacio-columnas.js?v=combinacion-25nov" defer></script>
   <script src="js/grafica-columnas.js?v=combinacion-25nov" defer></script>
   <script src="js/guia-importacion.js?v=guia-carga-22nov" defer></script>
@@ -26,7 +28,7 @@
   <script src="js/practica-ui.js?v=combinacion-25nov" defer></script>
   <script src="js/guia-practica.js?v=notacion-23nov" defer></script>
   <script src="js/importar-matriz.js?v=1" defer></script>
-  <script src="js/app.js?v=combinacion-25nov" defer></script>
+  <script src="js/app.js?v=anterior-25nov" defer></script>
   <script src="js/matrices-cuadradas.js?v=importacion-corregible-24nov" defer></script>
   <script src="js/unidad2.js?v=1" defer></script>
   <script src="js/editor-vectores.js?v=1" defer></script>
@@ -170,6 +172,7 @@
       <div id="matriz-resultado" class="desplazamiento-matriz"></div>
       <div class="acciones-resultado">
         <button type="button" id="explicar-infinitas" class="boton secundario" hidden>Ver espacio generado</button>
+        <button type="button" id="grafica-version-anterior" class="boton secundario" hidden>Gráficas versión anterior</button>
         <p id="error-grafica" role="alert" hidden></p>
         <p id="limite-grafica" hidden>no es posible graficar correctamente un espacio mayor a R3</p>
       </div>
@@ -435,6 +438,30 @@
 
 
 
+
+  <dialog id="modal-infinitas" aria-labelledby="titulo-infinitas">
+    <div class="modal-cabecera"><h2 id="titulo-infinitas">¿Qué significan infinitas soluciones?</h2><button type="button" id="cerrar-infinitas" class="boton" aria-label="Cerrar explicación">×</button></div>
+    <p id="explicacion-infinitas"></p>
+    <p id="proyeccion-infinitas" class="nota-geometria"></p>
+    <div id="ejes-infinitas" class="controles-geometria"></div>
+    <div class="grafica-contenedor grafica-interactiva">
+      <canvas id="grafica-infinitas" width="900" height="480" tabindex="0" aria-label="Gráfica del sistema. Arrastra o usa las flechas para girar."></canvas>
+      <div class="zoom-grafica" role="group" aria-label="Zoom de la gráfica">
+        <span id="intervalo-grafica" aria-live="polite">−5 a 5</span>
+        <button type="button" id="reiniciar-vista" aria-label="Volver a la vista inicial: de menos cinco a cinco" title="Vista inicial">↺</button>
+        <button type="button" id="enfocar-solucion" aria-label="Enfocar la intersección" title="Enfocar solución" hidden>◎</button>
+        <button type="button" id="acercar-grafica" aria-label="Acercar: reducir intervalo" title="Acercar">+</button>
+        <button type="button" id="alejar-grafica" aria-label="Alejar: ampliar intervalo" title="Alejar">−</button>
+      </div>
+    </div>
+    <div id="resumen-punto" aria-label="Coordenadas del punto" aria-live="polite" hidden></div>
+    <p id="estado-grafica" role="status" hidden></p>
+    <div class="controles-geometria"><label id="control-destacar">Resaltar <select id="destacar-plano" aria-label="Resaltar una ecuación"><option value="-1">Todos</option></select></label><label><input id="mostrar-normales" type="checkbox"> Mostrar vectores 𝛾</label></div>
+    <details><summary>Ver ecuaciones y vectores</summary><div id="leyenda-geometria"></div></details>
+    <div id="controles-parametros" hidden><h3>Explora otras soluciones</h3><p>Mueve el control: las demás coordenadas se ajustan solas.</p>
+    <div id="parametros-infinitas"></div></div>
+    <p id="error-parametro" class="mensaje error" role="alert" hidden></p>
+  </dialog>
 
   <dialog id="modal-columnas" aria-labelledby="titulo-columnas">
     <div class="modal-cabecera"><h2 id="titulo-columnas">Espacio generado por las columnas</h2><button id="cerrar-columnas" type="button" class="boton" aria-label="Cerrar gráfica">×</button></div>

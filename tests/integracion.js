@@ -5,7 +5,7 @@ const html = fs.readFileSync(path.join(raiz, 'index.html'), 'utf8');
 const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);
 assert.equal(new Set(ids).size, ids.length, 'No debe haber identificadores repetidos.');
 const scripts = [...html.matchAll(/<script\s+src="([^"]+)"\s+defer><\/script>/g)].map(m=>m[1].split('?')[0]);
-for (const nombre of ['configuracion','espacio-columnas','grafica-columnas','tema','navegacion','guia-importacion','fracciones','gauss-jordan','practica-modelo','practica-ui','guia-practica','app','ayuda','matrices-cuadradas','formato-matematico','importar-matriz','unidad2','editor-vectores','unidad2-vectoriales','unidad3-ortogonalidad']) {
+for (const nombre of ['espacio-soluciones','visualizacion-soluciones','configuracion','espacio-columnas','grafica-columnas','tema','navegacion','guia-importacion','fracciones','gauss-jordan','practica-modelo','practica-ui','guia-practica','app','ayuda','matrices-cuadradas','formato-matematico','importar-matriz','unidad2','editor-vectores','unidad2-vectoriales','unidad3-ortogonalidad']) {
  const archivo=`js/${nombre}.js`;
  assert(scripts.includes(archivo),`Falta cargar ${archivo}`);
  const codigo=fs.readFileSync(path.join(raiz,archivo),'utf8');
