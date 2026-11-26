@@ -23,13 +23,40 @@
     ['0', '1', '1']
   ];
 
-  // Aritmética exacta sobre fracciones de Tlato
-  const fCero = () => F.desdeTexto('0');
+  // Aritmética exacta independiente (BigInt) compatibilizada con Fraccion.desdeTexto
+  function mcdBigInt(a, b) {
+    a = a < 0n ? -a : a;
+    b = b < 0n ? -b : b;
+    while (b !== 0n) {
+      const t = b;
+      b = a % b;
+      a = t;
+    }
+    return a === 0n ? 1n : a;
+  }
+
+  function crearFrac(n, d = 1n) {
+    n = BigInt(n);
+    d = BigInt(d);
+    if (d < 0n) {
+      n = -n;
+      d = -d;
+    }
+    if (n === 0n) return { n: 0n, d: 1n };
+    const g = mcdBigInt(n, d);
+    return { n: n / g, d: d / g };
+  }
+
+  function aFraccionApp(q) {
+    return q.d === 1n ? F.desdeTexto(q.n.toString()) : F.desdeTexto(`${q.n}/${q.d}`);
+  }
+
+  const fCero = () => ({ n: 0n, d: 1n });
   const esCero = (x) => x.n === 0n;
-  const sumarF = (a, b) => F.crear(a.n * b.d + b.n * a.d, a.d * b.d);
-  const restarF = (a, b) => F.crear(a.n * b.d - b.n * a.d, a.d * b.d);
-  const multF = (a, b) => F.crear(a.n * b.n, a.d * b.d);
-  const divF = (a, b) => F.crear(a.n * b.d, a.d * b.n);
+  const sumarF = (a, b) => crearFrac(a.n * b.d + b.n * a.d, a.d * b.d);
+  const restarF = (a, b) => crearFrac(a.n * b.d - b.n * a.d, a.d * b.d);
+  const multF = (a, b) => crearFrac(a.n * b.n, a.d * b.d);
+  const divF = (a, b) => crearFrac(a.n * b.d, a.d * b.n);
 
   function productoPunto(u, v) {
     let acc = fCero();
@@ -51,30 +78,48 @@
     return v.every(esCero);
   }
 
-  // Obtiene de forma segura las columnas pivote (sin depender de propiedades opcionales)
+  // Eliminación gaussiana exacta propia para detectar columnas pivote sin fallos
   function obtenerIndicesPivote(columnas) {
     if (columnas.length === 0) return [];
     const filas = columnas[0].length;
     const cols = columnas.length;
-    const matAumentada = Array.from({ length: filas }, (_, i) => [
-      ...columnas.map(c => c[i]),
-      fCero()
-    ]);
-    const res = GaussJordan.reducir(matAumentada, cols);
-    if (Array.isArray(res?.pivotes)) {
-      return res.pivotes.filter(c => c >= 0 && c < cols);
-    }
+    const M = Array.from({ length: filas }, (_, i) =>
+      columnas.map(c => crearFrac(c[i].n, c[i].d))
+    );
+
     const pivotes = [];
-    if (Array.isArray(res?.matriz)) {
-      for (let i = 0; i < res.matriz.length; i++) {
-        for (let j = 0; j < cols; j++) {
-          if (!esCero(res.matriz[i][j])) {
-            pivotes.push(j);
-            break;
+    let filaActual = 0;
+
+    for (let j = 0; j < cols && filaActual < filas; j++) {
+      let filaPiv = -1;
+      for (let i = filaActual; i < filas; i++) {
+        if (!esCero(M[i][j])) {
+          filaPiv = i;
+          break;
+        }
+      }
+      if (filaPiv === -1) continue;
+
+      [M[filaActual], M[filaPiv]] = [M[filaPiv], M[filaActual]];
+      const piv = M[filaActual][j];
+
+      for (let k = j; k < cols; k++) {
+        M[filaActual][k] = divF(M[filaActual][k], piv);
+      }
+
+      for (let i = 0; i < filas; i++) {
+        if (i !== filaActual && !esCero(M[i][j])) {
+          const factor = M[i][j];
+          for (let k = j; k < cols; k++) {
+            M[i][k] = restarF(M[i][k], multF(factor, M[filaActual][k]));
           }
         }
       }
+
+      pivotes.push(j);
+      filaActual++;
     }
+
     return pivotes;
   }
 
@@ -95,16 +140,16 @@
 
   // Representación simbólica exacta de comp / sqrt(normaSq)
   function normalizarComponenteVisual(comp, normaSq) {
-    if (esCero(comp)) return fraccionVisual(fCero());
+    if (esCero(comp)) return fraccionVisual(F.desdeTexto('0'));
 
     const p = normaSq.n;
     const q = normaSq.d;
     const { fuera, dentro } = raizExactaBigInt(p * q);
 
-    const coef = F.crear(comp.n * fuera, comp.d * p);
+    const coef = crearFrac(comp.n * fuera, comp.d * p);
 
     if (dentro === 1n) {
-      return fraccionVisual(coef);
+      return fraccionVisual(aFraccionApp(coef));
     }
 
     const wrap = document.createElement('span');
@@ -207,7 +252,7 @@
         if (normaSq) {
           celda.append(normalizarComponenteVisual(val, normaSq));
         } else {
-          celda.append(fraccionVisual(val));
+          celda.append(fraccionVisual(aFraccionApp(val)));
         }
         corchetes.append(celda);
       } else {
@@ -339,7 +384,7 @@
   function ejecutarGramSchmidt(vectores) {
     const baseOrtogonal = [];
     vectores.forEach(alpha => {
-      let u = [...alpha];
+      let u = alpha.map(c => crearFrac(c.n, c.d));
       baseOrtogonal.forEach(uPrev => {
         const num = productoPunto(alpha, uPrev);
         const den = productoPunto(uPrev, uPrev);
@@ -358,8 +403,12 @@
     try {
       const entrada = vectoresS.map((vec, vIdx) =>
         vec.map((txt, fIdx) => {
-          try { return F.desdeTexto(txt); }
-          catch (e) { throw new Error(`Vector α${vIdx + 1}, fila ${fIdx + 1}: ${e.message}`); }
+          try {
+            const parsed = F.desdeTexto(txt);
+            return crearFrac(parsed.n, parsed.d);
+          } catch (e) {
+            throw new Error(`Vector α${vIdx + 1}, fila ${fIdx + 1}: ${e.message}`);
+          }
         })
       );
 
@@ -394,7 +443,7 @@
               const dot = productoPunto(baseOrtogonal[i], baseOrtogonal[j]);
               const chip = document.createElement('span');
               chip.className = 'u2-chip';
-              chip.append(`✓ ⟨u${i + 1}, u${j + 1}⟩ = `, fraccionVisual(dot), ' (90°)');
+              chip.append(`✓ ⟨u${i + 1}, u${j + 1}⟩ = `, fraccionVisual(aFraccionApp(dot)), ' (90°)');
               verificacionEl.append(chip);
             }
           }
@@ -411,7 +460,7 @@
         const nombresBase = [...nombresLI];
 
         for (let k = 0; k < dimension && vectoresBase.length < dimension; k++) {
-          const canonico = Array.from({ length: dimension }, (_, i) => F.desdeTexto(i === k ? '1' : '0'));
+          const canonico = Array.from({ length: dimension }, (_, i) => crearFrac(i === k ? 1n : 0n, 1n));
           const prueba = [...vectoresBase, canonico];
           const pivPrueba = obtenerIndicesPivote(prueba);
           if (pivPrueba.length === prueba.length) {
@@ -488,7 +537,7 @@
               const dot = productoPunto(baseOrtogonal[i], baseOrtogonal[j]);
               const chip = document.createElement('span');
               chip.className = 'u2-chip';
-              chip.append(`✓ ⟨v${i + 1}, v${j + 1}⟩ = `, fraccionVisual(dot), ' (90°)');
+              chip.append(`✓ ⟨v${i + 1}, v${j + 1}⟩ = `, fraccionVisual(aFraccionApp(dot)), ' (90°)');
               verificacionEl.append(chip);
             }
           }
