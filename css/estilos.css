@@ -725,3 +725,116 @@ input.celda { cursor: text; }
 .zoom-columnas span { font-size: .8rem; margin-right: 5px; }
 #modal-columnas .ayuda { margin: 12px 0; line-height: 1.5; }
 #leyenda-columnas p { overflow-wrap: anywhere; }
+/* ==================== EXTENSIONES U2 Y U3 (COMPLETAR BASE Y ORTONORMALIDAD) ==================== */
+.u2-chip.agregado {
+  background: var(--primario);
+  color: #ffffff;
+  border-color: var(--primario);
+}
+
+.u3-pipeline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 14px 0 18px;
+}
+
+.u3-etapa {
+  flex: 1 1 130px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 10px 12px;
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  background: var(--fondo-body);
+}
+
+.u3-etapa.activa {
+  border-color: var(--primario);
+  background: var(--fondo-panel);
+}
+
+.u3-etapa-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--texto-secundario);
+}
+
+.u3-etapa.activa .u3-etapa-tag {
+  color: var(--primario);
+}
+
+.u3-etapa-valor {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--texto-principal);
+}
+
+.u3-flecha {
+  color: var(--acento);
+  font-weight: 800;
+  font-size: 1.05rem;
+}
+
+.u3-propiedades-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.u3-prop-card {
+  padding: 12px 14px;
+  border: 1px solid var(--borde);
+  border-left: 4px solid var(--primario);
+  border-radius: 10px;
+  background: var(--fondo-body);
+}
+
+.u3-prop-titulo {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--texto-principal);
+  margin-bottom: 4px;
+}
+
+.u3-prop-desc {
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--texto-secundario);
+}
+
+.u3-radical {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 700;
+}
+
+.u3-radical-simbolo {
+  margin-right: 1px;
+}
+
+.u3-radical-contenido {
+  border-top: 1.5px solid currentColor;
+  padding: 0 2px;
+  line-height: 1.1;
+}
+
+@media (max-width: 760px) {
+  .barra-herramientas .u2-tabs-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .barra-herramientas .u3-tabs-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .u3-propiedades-grid {
+    grid-template-columns: 1fr;
+  }
+  .u3-flecha {
+    display: none;
+  }
+}

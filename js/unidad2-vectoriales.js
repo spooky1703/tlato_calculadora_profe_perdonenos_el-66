@@ -27,7 +27,7 @@
   const matrizRrefEl = document.getElementById('u2-matriz-rref');
 
   let unidadActiva = '1';
-  let actividad = 'generado'; // 'generado' | 'li-ld' | 'base'
+  let actividad = 'generado'; // 'generado' | 'li-ld' | 'base' | 'completar'
   let numVectores = 3;
   let dimension = 3;
 
@@ -53,6 +53,11 @@
       titulo: 'Extraer una base del espacio generado ⟨S⟩',
       desc: 'A partir de un conjunto S = {α₁, …, αₙ}, identifica los vectores pivote que forman una base.',
       boton: 'Obtener base de ⟨S⟩'
+    },
+    'completar': {
+      titulo: 'Quitar / Añadir vectores para formar base de ℝⁿ',
+      desc: 'Elimina vectores dependientes (LD → LI) y añade vectores canónicos independientes hasta completar una base de ℝⁿ.',
+      boton: 'Completar base de ℝⁿ'
     }
   };
 
@@ -151,10 +156,11 @@
       celda.className = 'celda';
       celda.setAttribute('aria-label', `${nombre}, componente ${compIdx + 1}`);
       try {
-        celda.append(window.FormatoMatematico.expresion(val));
+        const num = F.desdeTexto(val);
+        celda.append(fraccionVisual(num));
       } catch {
-        celda.textContent = val || 'Vacío';
-        celda.classList.add('invalida'); celda.setAttribute('aria-invalid', 'true');
+        celda.textContent = val || '0';
+        celda.classList.add('invalida');
       }
       celda.addEventListener('click', () => editarComponente(esGamma, idxVector, compIdx, celda));
       corchetes.append(celda);
@@ -166,9 +172,39 @@
 
   function editarComponente(esGamma, idxVector, compIdx, boton) {
     const arreglo = esGamma ? vectorGamma : vectoresS[idxVector];
-    window.EditorVectores.editar(boton, zonaVectores, arreglo[compIdx], valor => {
-      arreglo[compIdx] = valor; errorEl.hidden = true;
-    }, renderizarVectores, mostrarError);
+    const entrada = document.createElement('input');
+    entrada.className = 'celda';
+    entrada.maxLength = 128;
+    entrada.value = arreglo[compIdx];
+    entrada.defaultValue = arreglo[compIdx];
+    entrada.autocomplete = 'off';
+
+    boton.replaceWith(entrada);
+    entrada.focus();
+    entrada.select();
+
+    let guardado = false;
+    const guardar = () => {
+      if (guardado) return;
+      guardado = true;
+      arreglo[compIdx] = entrada.value.trim() === '' ? '0' : entrada.value.trim();
+      errorEl.hidden = true;
+      try {
+        F.desdeTexto(arreglo[compIdx]);
+      } catch (err) {
+        mostrarError(`${esGamma ? 'γ' : `α${idxVector + 1}`}, fila ${compIdx + 1}: ${err.message}`);
+      }
+      renderizarVectores();
+    };
+
+    entrada.addEventListener('blur', guardar);
+    entrada.addEventListener('keydown', e => {
+      if (e.key === 'Escape') { entrada.value = entrada.defaultValue; entrada.blur(); }
+      if (e.key === 'Enter' || e.key === 'Tab') {
+        e.preventDefault();
+        guardar();
+      }
+    });
   }
 
   function renderizarVectores() {
@@ -208,9 +244,9 @@
 
     document.getElementById('u2-dimensiones').textContent =
       `${numVectores} ${numVectores === 1 ? 'vector' : 'vectores'} · ℝ${dimension}`;
-    document.getElementById('u2-agregar-vector').disabled = numVectores >= window.col_max - 1;
+    document.getElementById('u2-agregar-vector').disabled = numVectores >= 12;
     document.getElementById('u2-quitar-vector').disabled = numVectores <= 1;
-    document.getElementById('u2-agregar-comp').disabled = dimension >= window.fila_max;
+    document.getElementById('u2-agregar-comp').disabled = dimension >= 12;
     document.getElementById('u2-quitar-comp').disabled = dimension <= 1;
   }
 
@@ -219,6 +255,7 @@
     document.getElementById('u2-tab-generado').setAttribute('aria-pressed', String(nueva === 'generado'));
     document.getElementById('u2-tab-li-ld').setAttribute('aria-pressed', String(nueva === 'li-ld'));
     document.getElementById('u2-tab-base').setAttribute('aria-pressed', String(nueva === 'base'));
+    document.getElementById('u2-tab-completar').setAttribute('aria-pressed', String(nueva === 'completar'));
 
     const info = textosActividad[nueva];
     document.getElementById('u2-titulo-actividad').textContent = info.titulo;
@@ -232,9 +269,10 @@
   document.getElementById('u2-tab-generado').onclick = () => cambiarActividad('generado');
   document.getElementById('u2-tab-li-ld').onclick = () => cambiarActividad('li-ld');
   document.getElementById('u2-tab-base').onclick = () => cambiarActividad('base');
+  document.getElementById('u2-tab-completar').onclick = () => cambiarActividad('completar');
 
   document.getElementById('u2-agregar-vector').onclick = () => {
-    if (numVectores >= window.col_max - 1) return;
+    if (numVectores >= 12) return;
     vectoresS.push(Array(dimension).fill('0'));
     numVectores++;
     renderizarVectores();
@@ -242,14 +280,13 @@
 
   document.getElementById('u2-quitar-vector').onclick = () => {
     if (numVectores <= 1) return;
-    if (vectoresS[numVectores - 1].some(v => v !== '0' && v !== '') && !confirm('Se quitará el último vector con sus valores. ¿Continuar?')) return;
     vectoresS.pop();
     numVectores--;
     renderizarVectores();
   };
 
   document.getElementById('u2-agregar-comp').onclick = () => {
-    if (dimension >= window.fila_max) return;
+    if (dimension >= 12) return;
     vectoresS.forEach(v => v.push('0'));
     vectorGamma.push('0');
     dimension++;
@@ -258,7 +295,6 @@
 
   document.getElementById('u2-quitar-comp').onclick = () => {
     if (dimension <= 1) return;
-    if (vectoresS.some(v => v[dimension - 1] !== '0' && v[dimension - 1] !== '') && !confirm('Se quitará la última componente de los vectores. ¿Continuar?')) return;
     vectoresS.forEach(v => v.pop());
     vectorGamma.pop();
     dimension--;
@@ -309,8 +345,24 @@
   document.getElementById('u2-calcular').onclick = () => {
     errorEl.hidden = true;
     try {
-      const analisis = window.Unidad2.analizar(vectoresS, vectorGamma, actividad);
-      const res = analisis.resultado;
+      const colsS = vectoresS.map((vec, vIdx) =>
+        vec.map((txt, fIdx) => {
+          try { return F.desdeTexto(txt); }
+          catch (e) { throw new Error(`Vector α${vIdx + 1}, fila ${fIdx + 1}: ${e.message}`); }
+        })
+      );
+
+      const colB = (actividad === 'generado' ? vectorGamma : Array(dimension).fill('0')).map((txt, fIdx) => {
+        try { return F.desdeTexto(txt); }
+        catch (e) { throw new Error(`Vector γ, fila ${fIdx + 1}: ${e.message}`); }
+      });
+
+      const matrizAumentada = Array.from({ length: dimension }, (_, i) => [
+        ...colsS.map(col => col[i]),
+        colB[i]
+      ]);
+
+      const res = GaussJordan.reducir(matrizAumentada, numVectores);
       renderizarRref(res.matriz, numVectores);
       detalleEl.replaceChildren();
 
@@ -325,13 +377,14 @@
           const p = document.createElement('p');
           p.textContent = res.tipo === 'unica'
             ? 'Existen escalares únicos c₁, …, cₙ tales que γ = c₁α₁ + … + cₙαₙ:'
-            : 'Hay infinitas combinaciones. Esta se obtiene eligiendo cero para los coeficientes libres:';
+            : 'Existen infinitos escalares (asignando 0 a las variables libres, una solución particular es):';
           detalleEl.append(p);
 
           const lista = document.createElement('div');
           lista.className = 'u2-escalares';
           for (let j = 0; j < numVectores; j++) {
-            const valorEscalar = analisis.coeficientes[j];
+            const filaPiv = res.pivotes.indexOf(j);
+            const valorEscalar = filaPiv !== -1 ? res.matriz[filaPiv][numVectores] : F.desdeTexto('0');
             const chip = document.createElement('span');
             chip.className = 'u2-chip';
             chip.append(`c${j + 1} = `, fraccionVisual(valorEscalar));
@@ -340,20 +393,23 @@
           detalleEl.append(lista);
         }
       } else if (actividad === 'li-ld') {
-        if (analisis.independientes) {
+        if (res.tipo === 'unica') {
           veredictoEl.textContent = '✓ Conjunto Linealmente Independiente (LI)';
           const p = document.createElement('p');
           p.textContent = `Los ${numVectores} vectores tienen pivote en cada columna (solo admite la solución trivial c₁ = … = c${numVectores} = 0). Ningún vector es redundante.`;
           detalleEl.append(p);
         } else {
           veredictoEl.textContent = '⚠ Conjunto Linealmente Dependiente (LD)';
-          const libres = analisis.libres.map(j => `c${j + 1}`);
+          const libres = [];
+          for (let j = 0; j < numVectores; j++) {
+            if (!res.pivotes.includes(j)) libres.push(`α${j + 1}`);
+          }
           const p = document.createElement('p');
           p.textContent = `Existen variables libres (${libres.join(', ')}), por lo que hay soluciones no triviales y al menos un vector depende de los demás.`;
           detalleEl.append(p);
         }
       } else if (actividad === 'base') {
-        const indicesPivote = analisis.indicesBase;
+        const indicesPivote = res.pivotes.filter(col => col < numVectores);
         const dimSubespacio = indicesPivote.length;
 
         if (dimSubespacio === 0) {
@@ -373,19 +429,71 @@
             const enBase = indicesPivote.includes(j);
             const chip = document.createElement('span');
             chip.className = 'u2-chip' + (enBase ? '' : ' descartado');
-            if (enBase) {
-              chip.append(`✓ α${j + 1} = (`);
-              analisis.originales[j].forEach((v, i) => {
-                if (i) chip.append(', ');
-                chip.append(fraccionVisual(v));
-              });
-              chip.append(')');
-            } else chip.textContent = `α${j + 1}: no necesario en esta base`;
-
+            chip.textContent = enBase
+              ? `✓ α${j + 1} = (${vectoresS[j].join(', ')})`
+              : `✗ α${j + 1} (redundante)`;
             lista.append(chip);
           }
           detalleEl.append(lista);
         }
+      } else if (actividad === 'completar') {
+        // 1. Quitar vectores dependientes (LD -> LI)
+        const indicesPivote = res.pivotes.filter(col => col < numVectores);
+        const colsLI = indicesPivote.map(idx => colsS[idx]);
+
+        // 2. Añadir vectores canónicos independientes hasta completar dimensión m
+        const agregados = [];
+        for (let k = 0; k < dimension && colsLI.length < dimension; k++) {
+          const canonico = Array.from({ length: dimension }, (_, i) => F.desdeTexto(i === k ? '1' : '0'));
+          const pruebaCols = [...colsLI, canonico];
+          const matPrueba = Array.from({ length: dimension }, (_, i) => [
+            ...pruebaCols.map(c => c[i]),
+            F.desdeTexto('0')
+          ]);
+          const resPrueba = GaussJordan.reducir(matPrueba, pruebaCols.length);
+          const pivPrueba = resPrueba.pivotes.filter(c => c < pruebaCols.length);
+          if (pivPrueba.length === pruebaCols.length) {
+            colsLI.push(canonico);
+            agregados.push({
+              nombre: `e${k + 1}`,
+              comps: Array.from({ length: dimension }, (_, i) => (i === k ? '1' : '0'))
+            });
+          }
+        }
+
+        const nombresFinales = [
+          ...indicesPivote.map(i => `α${i + 1}`),
+          ...agregados.map(a => a.nombre)
+        ];
+
+        veredictoEl.textContent = `✓ Base de ℝ${dimension}: B = {${nombresFinales.join(', ')}}`;
+
+        const p = document.createElement('p');
+        const quitadosCount = numVectores - indicesPivote.length;
+        p.textContent = `Proceso: ${quitadosCount > 0 ? `se quitaron ${quitadosCount} vector(es) LD para obtener un conjunto LI` : 'el conjunto inicial ya era LI'}, y ${agregados.length > 0 ? `se añadieron ${agregados.length} vector(es) canónico(s) para alcanzar dim = ${dimension}` : `ya cubría toda la dimensión ℝ${dimension}`}:`;
+        detalleEl.append(p);
+
+        const lista = document.createElement('div');
+        lista.className = 'u2-base-lista';
+
+        for (let j = 0; j < numVectores; j++) {
+          const conservado = indicesPivote.includes(j);
+          const chip = document.createElement('span');
+          chip.className = 'u2-chip' + (conservado ? '' : ' descartado');
+          chip.textContent = conservado
+            ? `✓ Conservado α${j + 1} = (${vectoresS[j].join(', ')})`
+            : `✗ Quitado α${j + 1} (LD)`;
+          lista.append(chip);
+        }
+
+        agregados.forEach(ag => {
+          const chip = document.createElement('span');
+          chip.className = 'u2-chip agregado';
+          chip.textContent = `+ Añadido ${ag.nombre} = (${ag.comps.join(', ')})`;
+          lista.append(chip);
+        });
+
+        detalleEl.append(lista);
       }
 
       resultadoEl.hidden = false;

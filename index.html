@@ -175,10 +175,9 @@
       </div>
     </section>
     <!-- ==================== UNIDAD 2: ESPACIOS VECTORIALES ==================== -->
-    <!-- ==================== UNIDAD 2: ESPACIOS VECTORIALES ==================== -->
     <div id="contenedor-unidad-2" hidden>
       <div class="barra-herramientas">
-        <div class="modos-unidad operaciones-unidad" role="group" aria-label="Actividad de la Unidad 2">
+        <div class="modos-unidad operaciones-unidad u2-tabs-4" role="group" aria-label="Actividad de la Unidad 2">
           <button id="u2-tab-generado" type="button" aria-pressed="true">
             <span class="material-symbols-outlined" aria-hidden="true">help_outline</span>
             <span>¿γ ∈ ⟨S⟩?</span>
@@ -190,6 +189,10 @@
           <button id="u2-tab-base" type="button" aria-pressed="false">
             <span class="material-symbols-outlined" aria-hidden="true">filter_alt</span>
             <span>Extraer Base</span>
+          </button>
+          <button id="u2-tab-completar" type="button" aria-pressed="false">
+            <span class="material-symbols-outlined" aria-hidden="true">playlist_add_check</span>
+            <span>Quitar / Añadir Base</span>
           </button>
         </div>
       </div>
@@ -234,10 +237,14 @@
     <!-- ==================== UNIDAD 3: ORTOGONALIDAD ==================== -->
     <div id="contenedor-unidad-3" hidden>
       <div class="barra-herramientas">
-        <div class="modos-unidad u3-actividad-pill" role="group" aria-label="Actividad de la Unidad 3">
+        <div class="modos-unidad operaciones-unidad u3-tabs-2" role="group" aria-label="Actividad de la Unidad 3">
           <button id="u3-tab-gs" type="button" aria-pressed="true">
             <span class="material-symbols-outlined" aria-hidden="true">square_foot</span>
             <span>Base ortogonal</span>
+          </button>
+          <button id="u3-tab-ortonormal" type="button" aria-pressed="false">
+            <span class="material-symbols-outlined" aria-hidden="true">compass_calibration</span>
+            <span>Bases ortonormales</span>
           </button>
         </div>
       </div>
@@ -246,7 +253,7 @@
         <div class="carga-editor">
           <div>
             <h2 id="u3-titulo-actividad">Base ortogonal</h2>
-            <p class="ayuda">Captura S = {α₁, α₂, …, αₙ} para obtener una base ortogonal B = {u₁, u₂, …, uₙ} con fracciones exactas.</p>
+            <p id="u3-desc-actividad" class="ayuda">Captura S = {α₁, α₂, …, αₙ} para obtener una base ortogonal B = {u₁, u₂, …, uₙ} mediante Gram-Schmidt.</p>
           </div>
           <span id="u3-dimensiones" class="contador-matriz" role="status">3 vectores · ℝ³</span>
         </div>
@@ -271,13 +278,42 @@
       </section>
 
       <section id="u3-resultado" class="panel resultado" aria-labelledby="u3-titulo-resultado" hidden>
-        <h2 id="u3-titulo-resultado">Base Ortogonal Obtenida</h2>
+        <h2 id="u3-titulo-resultado">Resultado</h2>
         <div id="u3-veredicto" class="clasificacion"></div>
+
+        <div id="u3-pipeline" class="u3-pipeline" hidden>
+          <div class="u3-etapa">
+            <span class="u3-etapa-tag">1 · Quitar LD → LI</span>
+            <span id="u3-etapa-li" class="u3-etapa-valor">—</span>
+          </div>
+          <span class="u3-flecha" aria-hidden="true">→</span>
+          <div class="u3-etapa">
+            <span class="u3-etapa-tag">2 · Añadir → Base ℝⁿ</span>
+            <span id="u3-etapa-base" class="u3-etapa-valor">—</span>
+          </div>
+          <span class="u3-flecha" aria-hidden="true">→</span>
+          <div class="u3-etapa">
+            <span class="u3-etapa-tag">3 · Gram-Schmidt</span>
+            <span id="u3-etapa-ortog" class="u3-etapa-valor">—</span>
+          </div>
+          <span class="u3-flecha" aria-hidden="true">→</span>
+          <div class="u3-etapa activa">
+            <span class="u3-etapa-tag">4 · Normalizar (‖eᵢ‖=1)</span>
+            <span id="u3-etapa-orton" class="u3-etapa-valor">—</span>
+          </div>
+        </div>
+
         <div id="u3-base-vectores" class="desplazamiento-matriz"></div>
-        <h3>Proceso paso a paso (Gram-Schmidt)</h3>
-        <div id="u3-pasos" class="u3-pasos"></div>
-        <h3>Comprobación de 90° (Producto punto)</h3>
-        <div id="u3-verificacion" class="u2-base-lista"></div>
+
+        <div id="u3-propiedades-box" hidden>
+          <h3>Verificación de propiedades</h3>
+          <div id="u3-propiedades" class="u3-propiedades-grid"></div>
+        </div>
+
+        <div id="u3-verificacion-box">
+          <h3>Comprobación de 90° (Producto punto)</h3>
+          <div id="u3-verificacion" class="u2-base-lista"></div>
+        </div>
       </section>
     </div>
     <footer>
