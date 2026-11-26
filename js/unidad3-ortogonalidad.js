@@ -51,6 +51,33 @@
     return v.every(esCero);
   }
 
+  // Obtiene de forma segura las columnas pivote (sin depender de propiedades opcionales)
+  function obtenerIndicesPivote(columnas) {
+    if (columnas.length === 0) return [];
+    const filas = columnas[0].length;
+    const cols = columnas.length;
+    const matAumentada = Array.from({ length: filas }, (_, i) => [
+      ...columnas.map(c => c[i]),
+      fCero()
+    ]);
+    const res = GaussJordan.reducir(matAumentada, cols);
+    if (Array.isArray(res?.pivotes)) {
+      return res.pivotes.filter(c => c >= 0 && c < cols);
+    }
+    const pivotes = [];
+    if (Array.isArray(res?.matriz)) {
+      for (let i = 0; i < res.matriz.length; i++) {
+        for (let j = 0; j < cols; j++) {
+          if (!esCero(res.matriz[i][j])) {
+            pivotes.push(j);
+            break;
+          }
+        }
+      }
+    }
+    return pivotes;
+  }
+
   // Simplificación exacta de raíz cuadrada entera (BigInt)
   function raizExactaBigInt(m) {
     if (m === 0n) return { fuera: 0n, dentro: 1n };
@@ -70,7 +97,6 @@
   function normalizarComponenteVisual(comp, normaSq) {
     if (esCero(comp)) return fraccionVisual(fCero());
 
-    // comp / sqrt(p/q) = (comp.n / comp.d) * sqrt(q / p) = (comp.n * sqrt(p * q)) / (comp.d * p)
     const p = normaSq.n;
     const q = normaSq.d;
     const { fuera, dentro } = raizExactaBigInt(p * q);
@@ -375,13 +401,11 @@
         }
       } else {
         // Proceso completo: Quitar LD -> LI -> Añadir -> Base Rn -> Gram-Schmidt -> Normalizar
-        const matInicial = Array.from({ length: dimension }, (_, i) => [
-          ...entrada.map(c => c[i]),
-          fCero()
-        ]);
-        const resInit = GaussJordan.reducir(matInicial, numVectores);
-        const indicesPivote = resInit.pivotes.filter(c => c < numVectores);
+        if (entrada.every(esVectorNulo)) {
+          throw new Error('Todos los vectores capturados son el vector cero; captura al menos un vector no nulo para construir la base ortonormal.');
+        }
 
+        const indicesPivote = obtenerIndicesPivote(entrada);
         const vectoresBase = indicesPivote.map(i => entrada[i]);
         const nombresLI = indicesPivote.map(i => `α${i + 1}`);
         const nombresBase = [...nombresLI];
@@ -389,12 +413,7 @@
         for (let k = 0; k < dimension && vectoresBase.length < dimension; k++) {
           const canonico = Array.from({ length: dimension }, (_, i) => F.desdeTexto(i === k ? '1' : '0'));
           const prueba = [...vectoresBase, canonico];
-          const matPrueba = Array.from({ length: dimension }, (_, i) => [
-            ...prueba.map(c => c[i]),
-            fCero()
-          ]);
-          const resPrueba = GaussJordan.reducir(matPrueba, prueba.length);
-          const pivPrueba = resPrueba.pivotes.filter(c => c < prueba.length);
+          const pivPrueba = obtenerIndicesPivote(prueba);
           if (pivPrueba.length === prueba.length) {
             vectoresBase.push(canonico);
             nombresBase.push(`e${k + 1}`);
@@ -425,7 +444,7 @@
         });
         baseVectoresEl.append(filaRes);
 
-        // 3 Propiedades del pizarrón
+        // 3 Propiedades
         propiedadesBoxEl.hidden = false;
         propiedadesEl.replaceChildren();
 
