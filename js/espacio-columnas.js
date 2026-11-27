@@ -51,7 +51,7 @@
     if(v.esCero()) return 0;
     const n=(v.n<0n?-v.n:v.n).toString(), d=v.d.toString();
     const x=Number(n.slice(0,15))/Number(d.slice(0,15))*10**(Math.max(0,n.length-15)-Math.max(0,d.length-15))*(v.n<0n?-1:1);
-    if(!Number.isFinite(x)) throw new Error('El valor es demasiado grande para dibujarlo.');
+    if(!Number.isFinite(x)||x===0||Math.abs(x)<1e-100||Math.abs(x)>1e100) throw new Error('La escala numérica excede el rango de esta gráfica. El resultado exacto sigue disponible.');
     return x;
   }
   // Recortar dentro de un cubo sin cambiar la dirección ni la escala de los ejes.

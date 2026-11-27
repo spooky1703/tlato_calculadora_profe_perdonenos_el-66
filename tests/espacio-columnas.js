@@ -35,3 +35,8 @@ for(const a of [[[1,2,3],[2,4,6]],[[0,0]],[[1,1],[0,1]]]) {
 const corte=E.segmento(m([[-10,0,0]])[0],m([[10,0,0]])[0],5);
 assert.equal(corte.map(v=>v.map(x=>x.aTexto()).join(',')).join(';'),'-5,0,0;5,0,0');
 console.log('Combinación: coeficientes, llegada exacta a b, autoescala y recorte de segmentos verificados.');
+
+assert.throws(()=>E.numero(new F(1n,10n**400n)), /escala/);
+assert.throws(()=>E.numero(new F(10n**400n)), /escala/);
+assert.equal(E.numero(F.CERO),0);
+console.log('Gráfica: magnitudes no representables rechazadas, sin convertirlas en cero.');

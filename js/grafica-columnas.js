@@ -46,6 +46,17 @@
     return recorte.fuera;
   }
   function dibujar() {
+    try { dibujarContenido(); } catch(e) { informarError(e); }
+  }
+  function informarError(e) {
+    if(modal.open)modal.close();
+    arrastre=null;
+    $('error-grafica').textContent=e.message;$('error-grafica').hidden=false;
+  }
+  function ajustarEscala() {
+    try { limite=E.escala(modelo,$('ver-combinacion').checked);dibujar(); } catch(e) { informarError(e); }
+  }
+  function dibujarContenido() {
     if(!modelo||!modal.open)return;
     canvas.width=Math.max(280,Math.round(canvas.getBoundingClientRect().width));canvas.height=420;
     ctx.clearRect(0,0,canvas.width,canvas.height);etiquetas=[];
@@ -118,13 +129,13 @@
     } else cuenta.textContent='No existe una combinación de las columnas que produzca b.';
     modal.showModal();dibujar();
   }
-  $('explicar-infinitas').onclick=()=>{try{abrir();$('error-grafica').hidden=true;}catch(e){$('error-grafica').textContent=e.message;$('error-grafica').hidden=false;}};
+  $('explicar-infinitas').onclick=()=>{try{$('error-grafica').hidden=true;abrir();}catch(e){informarError(e);}};
   $('cerrar-columnas').onclick=()=>modal.close();
   $('ver-columnas').onchange=dibujar;
-  $('ver-combinacion').onchange=()=>{limite=E.escala(modelo,$('ver-combinacion').checked);dibujar();};
+  $('ver-combinacion').onchange=ajustarEscala;
   $('acercar-columnas').onclick=()=>{limite=Math.max(1e-100,limite/2);dibujar();};
   $('alejar-columnas').onclick=()=>{limite=Math.min(1e100,limite*2);dibujar();};
-  $('reiniciar-columnas').onclick=()=>{limite=E.escala(modelo,$('ver-combinacion').checked);azimut=-2.18;elevacion=-.38;dibujar();};
+  $('reiniciar-columnas').onclick=()=>{azimut=-2.18;elevacion=-.38;ajustarEscala();};
   canvas.onpointerdown=e=>{arrastre=[e.clientX,e.clientY];canvas.setPointerCapture(e.pointerId);};
   canvas.onpointermove=e=>{if(!arrastre)return;azimut+=(e.clientX-arrastre[0])*.01;elevacion=Math.max(-1.4,Math.min(1.4,elevacion+(e.clientY-arrastre[1])*.01));arrastre=[e.clientX,e.clientY];dibujar();};
   canvas.onpointerup=canvas.onpointercancel=()=>{arrastre=null;};

@@ -23,177 +23,23 @@
     ['0', '1', '1']
   ];
 
-  // Aritmética exacta independiente (BigInt) compatibilizada con Fraccion.desdeTexto
-  function mcdBigInt(a, b) {
-    a = a < 0n ? -a : a;
-    b = b < 0n ? -b : b;
-    while (b !== 0n) {
-      const t = b;
-      b = a % b;
-      a = t;
-    }
-    return a === 0n ? 1n : a;
-  }
-
-  function crearFrac(n, d = 1n) {
-    n = BigInt(n);
-    d = BigInt(d);
-    if (d < 0n) {
-      n = -n;
-      d = -d;
-    }
-    if (n === 0n) return { n: 0n, d: 1n };
-    const g = mcdBigInt(n, d);
-    return { n: n / g, d: d / g };
-  }
-
-  function aFraccionApp(q) {
-    return q.d === 1n ? F.desdeTexto(q.n.toString()) : F.desdeTexto(`${q.n}/${q.d}`);
-  }
-
-  const fCero = () => ({ n: 0n, d: 1n });
-  const esCero = (x) => x.n === 0n;
-  const sumarF = (a, b) => crearFrac(a.n * b.d + b.n * a.d, a.d * b.d);
-  const restarF = (a, b) => crearFrac(a.n * b.d - b.n * a.d, a.d * b.d);
-  const multF = (a, b) => crearFrac(a.n * b.n, a.d * b.d);
-  const divF = (a, b) => crearFrac(a.n * b.d, a.d * b.n);
-
-  function productoPunto(u, v) {
-    let acc = fCero();
-    for (let i = 0; i < u.length; i++) {
-      acc = sumarF(acc, multF(u[i], v[i]));
-    }
-    return acc;
-  }
-
-  function escalarPorVector(k, v) {
-    return v.map(comp => multF(k, comp));
-  }
-
-  function restarVectores(u, v) {
-    return u.map((comp, i) => restarF(comp, v[i]));
-  }
-
-  function esVectorNulo(v) {
-    return v.every(esCero);
-  }
-
-  // Eliminación gaussiana exacta propia para detectar columnas pivote sin fallos
-  function obtenerIndicesPivote(columnas) {
-    if (columnas.length === 0) return [];
-    const filas = columnas[0].length;
-    const cols = columnas.length;
-    const M = Array.from({ length: filas }, (_, i) =>
-      columnas.map(c => crearFrac(c[i].n, c[i].d))
-    );
-
-    const pivotes = [];
-    let filaActual = 0;
-
-    for (let j = 0; j < cols && filaActual < filas; j++) {
-      let filaPiv = -1;
-      for (let i = filaActual; i < filas; i++) {
-        if (!esCero(M[i][j])) {
-          filaPiv = i;
-          break;
-        }
-      }
-      if (filaPiv === -1) continue;
-
-      [M[filaActual], M[filaPiv]] = [M[filaPiv], M[filaActual]];
-      const piv = M[filaActual][j];
-
-      for (let k = j; k < cols; k++) {
-        M[filaActual][k] = divF(M[filaActual][k], piv);
-      }
-
-      for (let i = 0; i < filas; i++) {
-        if (i !== filaActual && !esCero(M[i][j])) {
-          const factor = M[i][j];
-          for (let k = j; k < cols; k++) {
-            M[i][k] = restarF(M[i][k], multF(factor, M[filaActual][k]));
-          }
-        }
-      }
-
-      pivotes.push(j);
-      filaActual++;
-    }
-
-    return pivotes;
-  }
-
-  // Simplificación exacta de raíz cuadrada entera (BigInt)
-  function raizExactaBigInt(m) {
-    if (m === 0n) return { fuera: 0n, dentro: 1n };
-    if (m === 1n) return { fuera: 1n, dentro: 1n };
-    let fuera = 1n;
-    let dentro = m;
-    for (let d = 2n; d * d <= dentro; d++) {
-      while (dentro % (d * d) === 0n) {
-        fuera *= d;
-        dentro /= (d * d);
-      }
-    }
-    return { fuera, dentro };
-  }
-
-  // Representación simbólica exacta de comp / sqrt(normaSq)
   function normalizarComponenteVisual(comp, normaSq) {
-    if (esCero(comp)) return fraccionVisual(F.desdeTexto('0'));
-
-    const p = normaSq.n;
-    const q = normaSq.d;
-    const { fuera, dentro } = raizExactaBigInt(p * q);
-
-    const coef = crearFrac(comp.n * fuera, comp.d * p);
-
-    if (dentro === 1n) {
-      return fraccionVisual(aFraccionApp(coef));
+    if (comp.esCero()) return fraccionVisual(comp);
+    const rn = window.Unidad3.raizEntera(normaSq.n);
+    const rd = window.Unidad3.raizEntera(normaSq.d);
+    if (rn * rn === normaSq.n && rd * rd === normaSq.d) {
+      return fraccionVisual(comp.dividir(new F(rn, rd)));
     }
-
-    const wrap = document.createElement('span');
-    wrap.style.display = 'inline-flex';
-    wrap.style.alignItems = 'center';
-    wrap.style.gap = '2px';
-
-    if (coef.n < 0n) {
-      wrap.append('−');
-    }
-
-    const absNum = coef.n < 0n ? -coef.n : coef.n;
-    const absDen = coef.d;
-
-    const rad = document.createElement('span');
-    rad.className = 'u3-radical';
-    const sym = document.createElement('span');
-    sym.className = 'u3-radical-simbolo';
-    sym.textContent = '√';
-    const cont = document.createElement('span');
-    cont.className = 'u3-radical-contenido';
-    cont.textContent = dentro.toString();
-    rad.append(sym, cont);
-
-    if (absDen === 1n) {
-      if (absNum !== 1n) wrap.append(absNum.toString());
-      wrap.append(rad);
-      return wrap;
-    }
-
-    const frac = document.createElement('span');
-    frac.className = 'fraccion';
-    const numSpan = document.createElement('span');
-    numSpan.className = 'numerador';
-    if (absNum !== 1n) numSpan.append(absNum.toString());
-    numSpan.append(rad);
-
-    const denSpan = document.createElement('span');
-    denSpan.className = 'denominador';
-    denSpan.textContent = absDen.toString();
-
-    frac.append(numSpan, denSpan);
-    wrap.append(frac);
-    return wrap;
+    const frac = document.createElement('span'); frac.className = 'fraccion';
+    const num = document.createElement('span'); num.className = 'numerador'; num.append(fraccionVisual(comp));
+    const barra = document.createElement('span'); barra.className = 'barra';
+    const den = document.createElement('span'); den.className = 'denominador';
+    const raiz = document.createElement('span'); raiz.className = 'u3-radical';
+    const signo = document.createElement('span'); signo.className = 'u3-radical-simbolo'; signo.textContent = '√';
+    const contenido = document.createElement('span'); contenido.className = 'u3-radical-contenido'; contenido.append(fraccionVisual(normaSq));
+    raiz.append(signo, contenido); den.append(raiz); frac.append(num, barra, den);
+    frac.setAttribute('aria-label', `${comp.aTexto()} dividido entre la raíz de ${normaSq.aTexto()}`);
+    return frac;
   }
 
   function cambiarModoU3() {
@@ -252,7 +98,7 @@
         if (normaSq) {
           celda.append(normalizarComponenteVisual(val, normaSq));
         } else {
-          celda.append(fraccionVisual(aFraccionApp(val)));
+          celda.append(fraccionVisual(val));
         }
         corchetes.append(celda);
       } else {
@@ -262,9 +108,9 @@
         celda.setAttribute('aria-label', `${nombre}, componente ${compIdx + 1}`);
         try {
           const num = F.desdeTexto(val);
-          celda.append(fraccionVisual(num));
+          celda.append(window.FormatoMatematico.expresion(val));
         } catch {
-          celda.textContent = val || '0';
+          celda.textContent = val || '—';
           celda.classList.add('invalida');
         }
         celda.addEventListener('click', () => editarComponente(idxVector, compIdx, celda));
@@ -278,39 +124,9 @@
 
   function editarComponente(idxVector, compIdx, boton) {
     const arreglo = vectoresS[idxVector];
-    const entrada = document.createElement('input');
-    entrada.className = 'celda';
-    entrada.maxLength = 128;
-    entrada.value = arreglo[compIdx];
-    entrada.defaultValue = arreglo[compIdx];
-    entrada.autocomplete = 'off';
-
-    boton.replaceWith(entrada);
-    entrada.focus();
-    entrada.select();
-
-    let guardado = false;
-    const guardar = () => {
-      if (guardado) return;
-      guardado = true;
-      arreglo[compIdx] = entrada.value.trim() === '' ? '0' : entrada.value.trim();
-      errorEl.hidden = true;
-      try {
-        F.desdeTexto(arreglo[compIdx]);
-      } catch (err) {
-        mostrarError(`α${idxVector + 1}, fila ${compIdx + 1}: ${err.message}`);
-      }
-      renderizarVectores();
-    };
-
-    entrada.addEventListener('blur', guardar);
-    entrada.addEventListener('keydown', e => {
-      if (e.key === 'Escape') { entrada.value = entrada.defaultValue; entrada.blur(); }
-      if (e.key === 'Enter' || e.key === 'Tab') {
-        e.preventDefault();
-        guardar();
-      }
-    });
+    window.EditorVectores.editar(boton, zonaVectores, arreglo[compIdx], valor => {
+      arreglo[compIdx] = valor; errorEl.hidden = true;
+    }, renderizarVectores, mostrarError);
   }
 
   function renderizarVectores() {
@@ -334,14 +150,14 @@
 
     document.getElementById('u3-dimensiones').textContent =
       `${numVectores} ${numVectores === 1 ? 'vector' : 'vectores'} · ℝ${dimension}`;
-    document.getElementById('u3-agregar-vector').disabled = numVectores >= 12;
+    document.getElementById('u3-agregar-vector').disabled = numVectores >= window.col_max - 1;
     document.getElementById('u3-quitar-vector').disabled = numVectores <= 1;
-    document.getElementById('u3-agregar-comp').disabled = dimension >= 12;
+    document.getElementById('u3-agregar-comp').disabled = dimension >= Math.min(window.fila_max, window.col_max - 1);
     document.getElementById('u3-quitar-comp').disabled = dimension <= 1;
   }
 
   document.getElementById('u3-agregar-vector').onclick = () => {
-    if (numVectores >= 12) return;
+    if (numVectores >= window.col_max - 1) return;
     vectoresS.push(Array(dimension).fill('0'));
     numVectores++;
     renderizarVectores();
@@ -355,7 +171,7 @@
   };
 
   document.getElementById('u3-agregar-comp').onclick = () => {
-    if (dimension >= 12) return;
+    if (dimension >= Math.min(window.fila_max, window.col_max - 1)) return;
     vectoresS.forEach(v => v.push('0'));
     dimension++;
     renderizarVectores();
@@ -381,173 +197,41 @@
     errorEl.hidden = false;
   }
 
-  function ejecutarGramSchmidt(vectores) {
-    const baseOrtogonal = [];
-    vectores.forEach(alpha => {
-      let u = alpha.map(c => crearFrac(c.n, c.d));
-      baseOrtogonal.forEach(uPrev => {
-        const num = productoPunto(alpha, uPrev);
-        const den = productoPunto(uPrev, uPrev);
-        const coef = divF(num, den);
-        u = restarVectores(u, escalarPorVector(coef, uPrev));
-      });
-      if (!esVectorNulo(u)) {
-        baseOrtogonal.push(u);
-      }
-    });
-    return baseOrtogonal;
-  }
-
   document.getElementById('u3-calcular').onclick = () => {
     errorEl.hidden = true;
     try {
-      const entrada = vectoresS.map((vec, vIdx) =>
-        vec.map((txt, fIdx) => {
-          try {
-            const parsed = F.desdeTexto(txt);
-            return crearFrac(parsed.n, parsed.d);
-          } catch (e) {
-            throw new Error(`Vector α${vIdx + 1}, fila ${fIdx + 1}: ${e.message}`);
-          }
-        })
-      );
-
-      if (actividad === 'ortogonal') {
-        const baseOrtogonal = ejecutarGramSchmidt(entrada);
-        if (baseOrtogonal.length === 0) {
-          throw new Error('Todos los vectores capturados son el vector cero; no existe base ortogonal no trivial.');
-        }
-
-        pipelineEl.hidden = true;
-        propiedadesBoxEl.hidden = true;
-
-        veredictoEl.textContent = `✓ Base ortogonal B = {${baseOrtogonal.map((_, i) => `u${i + 1}`).join(', ')}} · ${baseOrtogonal.length} ${baseOrtogonal.length === 1 ? 'vector' : 'vectores'} a 90°`;
-
-        baseVectoresEl.replaceChildren();
-        const filaRes = document.createElement('div');
-        filaRes.className = 'u2-fila-vectores';
-        baseOrtogonal.forEach((uVec, idx) => {
-          filaRes.append(crearTarjetaVector(`u${idx + 1}`, uVec, idx, true, null));
-        });
-        baseVectoresEl.append(filaRes);
-
-        verificacionEl.replaceChildren();
-        if (baseOrtogonal.length === 1) {
-          const chip = document.createElement('span');
-          chip.className = 'u2-chip';
-          chip.textContent = '✓ Base de 1 solo vector no nulo (ortogonal por definición)';
-          verificacionEl.append(chip);
-        } else {
-          for (let i = 0; i < baseOrtogonal.length; i++) {
-            for (let j = i + 1; j < baseOrtogonal.length; j++) {
-              const dot = productoPunto(baseOrtogonal[i], baseOrtogonal[j]);
-              const chip = document.createElement('span');
-              chip.className = 'u2-chip';
-              chip.append(`✓ ⟨u${i + 1}, u${j + 1}⟩ = `, fraccionVisual(aFraccionApp(dot)), ' (90°)');
-              verificacionEl.append(chip);
-            }
-          }
-        }
-      } else {
-        // Proceso completo: Quitar LD -> LI -> Añadir -> Base Rn -> Gram-Schmidt -> Normalizar
-        if (entrada.every(esVectorNulo)) {
-          throw new Error('Todos los vectores capturados son el vector cero; captura al menos un vector no nulo para construir la base ortonormal.');
-        }
-
-        const indicesPivote = obtenerIndicesPivote(entrada);
-        const vectoresBase = indicesPivote.map(i => entrada[i]);
-        const nombresLI = indicesPivote.map(i => `α${i + 1}`);
-        const nombresBase = [...nombresLI];
-
-        for (let k = 0; k < dimension && vectoresBase.length < dimension; k++) {
-          const canonico = Array.from({ length: dimension }, (_, i) => crearFrac(i === k ? 1n : 0n, 1n));
-          const prueba = [...vectoresBase, canonico];
-          const pivPrueba = obtenerIndicesPivote(prueba);
-          if (pivPrueba.length === prueba.length) {
-            vectoresBase.push(canonico);
-            nombresBase.push(`e${k + 1}`);
-          }
-        }
-
-        const baseOrtogonal = ejecutarGramSchmidt(vectoresBase);
-        const normasSq = baseOrtogonal.map(u => productoPunto(u, u));
-
-        // Actualizar etapas visuales
-        pipelineEl.hidden = false;
-        document.getElementById('u3-etapa-li').textContent =
-          nombresLI.length > 0 ? `{${nombresLI.join(', ')}}` : '∅';
-        document.getElementById('u3-etapa-base').textContent =
-          `{${nombresBase.join(', ')}}`;
-        document.getElementById('u3-etapa-ortog').textContent =
-          `{${baseOrtogonal.map((_, i) => `u${i + 1}`).join(', ')}}`;
-        document.getElementById('u3-etapa-orton').textContent =
-          `{${baseOrtogonal.map((_, i) => `v${i + 1}`).join(', ')}}`;
-
-        veredictoEl.textContent = `✓ Base ortonormal de ℝ${dimension}: B = {${baseOrtogonal.map((_, i) => `v${i + 1}`).join(', ')}}`;
-
-        baseVectoresEl.replaceChildren();
-        const filaRes = document.createElement('div');
-        filaRes.className = 'u2-fila-vectores';
-        baseOrtogonal.forEach((uVec, idx) => {
-          filaRes.append(crearTarjetaVector(`v${idx + 1}`, uVec, idx, true, normasSq[idx]));
-        });
-        baseVectoresEl.append(filaRes);
-
-        // 3 Propiedades
-        propiedadesBoxEl.hidden = false;
-        propiedadesEl.replaceChildren();
-
-        const props = [
-          {
-            titulo: '1. Es Base',
-            desc: `${dimension} vectores linealmente independientes que generan todo ℝ${dimension} (dim = ${dimension}).`
-          },
-          {
-            titulo: '2. Conjunto ortogonal',
-            desc: `Todos sus pares cumplen ⟨vᵢ, vⱼ⟩ = 0 (perpendiculares a 90° entre sí).`
-          },
-          {
-            titulo: '3. Vectores unitarios',
-            desc: `Cada vector está dividido entre su norma: ‖vᵢ‖ = 1 para todo i = 1, …, ${dimension}.`
-          }
-        ];
-
-        props.forEach(pr => {
-          const card = document.createElement('div');
-          card.className = 'u3-prop-card';
-          const t = document.createElement('div');
-          t.className = 'u3-prop-titulo';
-          t.textContent = `✓ ${pr.titulo}`;
-          const d = document.createElement('div');
-          d.className = 'u3-prop-desc';
-          d.textContent = pr.desc;
-          card.append(t, d);
-          propiedadesEl.append(card);
-        });
-
-        verificacionEl.replaceChildren();
-        if (baseOrtogonal.length === 1) {
-          const chip = document.createElement('span');
-          chip.className = 'u2-chip';
-          chip.textContent = '✓ Base unitaria de dimensión 1 (‖v₁‖ = 1)';
-          verificacionEl.append(chip);
-        } else {
-          for (let i = 0; i < baseOrtogonal.length; i++) {
-            for (let j = i + 1; j < baseOrtogonal.length; j++) {
-              const dot = productoPunto(baseOrtogonal[i], baseOrtogonal[j]);
-              const chip = document.createElement('span');
-              chip.className = 'u2-chip';
-              chip.append(`✓ ⟨v${i + 1}, v${j + 1}⟩ = `, fraccionVisual(aFraccionApp(dot)), ' (90°)');
-              verificacionEl.append(chip);
-            }
-          }
+      const completa = actividad === 'ortonormal';
+      const r = window.Unidad3.analizar(vectoresS, completa);
+      const base = r.ortogonales;
+      pipelineEl.hidden = !completa;
+      propiedadesBoxEl.hidden = !completa;
+      if (completa) {
+        const nombres = r.datos.indicesBase.map(i => `α${i + 1}`);
+        document.getElementById('u3-etapa-li').textContent = nombres.length ? `{${nombres.join(', ')}}` : '∅';
+        document.getElementById('u3-etapa-base').textContent = `{${[...nombres, ...r.datos.agregados.map(a => `e${a.indice + 1}`)].join(', ')}}`;
+        document.getElementById('u3-etapa-ortog').textContent = `{${base.map((_, i) => `u${i + 1}`).join(', ')}}`;
+        document.getElementById('u3-etapa-orton').textContent = `{${base.map((_, i) => `v${i + 1}`).join(', ')}}`;
+      }
+      veredictoEl.textContent = completa
+        ? `Base ortonormal de ℝ${dimension} · ${r.dimension} vectores`
+        : base.length ? `Base ortogonal del espacio generado ⟨S⟩ · dimensión ${r.dimension}` : 'Espacio generado {0}: su base es el conjunto vacío ∅.';
+      baseVectoresEl.replaceChildren();
+      const fila = document.createElement('div'); fila.className = 'u2-fila-vectores';
+      base.forEach((v, i) => fila.append(crearTarjetaVector(`${completa ? 'v' : 'u'}${i + 1}`, v, i, true, completa ? r.normasCuadradas[i] : null)));
+      baseVectoresEl.append(fila);
+      propiedadesEl.replaceChildren();
+      if (completa) {
+        for (const texto of [`✓ Base: ${r.dimension} vectores independientes en ℝ${dimension}.`, '✓ Ortogonales: los productos punto entre vectores distintos son cero.', '✓ Unitarios: al dividir por su norma, cada norma al cuadrado es uno.']) {
+          const p = document.createElement('p'); p.textContent = texto; propiedadesEl.append(p);
         }
       }
-
+      verificacionEl.replaceChildren();
+      const p = document.createElement('p');
+      p.textContent = base.length > 1
+        ? 'Se comprobaron todos los productos punto entre pares: son cero.'
+        : base.length === 1 ? 'Un vector no nulo forma una base ortogonal de su recta.' : 'No hay vectores que normalizar.';
+      verificacionEl.append(p);
       resultadoEl.hidden = false;
-    } catch (err) {
-      mostrarError(err.message);
-      resultadoEl.hidden = true;
-    }
+    } catch (err) { mostrarError(err.message); resultadoEl.hidden = true; }
   };
 })();
