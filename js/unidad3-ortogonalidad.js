@@ -18,9 +18,9 @@
   let dimension = 3;
 
   let vectoresS = [
-    ['1', '1', '0'],
-    ['1', '0', '1'],
-    ['0', '1', '1']
+    ['0', '0', '0'],
+    ['0', '0', '0'],
+    ['0', '0', '0']
   ];
 
   function normalizarComponenteVisual(comp, normaSq) {

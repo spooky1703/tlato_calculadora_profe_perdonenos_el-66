@@ -32,11 +32,11 @@
   let dimension = 3;
 
   let vectoresS = [
-    ['1', '0', '2'],
-    ['0', '1', '1'],
-    ['1', '1', '3']
+    ['0', '0', '0'],
+    ['0', '0', '0'],
+    ['0', '0', '0']
   ];
-  let vectorGamma = ['3', '2', '8'];
+  let vectorGamma = ['0', '0', '0'];
 
   const textosActividad = {
     'generado': {
